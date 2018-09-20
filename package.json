@@ -2,7 +2,7 @@
     "name": "vue-manage-system",
     "version": "3.2.0",
     "description": "泵选型系统",
-    "author": "lin-xin <2981207131@qq.com>",
+    "author": "li-test",
     "private": true,
     "scripts": {
         "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",

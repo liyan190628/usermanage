@@ -6,7 +6,7 @@ Vue.use(Router);
 export default new Router({
     routes: [{
             path: '/',
-            redirect: '/dashboard'
+            redirect: '/userManagement'
         },
         {
             path: '/',
@@ -16,7 +16,7 @@ export default new Router({
             },
             children: [{
                     path: '/userManagement',
-                    component: resolve => require(['../components/page/Dashboard.vue'], resolve),
+                    component: resolve => require(['../components/page/UserManagement/UserList.vue'], resolve),
                     meta: {
                         title: '用户管理'
                     }

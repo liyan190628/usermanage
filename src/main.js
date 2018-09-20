@@ -7,6 +7,10 @@ import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
 // import '../static/css/theme-green/index.css';       // 浅绿色主题
 import '../static/css/icon.css';
 import "babel-polyfill";
+// 全局组件
+import deleteModal from './components/modal/deleteModal'
+
+Vue.component('deleteModal', deleteModal)
 
 Vue.use(ElementUI, {
     size: 'small'
