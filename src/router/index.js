@@ -29,17 +29,17 @@ export default new Router({
                     }
                 },
                 {
-                    path: '/table',
-                    component: resolve => require(['../components/page/BaseTable.vue'], resolve),
+                    path: '/systemParameter',
+                    component: resolve => require(['../components/page/SystemParameter/SystemParameterList.vue'], resolve),
                     meta: {
                         title: '系统参数管理'
                     }
                 },
                 {
-                    path: '/tabs',
-                    component: resolve => require(['../components/page/Tabs.vue'], resolve),
+                    path: '/pumpParameter',
+                    component: resolve => require(['../components/page/PumpParameter/PumpParameterList.vue'], resolve),
                     meta: {
-                        title: '太阳能参数管理'
+                        title: '泵参数管理'
                     }
                 },
                 {

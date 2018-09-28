@@ -51,37 +51,13 @@ export default {
                 },
                 {
                     icon: 'el-icon-lx-copy',
-                    index: 'systemParameterManagement',
+                    index: 'systemParameter',
                     title: '系统参数管理'
                 },
                 {
                     icon: 'el-icon-lx-calendar',
-                    index: '3',
-                    title: '泵参数管理',
-                    subs: [
-                        {
-                            index: 'form',
-                            title: '基本表单'
-                        },
-                        {
-                            index: '3-2',
-                            title: '三级菜单',
-                            subs: [
-                                {
-                                    index: 'editor',
-                                    title: '富文本编辑器'
-                                },
-                                {
-                                    index: 'markdown',
-                                    title: 'markdown编辑器'
-                                },
-                            ]
-                        },
-                        {
-                            index: 'upload',
-                            title: '文件上传'
-                        }
-                    ]
+                    index: 'pumpParameter',
+                    title: '泵参数管理'
                 },
                 {
                     icon: 'el-icon-lx-emoji',

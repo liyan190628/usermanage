@@ -1,12 +1,7 @@
 <template>
   <div>
-    <div class="crumbs">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item>
-          <i class="el-icon-lx-people"></i>用户管理</el-breadcrumb-item>
-        <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-      </el-breadcrumb>
-    </div>
+    <!-- 面包屑导航 -->
+    <crumbs :title1="'用户管理'" :title2="'用户列表'"></crumbs>
     <!-- 搜索 -->
     <div class="container">
       <el-form :inline="true" :model="formInline" class="demo-form-inline mgb10">
@@ -44,7 +39,7 @@
           </el-table-column>
           <el-table-column prop="address" align="center" label="当前状态">
           </el-table-column>
-          <el-table-column prop="address" align="center" label="操作" width="180">
+          <el-table-column prop="address" align="center" label="操作" width="200">
             <template slot-scope="scope">
               <el-button @click="handleEdit(scope.$index, scope.row)" type="text">编辑</el-button>
               <el-button @click="handleDelete(scope.$index, scope.row)" type="text">删除</el-button>
@@ -142,12 +137,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-.table{
-  width: 100%;
-  font-size: 14px;
-}
-.title{
-  color:#000 !important;
-}
-</style>

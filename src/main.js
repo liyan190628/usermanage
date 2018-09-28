@@ -9,8 +9,10 @@ import '../static/css/icon.css';
 import "babel-polyfill";
 // 全局组件
 import deleteModal from './components/modal/deleteModal'
+import crumbs from './components/crumbs/crumbs'
 
 Vue.component('deleteModal', deleteModal)
+Vue.component('crumbs', crumbs)
 
 Vue.use(ElementUI, {
     size: 'small'
