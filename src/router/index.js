@@ -43,10 +43,17 @@ export default new Router({
                     }
                 },
                 {
-                    path: '/form',
-                    component: resolve => require(['../components/page/BaseForm.vue'], resolve),
+                    path: '/addPumpParameter',
+                    component: resolve => require(['../components/page/PumpParameter/addPumpParameter.vue'], resolve),
                     meta: {
-                        title: '基本表单'
+                        title: '新增泵参数'
+                    }
+                },
+                {
+                    path: '/solarParameter',
+                    component: resolve => require(['../components/page/SolarParameter/SolarParameterList.vue'], resolve),
+                    meta: {
+                        title: '太阳能参数管理'
                     }
                 },
                 {

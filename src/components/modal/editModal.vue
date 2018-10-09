@@ -3,26 +3,12 @@
     <!-- 新增/修改模态框 -->
     <el-dialog title="修改" :visible.sync="editVisible" center>
       <el-form :model="userform" label-width="120px" size="small">
-        <el-form-item label="pump_type">
-          <el-select v-model="userform.region">
+        <el-form-item v-for="(item, index) in items" :key="index" :label="item.title">
+          <el-select v-if="item.type === 'select'" v-model="userform.region">
             <el-option label="全部" value=""></el-option>
             <el-option label="区域二" value="beijing"></el-option>
           </el-select>
-        </el-form-item>
-        <el-form-item label="max_voc(v)">
-          <el-input></el-input>
-        </el-form-item>
-        <el-form-item label="max_vmp(v)">
-          <el-input></el-input>
-        </el-form-item>
-        <el-form-item label="head_factor">
-          <el-input></el-input>
-        </el-form-item>
-        <el-form-item label="cable_type">
-          <el-input placeholder="多个参数以,分开"></el-input>
-        </el-form-item>
-        <el-form-item label="pipes_caliber(m)">
-          <el-input placeholder="多个参数以,分开"></el-input>
+          <el-input v-else></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -42,6 +28,10 @@ export default {
     userform: {
       type: Object,
       default: {}
+    },
+    items: {
+      type: Array,
+      default: []
     }
   },
   methods: {

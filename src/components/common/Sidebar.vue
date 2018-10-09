@@ -40,12 +40,12 @@ export default {
             collapse: false,
             items: [
                 {
-                    icon: 'el-icon-lx-home',
+                    icon: 'el-icon-lx-people',
                     index: 'userManagement',
                     title: '用户管理'
                 },
                 {
-                    icon: 'el-icon-lx-cascades',
+                    icon: 'el-icon-lx-peoplefill',
                     index: 'roleManagement',
                     title: '角色管理'
                 },
@@ -61,7 +61,7 @@ export default {
                 },
                 {
                     icon: 'el-icon-lx-emoji',
-                    index: 'icon',
+                    index: 'solarParameter',
                     title: '太阳能参数管理'
                 },
                 {

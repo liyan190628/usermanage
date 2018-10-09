@@ -10,8 +10,24 @@
     padding-bottom: 10px;
 }
 
+.pd {
+    padding: 5px 0;
+}
+
+.p-all {
+    padding: 30px;
+}
+
 .mr-10 {
     margin-right: 10px;
+}
+
+.mb-10 {
+    margin-bottom: 10px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
 }
 
 .table {
@@ -22,7 +38,41 @@
     color: #333;
 }
 
+.text-center {
+    text-align: center;
+}
+
 .el-button--mini,
 .el-button--small {
     font-size: 14px;
+}
+
+.border {
+    border: 1px solid #000;
+}
+
+.bg-white {
+    background: #fff;
+}
+
+.border-right {
+    border-right: 1px solid #ccc;
+    height: 32px;
+    line-height: 32px;
+    padding-left: 4px;
+}
+
+.br {
+    border-right: 1px solid #ccc;
+    padding-left: 4px;
+    height: 64px;
+    line-height: 64px;
+}
+
+.border-top {
+    border-top: 1px solid #ccc;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #ccc;
 }
