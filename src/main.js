@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import Vuex from 'vuex'
 import App from './App'
 import router from './router'
 import axios from 'axios'
@@ -13,6 +14,7 @@ import editModal from './components/modal/editModal'
 import deleteModal from './components/modal/deleteModal'
 import crumbs from './components/crumbs/crumbs'
 
+Vue.use(Vuex)
 Vue.component('deleteModal', deleteModal)
 Vue.component('addModal', addModal)
 Vue.component('editModal', editModal)
@@ -20,6 +22,14 @@ Vue.component('crumbs', crumbs)
 
 import mixins from './mixin/mixin'
 Vue.mixin(mixins)
+
+// 用户登录信息
+import usersModule from './store/modules/usersModules'
+const store = new Vuex.Store({
+    modules: {
+        users: usersModule
+    }
+})
 
 Vue.use(ElementUI, {
     size: 'small'
@@ -48,5 +58,6 @@ router.beforeEach((to, from, next) => {
 
 new Vue({
     router,
+    store,
     render: h => h(App)
 }).$mount('#app')

@@ -1,8 +1,9 @@
 <template>
   <div>
     <!-- 面包屑导航 -->
-    <crumbs :title1="'泵参数管理'" :title2="'泵参数列表'"></crumbs>
+    <crumbs :title1="'附件管理'" :title2="'附件列表'"></crumbs>
     <div class="container mgb10">
+      <!-- 查询 -->
       <el-form :inline="true" :model="formInline" class="demo-form-inline mgb10">
         <el-form-item v-for="(items, index) in formItems" :key="index" :label="items.title">
           <el-select v-if="items.type === 'select'" v-model="formInline.region">
@@ -15,19 +16,19 @@
           <el-button type="primary">查询</el-button>
         </el-form-item>
       </el-form>
+
       <!-- 表格 -->
       <el-row type="flex" class="row-bg" justify="space-between">
         <el-col :span="6">
-          系统参数管理
+          <!-- 系统参数管理 -->
         </el-col>
         <el-col :span="1">
-          <span>
-            <router-link :to="{path: '/addPumpParameter'}">
-              <i class="el-icon-lx-add"></i>增加
-            </router-link>
+          <span @click="addVisible = !addVisible">
+            <i class="el-icon-lx-add"></i>增加
           </span>
         </el-col>
       </el-row>
+
       <el-table :data="tableData" class="table" stripe style="width: 100%;">
         <el-table-column prop="pump_type" align="center" label="pump_type">
         </el-table-column>
@@ -47,55 +48,26 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="pagination">
-        <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :total="1000">
-        </el-pagination>
-      </div>
     </div>
 
-    <!-- 新增模态框 -->
-    <!-- <addModal :show='addVisible' :items='items' :userform='addform' @cancel='addCancel'></addModal> -->
     <!-- 修改模态框 -->
     <editModal :show='editVisible' :items='items' :userform='editform' @cancel='editCancel'></editModal>
     <!-- 删除模态框 -->
     <deleteModal :show='delVisible' @cancel='deleteCancel' @deleteRow='deleteRow'></deleteModal>
+    <!-- 增加附件 -->
+    <addAttachment :show='addVisible' :items='items' :userform='editform' @cancel='addCancel'></addAttachment>
 
   </div>
 </template>
 <script>
+import addAttachment from './addAttachment'
 export default {
+  components: { addAttachment },
   data() {
     return {
       formInline: {
         region: ''
       },
-      tableData: [
-        {
-          pump_type: 'p_1',
-          max: 20,
-          head: 0.8,
-          cable: '0.6/1KV,450/750V',
-          pipes: '0.25,0.3,0.35'
-        },
-        {
-          pump_type: 'p_1',
-          max: 20,
-          head: 0.8,
-          cable: '0.6/1KV,450/750V',
-          pipes: '0.25,0.3,0.35'
-        },
-        {
-          pump_type: 'p_1',
-          max: 20,
-          head: 0.8,
-          cable: '0.6/1KV,450/750V',
-          pipes: '0.25,0.3,0.35'
-        }
-      ],
-      cur_page: 1,
-      // addVisible: false, // 新增模态框
-      editVisible: false, // 修改模态框
-      delVisible: false, // 删除
       formItems: [
         { title: 'pump_type:', type: 'select' },
         { title: 'pump_model:', type: 'input' },
@@ -103,6 +75,14 @@ export default {
         { title: 'h_head:', type: 'input' },
         { title: 'q_flow_rate:', type: 'input' }
       ],
+      tableData: [
+        { pump_type: 'p-1' }
+      ],
+      cur_page: 1,
+      // addVisible: false, // 新增模态框
+      editVisible: false, // 修改模态框
+      delVisible: false, // 删除
+      addVisible: false, // 增加
       // 编辑
       editform: {},
       items: [{ title: 'pump_type', tyep: 'select' }]
@@ -114,6 +94,9 @@ export default {
       this.tableData.splice(this.idx, 1)
       this.$message.success('删除成功')
       this.delVisible = false
+    },
+    addCancel() {
+      this.addVisible = false
     }
   }
 }

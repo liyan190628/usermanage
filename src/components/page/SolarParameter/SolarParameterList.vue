@@ -30,6 +30,25 @@
           </span>
         </el-col>
       </el-row>
+
+      <el-table :data="tableData" class="table" stripe style="width: 100%;">
+        <el-table-column width="200" prop="solar_panel_type" label="solar_panel_type">
+        </el-table-column>
+        <el-table-column width="190" prop="peak_power" label="peak_power">
+        </el-table-column>
+        <el-table-column width="260" prop="production_tolerance_of_pmax" label="production_tolerance_of_pmax">
+        </el-table-column>
+        <el-table-column width="180" prop="voltage_pmax" label="voltage_pmax">
+        </el-table-column>
+        <el-table-column width="180" prop="current_pmax" label="current_pmax">
+        </el-table-column>
+        <el-table-column width="180" prop="open_circuit_voltag" label="open_circuit_voltag">
+        </el-table-column>
+        <el-table-column width="260" prop="short_circuit_current" label="short_circuit_current">
+        </el-table-column>
+        <el-table-column width="260" prop="maximum_series_fuse" label="maximum_series_fuse">
+        </el-table-column>
+      </el-table>
     </div>
   </div>
 </template>
@@ -46,7 +65,8 @@ export default {
         { title: 'p_power:', type: 'input' },
         { title: 'h_head:', type: 'input' },
         { title: 'q_flow_rate:', type: 'input' }
-      ]
+      ],
+      tableData: [],
     }
   }
 }

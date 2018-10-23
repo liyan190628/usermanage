@@ -57,19 +57,19 @@ export default new Router({
                     }
                 },
                 {
-                    // 富文本编辑器组件
-                    path: '/editor',
-                    component: resolve => require(['../components/page/VueEditor.vue'], resolve),
+                    // 附件管理
+                    path: '/attachment',
+                    component: resolve => require(['../components/page/Attachment/attachmentList.vue'], resolve),
                     meta: {
-                        title: '富文本编辑器'
+                        title: '附件管理列表'
                     }
                 },
                 {
                     // markdown组件
-                    path: '/markdown',
-                    component: resolve => require(['../components/page/Markdown.vue'], resolve),
+                    path: '/curveData',
+                    component: resolve => require(['../components/page/CurveData/CurveData.vue'], resolve),
                     meta: {
-                        title: 'markdown编辑器'
+                        title: '扬程曲线基础数据'
                     }
                 },
                 {

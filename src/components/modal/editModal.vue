@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 新增/修改模态框 -->
-    <el-dialog title="修改" :visible.sync="editVisible" center>
+    <el-dialog title="编辑" :visible.sync="editVisible" center>
       <el-form :model="userform" label-width="120px" size="small">
         <el-form-item v-for="(item, index) in items" :key="index" :label="item.title">
           <el-select v-if="item.type === 'select'" v-model="userform.region">

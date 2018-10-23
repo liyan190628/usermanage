@@ -14,46 +14,58 @@
                     </el-input>
                 </el-form-item>
                 <div class="login-btn">
-                    <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+                    <el-button type="warning" @click="submitForm('ruleForm')">登录</el-button>
                 </div>
-                <p class="login-tips">Tips : 用户名和密码随便填。</p>
             </el-form>
         </div>
     </div>
 </template>
 
 <script>
-    export default {
-        data: function(){
-            return {
-                ruleForm: {
-                    username: 'admin',
-                    password: '123123'
-                },
-                rules: {
-                    username: [
-                        { required: true, message: '请输入用户名', trigger: 'blur' }
-                    ],
-                    password: [
-                        { required: true, message: '请输入密码', trigger: 'blur' }
-                    ]
-                }
-            }
-        },
-        methods: {
-            submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        localStorage.setItem('ms_username',this.ruleForm.username);
-                        this.$router.push('/');
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
+export default {
+    data: function () {
+        return {
+            ruleForm: {
+                username: 'admin',
+                password: '123123'
+            },
+            rules: {
+                username: [
+                    { required: true, message: '请输入用户名', trigger: 'blur' }
+                ],
+                password: [
+                    { required: true, message: '请输入密码', trigger: 'blur' }
+                ]
             }
         }
+    },
+    methods: {
+        submitForm(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    localStorage.setItem('ms_username', this.ruleForm.username);
+                    this.$router.push('/');
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+        },
+        // submitForm(formName) {
+        //     // console.log(this.$store.state.users.currentUser.Username)
+        //     // Element-ui框架提供的方法
+        //     this.$refs[formName].validate(function (flag) {
+        //         if (flag) {
+        //             /*localStorage.setItem("currentUser",this.UserModel.user_name);
+        //               alert("用户登录成功");*/
+        //             this.$store.dispatch('userLogin', { 'user_name': this.ruleForm.user_name, "user_pass": this.ruleForm.user_pass })
+        //         } else {
+        //             this.$message.error('用户名密码必填')
+        //         }
+        //     }.bind(this))
+        // }
     }
+}
 </script>
 
 <style scoped>
@@ -61,7 +73,7 @@
         position: relative;
         width:100%;
         height:100%;
-        background-image: url(../../assets/login-bg.jpg);
+        background-image: url(../../assets/bg1.jpg);
         background-size: 100%;
     }
     .ms-title{

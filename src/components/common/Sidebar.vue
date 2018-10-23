@@ -66,12 +66,12 @@ export default {
                 },
                 {
                     icon: 'el-icon-lx-favor',
-                    index: 'charts',
+                    index: 'attachment',
                     title: '附件管理'
                 },
                 {
                     icon: 'el-icon-rank',
-                    index: 'drag',
+                    index: 'curveData',
                     title: '扬程曲线基础数据'
                 },
                 {
