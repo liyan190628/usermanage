@@ -78,76 +78,16 @@ export default {
                     icon: 'el-icon-lx-warn',
                     index: '6',
                     title: '泵类型维护',
-                    subs: [
-                        {
-                            index: 'permission',
-                            title: '权限测试'
-                        },
-                        {
-                            index: '404',
-                            title: '404页面'
-                        }
-                    ]
                 },
                 {
                     icon: 'el-icon-lx-warn',
                     index: '7',
-                    title: '泵类型介绍',
-                    subs: [
-                        {
-                            index: 'permission',
-                            title: '权限测试'
-                        },
-                        {
-                            index: '404',
-                            title: '404页面'
-                        }
-                    ]
-                },
-                {
-                    icon: 'el-icon-lx-warn',
-                    index: '8',
-                    title: '附件维护',
-                    subs: [
-                        {
-                            index: 'permission',
-                            title: '权限测试'
-                        },
-                        {
-                            index: '404',
-                            title: '404页面'
-                        }
-                    ]
-                },
-                {
-                    icon: 'el-icon-lx-warn',
-                    index: '9',
-                    title: '系统图片管理',
-                    subs: [
-                        {
-                            index: 'permission',
-                            title: '权限测试'
-                        },
-                        {
-                            index: '404',
-                            title: '404页面'
-                        }
-                    ]
+                    title: '系统安装图管理',
                 },
                 {
                     icon: 'el-icon-lx-warn',
                     index: '10',
                     title: '主查询页面',
-                    subs: [
-                        {
-                            index: 'permission',
-                            title: '权限测试'
-                        },
-                        {
-                            index: '404',
-                            title: '404页面'
-                        }
-                    ]
                 }
             ]
         }
