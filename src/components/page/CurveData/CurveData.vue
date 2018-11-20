@@ -7,7 +7,7 @@
       <!-- 查询 -->
       <el-form :inline="true" :model="formInline" class="demo-form-inline mgb10">
         <el-form-item label="pump_model">
-          <el-input></el-input>
+          <el-select></el-select>
         </el-form-item>
         <el-form-item>
           <el-button type="primary">查询</el-button>

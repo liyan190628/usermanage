@@ -1,7 +1,7 @@
-import Vue from 'vue';
-import Router from 'vue-router';
+import Vue from 'vue'
+import Router from 'vue-router'
 
-Vue.use(Router);
+Vue.use(Router)
 
 export default new Router({
     routes: [{
@@ -30,7 +30,8 @@ export default new Router({
                 },
                 {
                     path: '/systemParameter',
-                    component: resolve => require(['../components/page/SystemParameter/SystemParameterList.vue'], resolve),
+                    component: resolve =>
+                        require(['../components/page/SystemParameter/SystemParameterList.vue'], resolve),
                     meta: {
                         title: '系统参数管理'
                     }
@@ -51,7 +52,8 @@ export default new Router({
                 },
                 {
                     path: '/solarParameter',
-                    component: resolve => require(['../components/page/SolarParameter/SolarParameterList.vue'], resolve),
+                    component: resolve =>
+                        require(['../components/page/SolarParameter/SolarParameterList.vue'], resolve),
                     meta: {
                         title: '太阳能参数管理'
                     }
@@ -77,15 +79,16 @@ export default new Router({
                     path: '/upload',
                     component: resolve => require(['../components/page/Upload.vue'], resolve),
                     meta: {
-                        title: '文件上传'
+                        title: '泵类型维护'
                     }
                 },
                 {
                     // vue-schart组件
-                    path: '/charts',
-                    component: resolve => require(['../components/page/BaseCharts.vue'], resolve),
+                    path: '/systemInstallDiagram',
+                    component: resolve =>
+                        require(['../components/page/SystemInstallDiagram/SystemInstallDiagram.vue'], resolve),
                     meta: {
-                        title: 'schart图表'
+                        title: '系统安装图管理'
                     }
                 },
                 {

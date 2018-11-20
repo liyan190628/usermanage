@@ -15,8 +15,11 @@
         <el-form-item label="邮箱">
           <el-input v-model="userform.address"></el-input>
         </el-form-item>
-        <el-form-item label="权限">
-          <el-input v-model="userform.address"></el-input>
+        <el-form-item label="角色">
+          <el-select v-model="userform.address">
+            <el-option label="全部" value=""></el-option>
+            <el-option label="区域二" value="beijing"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="当前状态">
           <el-input v-model="userform.address"></el-input>

@@ -81,7 +81,7 @@ export default {
                 },
                 {
                     icon: 'el-icon-lx-warn',
-                    index: '7',
+                    index: 'systemInstallDiagram',
                     title: '系统安装图管理',
                 },
                 {
