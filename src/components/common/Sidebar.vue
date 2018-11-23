@@ -57,7 +57,21 @@ export default {
                 {
                     icon: 'el-icon-lx-calendar',
                     index: 'pumpParameter',
-                    title: '泵参数管理'
+                    title: '泵参数管理',
+                    subs: [
+                        {
+                            index: 'pumpParameter',
+                            title: '泵参数管理'
+                        },
+                        {
+                            index: 'motorManage',
+                            title: 'MotorManage'
+                        },
+                        {
+                            index: 'standardsManage',
+                            title: 'StandardsManage'
+                        }
+                    ]
                 },
                 {
                     icon: 'el-icon-lx-emoji',
@@ -69,16 +83,16 @@ export default {
                     index: 'attachment',
                     title: '附件管理'
                 },
-                {
-                    icon: 'el-icon-rank',
-                    index: 'curveData',
-                    title: '扬程曲线基础数据'
-                },
-                {
-                    icon: 'el-icon-lx-warn',
-                    index: '6',
-                    title: '泵类型维护',
-                },
+                // {
+                //     icon: 'el-icon-rank',
+                //     index: 'curveData',
+                //     title: '扬程曲线基础数据'
+                // },
+                // {
+                //     icon: 'el-icon-lx-warn',
+                //     index: '6',
+                //     title: '泵类型维护',
+                // },
                 {
                     icon: 'el-icon-lx-warn',
                     index: 'systemInstallDiagram',

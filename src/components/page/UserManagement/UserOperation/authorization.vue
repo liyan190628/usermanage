@@ -1,38 +1,38 @@
 <template>
   <div>
-    <!-- 新增/修改模态框 -->
-    <el-dialog title="edit" :visible.sync="editVisible" center>
-      <el-form label-width="200px">
-        <el-form-item v-for="(item, index) in items" :key="index" :label="item.title">
-          <el-select v-if="item.type === 'select'" v-model="item.code">
+    <!-- 编辑弹出框 -->
+    <el-dialog center title="编辑" :visible.sync="editVisible" width="30%">
+      <el-form :model="userform" label-width="150px">
+        <el-form-item label="角色：">
+          <el-select :size="'medium'" v-model="userform.address">
             <el-option label="全部" value=""></el-option>
             <el-option label="区域二" value="beijing"></el-option>
           </el-select>
-          <el-input v-else></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <el-row slot="footer" type="flex" justify="center">
+        <el-button type="primary" @click="saveEdit">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
-        <el-button @click="saveEdit" type="primary">确 认</el-button>
-      </span>
+      </el-row>
     </el-dialog>
+
   </div>
 </template>
 <script>
 export default {
-  data() {
-    return {
-      userform: {}
-    }
-  },
   props: {
     show: {
       type: Boolean,
       default: false
-    },
-    items: {
-      type: Array,
-      default: []
+    }
+    // userform: {
+    //   type: Object,
+    //   default: {}
+    // }
+  },
+  data() {
+    return {
+      userform: {}
     }
   },
   methods: {
@@ -54,7 +54,7 @@ export default {
 }
 </script>
 <style scoped>
-.el-select{
-  width: 100%;
+.el-input__inner{
+  width: 200px;
 }
 </style>

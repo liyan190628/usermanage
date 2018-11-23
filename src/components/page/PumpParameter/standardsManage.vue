@@ -1,55 +1,38 @@
 <template>
   <div>
     <!-- 面包屑导航 -->
-    <crumbs :title1="'用户管理'" :title2="'用户列表'"></crumbs>
-    <!-- 搜索 -->
-    <div class="container">
+    <crumbs :title1="'泵参数管理'" :title2="'standardsManage'"></crumbs>
+
+    <div class="container system-content">
+      <!-- 检索条件 -->
       <el-form :inline="true" :model="formInline" class="demo-form-inline mgb10">
-        <el-form-item label="用户名：">
-          <el-input v-model="formInline.user"></el-input>
-        </el-form-item>
-        <el-form-item label="角色：">
-          <el-input v-model="formInline.user"></el-input>
-        </el-form-item>
-        <el-form-item label="状态：">
-          <el-select v-model="formInline.region">
-            <el-option label="全部" value=""></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
+        <el-form-item label="standarsName：">
+          <el-input></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="query">查询</el-button>
+          <el-button type="primary">查询</el-button>
         </el-form-item>
       </el-form>
-      <!-- <el-row class="pb-10">
-        <el-button type="primary">添加用户</el-button>
-      </el-row> -->
+
+      <!-- 添加 -->
       <el-row class="pb-20" :gutter="24">
         <el-col :span="2" :offset="22">
-          <el-button type="primary">添加用户</el-button>
+          <el-button @click="addVisible = true" type="primary">+add</el-button>
         </el-col>
       </el-row>
-      <!-- 表格 -->
+
       <el-card shadow="hover">
         <el-table :data="tableData" class="table" stripe style="width: 100%;">
-          <el-table-column prop="date" align="center" label="用户名">
+          <el-table-column prop="address" align="center" label="standarsName">
           </el-table-column>
-          <el-table-column prop="name" align="center" label="密码">
+          <el-table-column prop="address" align="center" label="standarsExplain">
           </el-table-column>
-          <el-table-column prop="address" align="center" label="联系方式">
+          <el-table-column prop="address" align="center" label="standarsPicture">
           </el-table-column>
-          <el-table-column prop="email" align="center" label="邮箱">
-          </el-table-column>
-          <el-table-column prop="address" align="center" label="权限">
-          </el-table-column>
-          <el-table-column prop="address" align="center" label="当前状态">
-          </el-table-column>
-          <el-table-column prop="address" align="center" label="操作" width="200">
+          <el-table-column prop="address" align="center" label="operate">
             <template slot-scope="scope">
-              <el-button @click="handleEdit(scope.$index, scope.row)" type="text">编辑</el-button>
-              <el-button @click="handleDelete(scope.$index, scope.row)" type="text">删除</el-button>
-              <el-button type="text">解锁</el-button>
-              <el-button @click="authorVisible = true" type="text">授权</el-button>
+              <el-button @click="handleEdit(scope.$index, scope.row)" type="text">edit</el-button>
+              <el-button @click="handleDelete(scope.$index, scope.row)" type="text">delete</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -58,20 +41,21 @@
           </el-pagination>
         </div>
       </el-card>
+
     </div>
+    <!-- 新增模态框 -->
+    <add :show='addVisible' :items='items' @cancel='addCancel'></add>
     <!-- 编辑用户 -->
-    <edit @cancel='editCancel' :show='editVisible' :userform='userform'></edit>
-    <!-- 删除用户 -->
+    <edit @cancel='editCancel' :show='editVisible' :items='items'></edit>
+    <!-- 删除模态框 -->
     <deleteModal :show='delVisible' @cancel='deleteCancel' @deleteRow='deleteRow'></deleteModal>
-    <!-- 授权 -->
-    <authorization :show='authorVisible' @cancel='authorCancel'></authorization>
   </div>
 </template>
 <script>
-import edit from './UserOperation/edit' // 编辑
-import authorization from './UserOperation/authorization' // 授权
+import add from '../../modal/addModal'
+import edit from '../../modal/editModal' // 编辑
 export default {
-  components: { edit, authorization },
+  components: { edit, add },
   data() {
     return {
       cur_page: 1,
@@ -88,8 +72,12 @@ export default {
       editVisible: false, // 编辑
       delVisible: false, // 删除
       authorVisible: false, // 授权
-      userform: {},
-      idx: -1
+      addVisible: false, // 增加
+      items: [
+        { title: 'standarsName', type: '' },
+        { title: 'standarsExplain', type: '' },
+        { title: 'standarsPicture', type: '' }
+      ]
     }
   },
   methods: {

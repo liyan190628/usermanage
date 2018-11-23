@@ -10,8 +10,21 @@
     padding-bottom: 10px;
 }
 
+.pb-20 {
+    padding-bottom: 20px;
+}
+
 .pd {
     padding: 5px 0;
+}
+
+.pr-20 {
+    padding-right: 20px;
+}
+
+.py {
+    padding-left: 100px;
+    padding-right: 100px;
 }
 
 .p-all {
@@ -20,6 +33,10 @@
 
 .mr-10 {
     margin-right: 10px;
+}
+
+.mt-10 {
+    margin-top: 10px;
 }
 
 .mb-10 {

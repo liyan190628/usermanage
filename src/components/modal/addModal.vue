@@ -1,10 +1,10 @@
 <template>
   <div>
     <!-- 新增/修改模态框 -->
-    <el-dialog title="新增" :visible.sync="editVisible" center>
-      <el-form :model="userform" label-width="120px" size="small">
+    <el-dialog title="add" :visible.sync="editVisible" center>
+      <el-form label-width="200px" size="small">
         <el-form-item v-for="(item, index) in items" :key="index" :label="item.title">
-          <el-select v-if="item.type === 'select'" v-model="userform.region">
+          <el-select v-if="item.type === 'select'" v-model="item.code">
             <el-option label="全部" value=""></el-option>
             <el-option label="区域二" value="beijing"></el-option>
           </el-select>
@@ -12,8 +12,8 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="cancel">取 消</el-button>
-        <el-button @click="saveEdit" type="primary">确 认</el-button>
+        <el-button @click="cancel">cancel</el-button>
+        <el-button @click="saveEdit" type="primary">confirm</el-button>
       </span>
     </el-dialog>
   </div>
@@ -24,10 +24,6 @@ export default {
     show: {
       type: Boolean,
       default: false
-    },
-    userform: {
-      type: Object,
-      default: {}
     },
     items: {
       type: Array,

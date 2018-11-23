@@ -44,6 +44,20 @@ export default new Router({
                     }
                 },
                 {
+                    path: '/motorManage',
+                    component: resolve => require(['../components/page/PumpParameter/motorManage.vue'], resolve),
+                    meta: {
+                        title: 'MotorManage'
+                    }
+                },
+                {
+                    path: '/standardsManage',
+                    component: resolve => require(['../components/page/PumpParameter/standardsManage.vue'], resolve),
+                    meta: {
+                        title: 'StandardsManage'
+                    }
+                },
+                {
                     path: '/addPumpParameter',
                     component: resolve => require(['../components/page/PumpParameter/addPumpParameter.vue'], resolve),
                     meta: {
