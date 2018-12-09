@@ -19,9 +19,7 @@
 
       <!-- 表格 -->
       <el-row type="flex" class="row-bg" justify="space-between">
-        <el-col :span="6">
-          <!-- 系统参数管理 -->
-        </el-col>
+        <el-col :span="6"></el-col>
         <el-col :span="1">
           <span @click="addVisible = !addVisible">
             <i class="el-icon-lx-add"></i>增加

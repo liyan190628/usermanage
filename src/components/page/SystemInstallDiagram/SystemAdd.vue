@@ -1,24 +1,24 @@
 <template>
   <div>
     <!-- 新增/修改模态框 -->
-    <el-dialog title="新增" :visible.sync="editVisible" center>
+    <el-dialog title="add" :visible.sync="editVisible" center>
       <el-form :model="userform" label-width="120px" size="small">
         <el-form-item label="install_type:">
-          <el-input></el-input>
+          <el-input v-model="userform.installType"></el-input>
         </el-form-item>
         <el-form-item label="install_picture:">
           <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
             <img v-if="imageUrl" :src="imageUrl" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon">上传图片</i>
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
         <el-form-item label="explain:">
-          <el-input></el-input>
+          <el-input v-model="userform.explainRemark"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="saveEdit" type="primary">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button @click="saveEdit" type="primary">confirm</el-button>
+        <el-button @click="cancel">cancel</el-button>
       </span>
     </el-dialog>
   </div>
@@ -30,10 +30,10 @@ export default {
       type: Boolean,
       default: false
     },
-    userform: {
-      type: Object,
-      default: {}
-    },
+    // userform: {
+    //   type: Object,
+    //   default: {}
+    // },
     items: {
       type: Array,
       default: []
@@ -41,7 +41,11 @@ export default {
   },
   data() {
     return {
-      imageUrl: ''
+      imageUrl: '',
+      userform: {
+        type: Object,
+        default: {}
+      }
     }
   },
   methods: {

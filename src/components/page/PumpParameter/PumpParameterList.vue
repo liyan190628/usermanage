@@ -3,13 +3,13 @@
     <!-- 面包屑导航 -->
     <crumbs :title1="'泵参数管理'" :title2="'泵参数列表'"></crumbs>
     <div class="container mgb10">
-      <el-form :inline="true" :model="formInline" class="demo-form-inline mgb10">
-        <el-form-item v-for="(items, index) in formItems" :key="index" :label="items.title">
-          <el-select v-if="items.type === 'select'" v-model="formInline.region">
+      <el-form :inline="true" class="demo-form-inline mgb10">
+        <el-form-item v-for="(item, index) in formItems" :key="index" :label="item.title">
+          <el-select v-if="item.type === 'select'" v-model="item.value">
             <el-option label="全部" value=""></el-option>
             <el-option label="区域二" value="beijing"></el-option>
           </el-select>
-          <el-input v-else></el-input>
+          <el-input v-model="item.value" v-else></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary">查询</el-button>
@@ -29,17 +29,17 @@
         </el-col>
       </el-row>
       <el-table :data="tableData" class="table" stripe style="width: 100%;">
-        <el-table-column prop="pump_type" align="center" label="pump_type">
+        <el-table-column prop="pumpType" align="center" label="pump_type">
         </el-table-column>
-        <el-table-column prop="pump_model" align="center" label="pump_model">
+        <el-table-column prop="pumpModel" align="center" label="pump_model">
         </el-table-column>
-        <el-table-column prop="P_power(KW)" align="center" label="P_power(KW)">
+        <el-table-column prop="powerMax" align="center" label="P_power(KW)">
         </el-table-column>
-        <el-table-column prop="H_head(M)" align="center" label="H_head(M)">
+        <el-table-column prop="headMax" align="center" label="H_head(M)">
         </el-table-column>
         <el-table-column prop="Q_flow_rate(m/h)" align="center" label="Q_flow_rate(m/h)">
         </el-table-column>
-        <el-table-column prop="operate" align="center" label="operate" width="180">
+        <el-table-column prop="operation" align="center" label="operate" width="180">
           <template slot-scope="scope">
             <el-button @click="editVisible = true" type="text">详情</el-button>
             <el-button @click="editVisible = true" type="text">修改</el-button>
@@ -66,46 +66,28 @@
 export default {
   data() {
     return {
-      formInline: {
-        region: ''
-      },
-      tableData: [
+      formItems: [ // 查询条件
+        { title: 'pump_type:', type: 'select', value: '', code: 'pumpType' },
+        { title: 'pump_model:', type: 'input', value: '', code: 'pumpModel' },
+        { title: 'p_power:', type: 'input', value: '', code: 'powerMax' },
+        { title: 'h_head:', type: 'input',value: '', code: 'powerMax' },
+        { title: 'q_flow_rate:', type: 'input', value: '', code: '' }
+      ],
+      tableData: [ // 表格数据
         {
-          pump_type: 'p_1',
-          max: 20,
-          head: 0.8,
-          cable: '0.6/1KV,450/750V',
-          pipes: '0.25,0.3,0.35'
-        },
-        {
-          pump_type: 'p_1',
-          max: 20,
-          head: 0.8,
-          cable: '0.6/1KV,450/750V',
-          pipes: '0.25,0.3,0.35'
-        },
-        {
-          pump_type: 'p_1',
-          max: 20,
+          pumpType: 'p_1',
+          powerMax: 20,
           head: 0.8,
           cable: '0.6/1KV,450/750V',
           pipes: '0.25,0.3,0.35'
         }
       ],
-      cur_page: 1,
       // addVisible: false, // 新增模态框
       editVisible: false, // 修改模态框
       delVisible: false, // 删除
-      formItems: [
-        { title: 'pump_type:', type: 'select' },
-        { title: 'pump_model:', type: 'input' },
-        { title: 'p_power:', type: 'input' },
-        { title: 'h_head:', type: 'input' },
-        { title: 'q_flow_rate:', type: 'input' }
-      ],
-      // 编辑
-      editform: {},
-      items: [{ title: 'pump_type', tyep: 'select' }]
+      editform: {}, // 编辑
+      items: [{ title: 'pump_type', tyep: 'select' }],
+      cur_page: 1, // 当前页
     }
   },
   methods: {
@@ -114,7 +96,17 @@ export default {
       this.tableData.splice(this.idx, 1)
       this.$message.success('删除成功')
       this.delVisible = false
+    },
+    // 获取泵参数列表数据
+    getData() {
+      let vm = {}
+      for (let index of this.formItems) {
+        vm[index.code] = index.value;
+      }
     }
+  },
+  created () {
+    this.getData()
   }
 }
 </script>

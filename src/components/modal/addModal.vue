@@ -8,7 +8,7 @@
             <el-option label="全部" value=""></el-option>
             <el-option label="区域二" value="beijing"></el-option>
           </el-select>
-          <el-input v-else></el-input>
+          <el-input v-model="item.code" v-else></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -34,7 +34,7 @@ export default {
     cancel() {
       this.$emit('cancel')
     },
-    saveEdit() { }
+    saveEdit() {this.$emit('saveEdit') }
   },
   computed: {
     editVisible: {
@@ -45,6 +45,9 @@ export default {
         this.$emit('cancel', n)
       }
     }
+  },
+  created () {
+    
   }
 }
 </script>

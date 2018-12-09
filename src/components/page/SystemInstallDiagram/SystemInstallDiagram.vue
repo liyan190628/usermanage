@@ -6,7 +6,7 @@
       <!-- 查询 -->
       <el-form :inline="true" :model="formInline" class="demo-form-inline mgb10">
         <el-form-item label="install_type:">
-          <el-input></el-input>
+          <el-input v-model="formInline.installType"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary">查询</el-button>
@@ -20,15 +20,15 @@
         </el-col>
         <el-col :span="1">
           <span @click="editVisible = true">
-            <i class="el-icon-lx-add"></i>增加</span>
+            <i class="el-icon-lx-add"></i>add</span>
         </el-col>
       </el-row>
       <el-table :data="tableData" class="table" stripe style="width: 100%;">
-        <el-table-column prop="pump_type" align="center" label="install_type">
+        <el-table-column prop="installType" align="center" label="install_type">
         </el-table-column>
-        <el-table-column prop="max" align="center" label="explain">
+        <el-table-column prop="explainRemark" align="center" label="explain">
         </el-table-column>
-        <el-table-column prop="max" align="center" label="install_picture">
+        <el-table-column prop="picPath" align="center" label="install_picture">
         </el-table-column>
       </el-table>
       <div class="pagination">
@@ -48,46 +48,34 @@ export default {
   data() {
     return {
       formInline: {
-        region: ''
+        installType: '' // 安装类型
       },
-      formItems: [
-        { title: 'pump_type:', type: 'select' },
-        { title: 'pump_model:', type: 'input' },
-        { title: 'p_power:', type: 'input' },
-        { title: 'h_head:', type: 'input' },
-        { title: 'q_flow_rate:', type: 'input' }
-      ],
-      tableData: [
+      tableData: [ // 表格数据
         {
-          pump_type: 'p_1',
-          max: 20,
-          head: 0.8,
-          cable: '0.6/1KV,450/750V',
-          pipes: '0.25,0.3,0.35'
-        },
-        {
-          pump_type: 'p_1',
-          max: 20,
-          head: 0.8,
-          cable: '0.6/1KV,450/750V',
-          pipes: '0.25,0.3,0.35'
-        },
-        {
-          pump_type: 'p_1',
-          max: 20,
-          head: 0.8,
-          cable: '0.6/1KV,450/750V',
-          pipes: '0.25,0.3,0.35'
+          installType: 'p_1',
+          explainRemark: 20,
+          picPath: 0.8
         }
       ],
-      cur_page: 1,
-      editVisible: true
+      cur_page: 1, // 当前页
+      rows: 10,
+      editVisible: false
     }
   },
   methods: {
-    cancel() {
+    cancel() { // 关闭弹出框
       this.editVisible = !this.editVisible
+    },
+    getData() { // 获取列表数据
+      let vm = {
+        installType: this.installType,
+        page: this.cur_page,
+        rows: this.rows
+      }
     }
+  },
+  created () {
+    this.getData()
   }
 }
 </script>

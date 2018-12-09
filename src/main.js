@@ -5,10 +5,13 @@ import router from './router'
 import axios from 'axios'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css' // 默认主题
-// import '../static/css/theme-green/index.css';       // 浅绿色主题
 import '../static/css/icon.css'
 import 'babel-polyfill'
 import echarts from 'echarts'
+
+axios.defaults.baseURL = 'http://192.168.1.104:8080';
+// axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 Vue.prototype.$echarts = echarts
 
