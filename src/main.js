@@ -19,12 +19,14 @@ Vue.prototype.$echarts = echarts
 import addModal from './components/modal/addModal'
 import editModal from './components/modal/editModal'
 import deleteModal from './components/modal/deleteModal'
+import infoModal from './components/modal/infoModal'
 import crumbs from './components/crumbs/crumbs'
 
 Vue.use(Vuex)
 Vue.component('deleteModal', deleteModal)
 Vue.component('addModal', addModal)
 Vue.component('editModal', editModal)
+Vue.component('infoModal', infoModal)
 Vue.component('crumbs', crumbs)
 
 import mixins from './mixin/mixin'

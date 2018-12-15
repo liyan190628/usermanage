@@ -13,6 +13,7 @@
         </el-form-item>
         <el-form-item label="状态：">
           <el-select v-model="formInline.isLock">
+            <el-option label="全部" value=""></el-option>
             <el-option label="锁定" value="Y"></el-option>
             <el-option label="未锁定" value="N"></el-option>
           </el-select>
@@ -21,8 +22,8 @@
           <el-button type="primary" @click="getUserList">查询</el-button>
         </el-form-item>
       </el-form>
-      <el-row class="pb-20" :gutter="24">
-        <el-col :span="2" :offset="22">
+      <el-row type="flex" class="row-bg pb-20" justify="end">
+        <el-col :span="2">
           <el-button type="primary" @click="addVisible = true">添加用户</el-button>
         </el-col>
       </el-row>
@@ -31,16 +32,16 @@
         <el-table :data="tableData" class="table" stripe style="width: 100%;">
           <el-table-column prop="userName" align="center" label="用户名"></el-table-column>
           <el-table-column prop="password" align="center" label="密码"></el-table-column>
-          <el-table-column prop="password" align="center" label="联系方式"></el-table-column>
+          <el-table-column prop="phone" align="center" label="联系方式"></el-table-column>
           <el-table-column prop="email" align="center" label="邮箱"></el-table-column>
           <el-table-column prop="userType" align="center" label="权限"></el-table-column>
           <el-table-column prop="isLock" align="center" label="当前状态"></el-table-column>
           <el-table-column prop="operation" align="center" label="操作" width="200">
             <template slot-scope="scope">
               <el-button @click="handleEdit(scope.$index, scope.row)" type="text">编辑</el-button>
-              <el-button @click="handleDelete(scope.$index, scope.row)" type="text">删除</el-button>
+              <el-button @click="handleDelete(scope.$index)" type="text">删除</el-button>
               <el-button type="text">解锁</el-button>
-              <el-button @click="authorVisible = true" type="text">授权</el-button>
+              <el-button @click="handleAuthor(scope.$index)" type="text">授权</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -57,11 +58,11 @@
     <!-- 添加用户 -->
     <addModal @cancel='addCancel' @saveEdit="addUser" :show="addVisible" :items="addItems"></addModal>
     <!-- 编辑用户 -->
-    <edit @cancel="editCancel" :show="editVisible" :userform="userform"></edit>
+    <edit @cancel="editCancel" @saveEdit='saveEdit' :show="editVisible" :userform="userform"></edit>
     <!-- 删除用户 -->
     <deleteModal :show="delVisible" @cancel="deleteCancel" @deleteRow="deleteRow"></deleteModal>
     <!-- 授权 -->
-    <authorization :show="authorVisible" @cancel="authorCancel"></authorization>
+    <authorization :userId='userId' :show="authorVisible" @cancel="authorCancel"></authorization>
   </div>
 </template>
 <script>
@@ -93,7 +94,8 @@ export default {
       ],
       idx: -1,
       cur_page: 1, // 当前页
-      rows: 10
+      rows: 10,
+      userId: ''
     };
   },
   methods: {
@@ -105,7 +107,11 @@ export default {
       this.delVisible = true;
     },
     addCancel () {
-      this.addVisible = !this.addCancel
+      this.addVisible = !this.addVisible
+    },
+    handleAuthor (index) {
+      this.authorVisible = !this.authorVisible
+      this.userId = this.tableData[index].userId
     },
     // 编辑
     editCancel() {
@@ -121,9 +127,10 @@ export default {
         userName: item.userName,
         password: item.password,
         phone: item.phone,
-        email: this.email,
-        userType: this.userType,
-        isLock: this.isLock
+        email: item.email,
+        userType: item.userType,
+        isLock: item.isLock,
+        userId: item.userId
       };
       this.editVisible = true
     },
@@ -132,9 +139,24 @@ export default {
     },
     // 确定删除
     deleteRow() {
-      this.tableData.splice(this.idx, 1);
-      this.$message.success("删除成功");
-      this.delVisible = false;
+      this.$axios
+        .get("/pumpms/customer/delete", {
+          params: {
+            userId: this.tableData[this.idx].userId
+          }
+        })
+        .then(response => {
+          if (response.data.flag) {
+            this.delVisible = false
+            this.$message("删除成功")
+            this.getUserList()
+          } else {
+            this.$message.success(response.data.msg)
+          }
+        })
+        .catch(error => {
+          // console.log(error);
+        })
     },
     // 获取用户列表
     getUserList() {
@@ -151,8 +173,8 @@ export default {
         .then(response => {
           this.tableData = response.data.rows;
         })
-        .catch(function(error) {
-          console.log(error);
+        .catch(error => {
+          // console.log(error);
         });
     },
     // 添加用户
@@ -165,11 +187,34 @@ export default {
         .get("/pumpms/customer/add", {
           params: vm
         })
-        .then(function(response) {
-          console.log(1);
+        .then(response => {
+           if (response.data.flag) {
+            this.addVisible = false
+            this.$message.success("添加成功!")
+            this.getUserList()
+          } else {
+            this.$message.success(response.data.msg)
+          }
+        })
+        .catch(response => {
+          // console.log(error);
+        });
+    },
+    saveEdit() { 
+      this.$axios
+        .get("/pumpms/customer/edit", {
+          params: this.userform
+        })
+        .then(response => {
+          if (response.data.flag) {
+            this.editVisible = false
+            this.getUserList()
+          }else {
+            this.$message.success(response.data.msg)
+          }
         })
         .catch(function(error) {
-          console.log(error);
+          // this.$message('这是一条消息提示');
         });
     }
   },

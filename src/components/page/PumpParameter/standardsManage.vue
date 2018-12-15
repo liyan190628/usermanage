@@ -7,10 +7,10 @@
       <!-- 检索条件 -->
       <el-form :inline="true" :model="formInline" class="demo-form-inline mgb10">
         <el-form-item label="standarsName：">
-          <el-input></el-input>
+          <el-input v-model="standarsName"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">查询</el-button>
+          <el-button @click="getListData" type="primary">查询</el-button>
         </el-form-item>
       </el-form>
 
@@ -23,13 +23,13 @@
 
       <el-card shadow="hover">
         <el-table :data="tableData" class="table" stripe style="width: 100%;">
-          <el-table-column prop="address" align="center" label="standarsName">
+          <el-table-column prop="standarsName" align="center" label="standarsName">
           </el-table-column>
-          <el-table-column prop="address" align="center" label="standarsExplain">
+          <el-table-column prop="standarsExplain" align="center" label="standarsExplain">
           </el-table-column>
-          <el-table-column prop="address" align="center" label="standarsPicture">
+          <el-table-column prop="astandarsPicture" align="center" label="standarsPicture">
           </el-table-column>
-          <el-table-column prop="address" align="center" label="operate">
+          <el-table-column prop="operate" align="center" label="operate">
             <template slot-scope="scope">
               <el-button @click="handleEdit(scope.$index, scope.row)" type="text">edit</el-button>
               <el-button @click="handleDelete(scope.$index, scope.row)" type="text">delete</el-button>
@@ -63,27 +63,20 @@ export default {
         user: '',
         region: ''
       },
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '18888888888',
-        email: '97620101@qq.com'
-      }],
+      tableData: [],
       editVisible: false, // 编辑
       delVisible: false, // 删除
       authorVisible: false, // 授权
       addVisible: false, // 增加
       items: [
-        { title: 'standarsName', type: '' },
-        { title: 'standarsExplain', type: '' },
-        { title: 'standarsPicture', type: '' }
-      ]
+        { title: 'standarsName', type: '', code: '' },
+        { title: 'standarsExplain', type: '', code: '' },
+        { title: 'standarsPicture', type: '', code: '' }
+      ],
+      standarsName: ''
     }
   },
   methods: {
-    query() {
-      console.log('submit!')
-    },
     handleCurrentChange(val) {
       this.cur_page = val
       // this.getData()
@@ -117,7 +110,25 @@ export default {
       this.tableData.splice(this.idx, 1)
       this.$message.success('删除成功')
       this.delVisible = false
+    },
+    getListData () {
+      this.$axios
+        .get("/pumpms/solarPanel/queryList", {
+          params: {
+            standarsName: this.standarsName
+          }
+        })
+        .then(response => {
+          console.log(response)
+          this.tableData = response.data.rows;
+        })
+        .catch(error => {
+          // console.log(error);
+        });
     }
-  }
+  },
+  created() {
+    this.getListData()
+  },
 }
 </script>

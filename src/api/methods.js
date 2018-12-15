@@ -1,4 +1,3 @@
-// import qs from 'qs'
 import router from '../router'
 import app from '../main.js'
 const axios = require('axios')
@@ -6,48 +5,11 @@ import {
     Loading,
     Message
 } from 'element-ui'
-// 超时时间
-axios.defaults.timeout = 5000
-// http请求拦截器
-// var loadinginstace
-// axios.interceptors.request.use(config => {
-//     // element ui Loading方法
-//     loadinginstace = Loading.service({
-//         fullscreen: true
-//     })
 
-//     return config
-
-// }, error => {
-//     loadinginstace.close()
-//     Message.error({
-//         message: '加载超时'
-
-//     })
-
-//     return Promise.reject(error)
-
-// })
-// // http响应拦截器
-// axios.interceptors.response.use(data => { // 响应成功关闭loading
-//     loadinginstace.close()
-
-//     return data
-
-// }, error => {
-//     loadinginstace.close()
-//     Message.error({
-//         message: '加载失败'
-
-//     })
-
-//     return Promise.reject(error)
-
-// })
-// export default axios
+axios.defaults.timeout = 5000 // 超时时间
 const myErr = 'callback is expect fuction'
-const instance = axios.create()
 
+const instance = axios.create()
 instance.defaults.headers.post['Content-Type'] = 'application/json-patch+json'
 
 // 发送请求拦截器
@@ -57,7 +19,10 @@ instance.interceptors.request.use(config => {
     if (token) { // 发送前判断是否存在token，如果存在，统一在http请求的headers加上token
         config.headers.Authorization = 'Bearer ' + token
     }
-    app.loadingService()
+    loadinginstace = Loading.service({
+      fullscreen: true
+    })
+
     if (config.method === 'post' && !config.data.Accept) {
         let data = config.data
         let arr = []
@@ -86,7 +51,7 @@ instance.interceptors.request.use(config => {
 // 返回参数拦截器
 instance.interceptors.response.use(
     response => {
-        app.$load.close()
+        loadinginstace.close()
         let err = response.data.Error
         if (err) { // 若操作失败
             message(err, 'error')
@@ -116,7 +81,7 @@ instance.interceptors.response.use(
                     message('网络不稳定，请检查网络', 'error')
             }
         }
-        app.$load.close()
+        loadinginstace.close()
         return Promise.reject(err)
     }
 )

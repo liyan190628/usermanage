@@ -1,18 +1,18 @@
 <template>
   <div>
     <!-- 编辑弹出框 -->
-    <el-dialog center title="编辑" :visible.sync="editVisible" width="30%">
-      <el-form :model="userform" label-width="150px">
-        <el-form-item label="角色：">
-          <el-select :size="'medium'" v-model="userform.address">
-            <el-option label="全部" value=""></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
+    <el-dialog center title="edit" :visible.sync="editVisible" width="30%">
+      <el-form label-width="150px">
+        <el-form-item label="role：">
+          <el-select :size="'medium'" v-model="roleId">
+            <el-option v-for="(item, index) in userform" :key="index" :label="item.roleName" :value="item.roleId"></el-option>
+            <!-- <el-option label="区域二" value="beijing"></el-option> -->
           </el-select>
         </el-form-item>
       </el-form>
       <el-row slot="footer" type="flex" justify="center">
-        <el-button type="primary" @click="saveEdit">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button @click="cancel">cancel</el-button>
+        <el-button type="primary" @click="saveEdit">confirm</el-button>
       </el-row>
     </el-dialog>
 
@@ -24,22 +24,49 @@ export default {
     show: {
       type: Boolean,
       default: false
-    }
-    // userform: {
-    //   type: Object,
-    //   default: {}
-    // }
+    },
+    userId: null
   },
   data() {
     return {
-      userform: {}
+      userform: {},
+      roleId: ''
     }
   },
   methods: {
     cancel() {
       this.$emit('cancel')
     },
-    saveEdit() { }
+    saveEdit() {
+      this.$axios
+        .get("/pumpms/customer/accredit", {
+          params: {
+            userId: this.userId,
+            roleId: this.roleId
+          }
+        })
+        .then(response => {
+          console.log(response)
+        })
+        .catch(response => {
+          // console.log(error);
+        });
+    },
+    queryRole () {
+      this.$axios
+        .get("/pumpms/role/queryRoles", {
+          // params: 
+        })
+        .then(response => {
+          this.userform = response.data
+        })
+        .catch(response => {
+          // console.log(error);
+        });
+    }
+  },
+  created() {
+    this.queryRole() 
   },
   computed: {
     editVisible: {

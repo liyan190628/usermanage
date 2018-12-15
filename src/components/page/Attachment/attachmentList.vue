@@ -18,12 +18,9 @@
       </el-form>
 
       <!-- 表格 -->
-      <el-row type="flex" class="row-bg" justify="space-between">
-        <el-col :span="6"></el-col>
-        <el-col :span="1">
-          <span @click="addVisible = !addVisible">
-            <i class="el-icon-lx-add"></i>增加
-          </span>
+      <el-row type="flex" class="row-bg" justify="end">
+        <el-col :span="2">
+          <el-button @click="addVisible = !addVisible" type="primary">+add</el-button>
         </el-col>
       </el-row>
 
@@ -81,8 +78,7 @@ export default {
       editVisible: false, // 修改模态框
       delVisible: false, // 删除
       addVisible: false, // 增加
-      // 编辑
-      editform: {},
+      editform: {}, // 编辑
       items: [{ title: 'pump_type', tyep: 'select' }]
     }
   },

@@ -18,9 +18,8 @@
         <el-col :span="6">
           系统参数管理
         </el-col>
-        <el-col :span="1">
-          <span @click="editVisible = true">
-            <i class="el-icon-lx-add"></i>add</span>
+        <el-col :span="2">
+          <el-button @click="editVisible = true" type="primary">+add</el-button>
         </el-col>
       </el-row>
       <el-table :data="tableData" class="table" stripe style="width: 100%;">

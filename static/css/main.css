@@ -23,7 +23,7 @@ a {
 
 .content-box {
     position: absolute;
-    left: 250px;
+    left: 220px;
     right: 0;
     top: 70px;
     bottom: 0;
@@ -37,6 +37,7 @@ a {
     width: auto;
     height: 100%;
     padding: 10px;
+    padding-right: 0;
     overflow-y: scroll;
     box-sizing: border-box;
 }

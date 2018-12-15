@@ -17,15 +17,11 @@
       </el-form>
       <!-- 表格 -->
       <el-row type="flex" class="row-bg" justify="space-between">
-        <el-col :span="6">
-          系统参数管理
-        </el-col>
-        <el-col :span="1">
-          <span>
-            <router-link :to="{path: '/addPumpParameter'}">
-              <i class="el-icon-lx-add"></i>增加
-            </router-link>
-          </span>
+        <el-col :span="6">泵参数管理</el-col>
+        <el-col :span="2">
+          <router-link :to="{path: '/addPumpParameter'}">
+            <el-button type="primary">+add</el-button>
+          </router-link>
         </el-col>
       </el-row>
       <el-table :data="tableData" class="table" stripe style="width: 100%;">
@@ -37,11 +33,11 @@
         </el-table-column>
         <el-table-column prop="headMax" align="center" label="H_head(M)">
         </el-table-column>
-        <el-table-column prop="Q_flow_rate(m/h)" align="center" label="Q_flow_rate(m/h)">
+        <el-table-column prop="flowMax" align="center" label="Q_flow_rate(m/h)">
         </el-table-column>
         <el-table-column prop="operation" align="center" label="operate" width="180">
           <template slot-scope="scope">
-            <el-button @click="editVisible = true" type="text">详情</el-button>
+            <el-button @click="handleInfo(scope.$index)" type="text">详情</el-button>
             <el-button @click="editVisible = true" type="text">修改</el-button>
             <el-button @click="handleDelete(scope.$index, scope.row)" type="text">删除</el-button>
           </template>
@@ -52,9 +48,9 @@
         </el-pagination>
       </div>
     </div>
-
-    <!-- 新增模态框 -->
-    <!-- <addModal :show='addVisible' :items='items' :userform='addform' @cancel='addCancel'></addModal> -->
+     
+    <!-- 查看详情弹出框 -->
+    <infoModal :show='infoVisible' :form='infoForm'></infoModal>
     <!-- 修改模态框 -->
     <editModal :show='editVisible' :items='items' :userform='editform' @cancel='editCancel'></editModal>
     <!-- 删除模态框 -->
@@ -70,8 +66,8 @@ export default {
         { title: 'pump_type:', type: 'select', value: '', code: 'pumpType' },
         { title: 'pump_model:', type: 'input', value: '', code: 'pumpModel' },
         { title: 'p_power:', type: 'input', value: '', code: 'powerMax' },
-        { title: 'h_head:', type: 'input',value: '', code: 'powerMax' },
-        { title: 'q_flow_rate:', type: 'input', value: '', code: '' }
+        { title: 'h_head:', type: 'input',value: '', code: 'headMax' },
+        { title: 'q_flow_rate:', type: 'input', value: '', code: 'flowMax' }
       ],
       tableData: [ // 表格数据
         {
@@ -82,12 +78,14 @@ export default {
           pipes: '0.25,0.3,0.35'
         }
       ],
-      // addVisible: false, // 新增模态框
+      infoVisible: false, // 详情弹出框
       editVisible: false, // 修改模态框
       delVisible: false, // 删除
       editform: {}, // 编辑
       items: [{ title: 'pump_type', tyep: 'select' }],
+      infoForm: {}, // 详情
       cur_page: 1, // 当前页
+      rows: 10
     }
   },
   methods: {
@@ -103,6 +101,22 @@ export default {
       for (let index of this.formItems) {
         vm[index.code] = index.value;
       }
+      vm.page = this.cur_page,
+      vm.rows = this.rows 
+      this.$axios
+        .get("/pumpms/pump/queryList", {
+          params: vm
+        })
+        .then(response => {
+          this.tableData = response.data.rows;
+        })
+        .catch(error => {
+          // console.log(error);
+        });
+    },
+    handleInfo (index) { // 查看详情
+      this.infoVisible = !this.infoVisible
+      this.infoForm = this.tableData[index]
     }
   },
   created () {
@@ -113,10 +127,14 @@ export default {
 <style scoped>
 .row-bg{
   border: 1px solid #ccc;
-  padding: 8px 4px;
+  padding: 4px 4px;
 }
 .table{
   border: 1px solid #ccc;
   border-top: none;
+}
+.el-row--flex.is-justify-space-between{
+  align-items:center;
+  padding-left: 20px;
 }
 </style>

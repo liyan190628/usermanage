@@ -49,7 +49,21 @@ export default {
     cancel() {
       this.$emit('cancel')
     },
-    saveEdit() { }
+    saveEdit() { 
+      this.$emit('saveEdit')
+      // this.$axios
+      //   .get("/pumpms/customer/edit", {
+      //     params: this.userform
+      //   })
+      //   .then(response => {
+      //     if (response.data.flag) {
+      //       // this.show = flase
+      //     }
+      //   })
+      //   .catch(function(error) {
+      //     this.$message('这是一条消息提示');
+      //   });
+    }
   },
   computed: {
     editVisible: {

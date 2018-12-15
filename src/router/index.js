@@ -80,14 +80,14 @@ export default new Router({
                         title: '附件管理列表'
                     }
                 },
-                {
-                    // markdown组件
-                    path: '/curveData',
-                    component: resolve => require(['../components/page/CurveData/CurveData.vue'], resolve),
-                    meta: {
-                        title: '扬程曲线基础数据'
-                    }
-                },
+                // {
+                //     // markdown组件
+                //     path: '/curveData',
+                //     component: resolve => require(['../components/page/CurveData/CurveData.vue'], resolve),
+                //     meta: {
+                //         title: '扬程曲线基础数据'
+                //     }
+                // },
                 {
                     // 图片上传组件
                     path: '/upload',
@@ -106,11 +106,21 @@ export default new Router({
                     }
                 },
                 {
-                    // 拖拽列表组件
-                    path: '/drag',
-                    component: resolve => require(['../components/page/DragList.vue'], resolve),
+                    // 权限页面
+                    path: '/mainQueryPage',
+                    component: resolve => require(['../components/page/mainQueryPage/index.vue'], resolve),
                     meta: {
-                        title: '拖拽列表'
+                        title: '主查询页面',
+                        permission: true
+                    }
+                },
+                {
+                    // 权限页面
+                    path: '/test',
+                    component: resolve => require(['../components/page/test/index.vue'], resolve),
+                    meta: {
+                        title: '测试',
+                        permission: true
                     }
                 },
                 {

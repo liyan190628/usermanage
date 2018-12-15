@@ -3,7 +3,7 @@ import {
 } from './methods'
 
 let apiBaseUrl = require('./ApiConst').apiBaseUrl
-apiBaseUrl += 'user/api'
+apiBaseUrl += 'pumps'
 
 console.log(apiBaseUrl)
 

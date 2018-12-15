@@ -6,11 +6,7 @@
       <!-- 查询 -->
       <el-form :inline="true" class="demo-form-inline mgb10">
         <el-form-item v-for="(items, index) in formItems" :key="index" :label="items.title">
-          <el-select v-if="items.type === 'select'" v-model="items.value">
-            <el-option label="全部" value=""></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
-          <el-input v-model="items.value" v-else></el-input>
+          <el-input v-model="items.value"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="getListData" type="primary">查询</el-button>
@@ -18,16 +14,10 @@
       </el-form>
 
       <!-- 表格 -->
-      <el-row type="flex" class="row-bg" justify="space-between">
-        <el-col :span="6">
-          <!-- 系统参数管理 -->
-        </el-col>
-        <el-col :span="1">
-          <span>
-            <router-link :to="{path: '/addPumpParameter'}">
-              <i class="el-icon-lx-add"></i>增加
-            </router-link>
-          </span>
+      <el-row type="flex" class="row-bg" justify="end">
+        <el-col :span="2">
+          <!-- <span @click="addCancel"><i class="el-icon-lx-add"></i>增加</span> -->
+          <el-button @click="addCancel" type="primary">+add</el-button>
         </el-col>
       </el-row>
 
@@ -56,6 +46,10 @@
       </div>
 
     </div>
+
+     <!-- 添加太阳能参数 -->
+    <addModal @cancel='addCancel' @saveEdit="addUser" :show="addVisible" :items="addItems"></addModal>
+
   </div>
 </template>
 <script>
@@ -66,13 +60,21 @@ export default {
         region: ''
       },
       formItems: [
-        { title: 'pump_type:', type: 'select', value: '', code: 'solarPanelType' },
-        { title: 'pump_model:', type: 'input', value: '', code: 'peakPower'  },
-        { title: 'p_power:', type: 'input', value: '', code: 'solarPanelType'  },
-        { title: 'h_head:', type: 'input', value: '', code: 'solarPanelType'  },
-        { title: 'q_flow_rate:', type: 'input', value: '', code: 'solarPanelType'  }
+        { title: 'peakPower:', type: 'input', value: '', code: 'peakPower' },
+        { title: 'openCircuitVoltage:', type: 'input', value: '', code: 'openCircuitVoltage'  },
       ],
       tableData: [],
+      addVisible: false, // 添加
+      addItems: [
+        { title: "solarPanelType:", type: "input", code: "", vm: "solarPanelType" },
+        { title: "peakPower:", type: "input", code: "", vm: "peakPower" },
+        { title: "tolerancePmax:", type: "input", code: "", vm: "tolerancePmax" },
+        { title: "voltagePmax:", type: "input", code: "", vm: "voltagePmax" },
+        { title: "currentPmax;:", type: "input", code: "", vm: "currentPmax;" },
+        { title: "openCircuitVoltage:", type: "input", code: "", vm: "openCircuitVoltage" },
+        { title: "shortCircuitCurrent:", type: "input", code: "", vm: "shortCircuitCurrent" },
+        { title: "maxSeriesFuse:", type: "input", code: "", vm: "maxSeriesFuse" }
+      ],
       rows: 10, // 显示条数
       cur_page: 1, // 当前页
     }
@@ -85,8 +87,47 @@ export default {
       }
       vm.page = this.cur_page
       vm.rows = this.rows
-    }
-  }
+      this.$axios
+        .get("/pumpms/solarPanel/queryList", {
+          params: vm
+        })
+        .then(response => {
+          console.log(response)
+          this.tableData = response.data.rows;
+        })
+        .catch(error => {
+          // console.log(error);
+        });
+    },
+    addCancel () {
+      this.addVisible = !this.addVisible
+    },
+    addUser() {
+      let vm = {};
+      for (let index of this.addItems) {
+        vm[index.vm] = index.code;
+      }
+      this.$axios
+        .get("/pumpms/solarPanel/add", {
+          params: vm
+        })
+        .then(response => {
+           if (response.data.flag) {
+            this.addVisible = false
+            this.$message.success("添加成功!")
+            this.getListData()
+          } else {
+            this.$message.error(response.data.msg)
+          }
+        })
+        .catch(response => {
+          // console.log(error);
+        });
+    },
+  },
+  created() {
+    this.getListData()
+  },
 }
 </script>
 <style scoped>

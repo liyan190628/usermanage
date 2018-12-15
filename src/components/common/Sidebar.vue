@@ -83,16 +83,6 @@ export default {
                     index: 'attachment',
                     title: '附件管理'
                 },
-                // {
-                //     icon: 'el-icon-rank',
-                //     index: 'curveData',
-                //     title: '扬程曲线基础数据'
-                // },
-                // {
-                //     icon: 'el-icon-lx-warn',
-                //     index: '6',
-                //     title: '泵类型维护',
-                // },
                 {
                     icon: 'el-icon-lx-warn',
                     index: 'systemInstallDiagram',
@@ -100,8 +90,13 @@ export default {
                 },
                 {
                     icon: 'el-icon-lx-warn',
-                    index: '10',
+                    index: 'mainQueryPage',
                     title: '主查询页面',
+                },
+                {
+                    icon: 'el-icon-lx-warn',
+                    index: 'test',
+                    title: '测试',
                 }
             ]
         }
@@ -133,7 +128,7 @@ export default {
         width: 0;
     }
     .sidebar-el-menu:not(.el-menu--collapse){
-        width: 250px;
+        width: 220px;
     }
     .sidebar > ul {
         height:100%;

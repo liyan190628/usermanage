@@ -50,20 +50,7 @@ export default {
                     return false;
                 }
             });
-        },
-        // submitForm(formName) {
-        //     // console.log(this.$store.state.users.currentUser.Username)
-        //     // Element-ui框架提供的方法
-        //     this.$refs[formName].validate(function (flag) {
-        //         if (flag) {
-        //             /*localStorage.setItem("currentUser",this.UserModel.user_name);
-        //               alert("用户登录成功");*/
-        //             this.$store.dispatch('userLogin', { 'user_name': this.ruleForm.user_name, "user_pass": this.ruleForm.user_pass })
-        //         } else {
-        //             this.$message.error('用户名密码必填')
-        //         }
-        //     }.bind(this))
-        // }
+        }
     }
 }
 </script>

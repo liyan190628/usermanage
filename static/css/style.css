@@ -18,8 +18,18 @@
     padding: 5px 0;
 }
 
+.px-30{
+    padding-left: 30px;
+    padding-right: 20px;
+}
+
 .pr-20 {
     padding-right: 20px;
+}
+
+.py-20{
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .py {
@@ -27,8 +37,20 @@
     padding-right: 100px;
 }
 
+.pl-30 {
+    padding-left: 30px;
+}
+
 .p-all {
     padding: 30px;
+}
+
+.pl-10{
+    padding-left: 10px;
+}
+
+.mr-5{
+    margin-left: 5px;
 }
 
 .mr-10 {
@@ -37,6 +59,14 @@
 
 .mt-10 {
     margin-top: 10px;
+}
+
+.mt-20{
+    margin-top: 20px;
+}
+
+.mt-30{
+    margin-top: 30px;
 }
 
 .mb-10 {
@@ -92,4 +122,16 @@
 
 .border-bottom {
     border-bottom: 1px solid #ccc;
+}
+
+.border-bottom2 {
+    border-bottom: 2px solid #ccc;
+}
+
+.text-bold{
+    font-weight: 700;
+}
+
+.ml-left{
+    margin-left: -8px;
 }
