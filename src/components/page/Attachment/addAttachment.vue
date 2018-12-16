@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 新增/修改模态框 -->
-    <el-dialog title="新增" :visible.sync="editVisible" center>
+    <el-dialog title="add" :visible.sync="editVisible" center>
       <el-form :model="userform" label-width="120px" size="small">
         <el-form-item label="productname:">
           <el-input></el-input>
@@ -21,23 +21,22 @@
         <el-form-item label="dimenWeight:">
           <el-input></el-input>
         </el-form-item>
-        <el-row :gutter="20">
-          <el-col :span="12" :offset="3">
-            <div class="grid-content bg-purple">
-              <el-upload class="upload-demo" drag action="/api/posts/" multiple>
-                <div class="el-upload__text">
-                  <i class="el-icon-lx-add"></i>
-                  <em>上传图片</em>
-                </div>
-              </el-upload>
-            </div>
-          </el-col>
-        </el-row>
-
+        <el-form-item>
+           <el-upload
+             class="avatar-uploader"
+             :action="st"
+             :show-file-list="false"
+             :http-request="uploadImg"
+             :on-success="handleAvatarSuccess">
+             <img v-if="imageUrl" :src="imageUrl" class="avatar">
+             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+        </el-form-item>
+         
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="cancel">取 消</el-button>
-        <el-button @click="saveEdit" type="primary">确 认</el-button>
+        <el-button @click="cancel">cancel</el-button>
+        <el-button @click="saveEdit" type="primary">confirm</el-button>
       </span>
     </el-dialog>
   </div>
@@ -54,11 +53,25 @@ export default {
       default: {}
     }
   },
+  data () {
+    return {
+      imageUrl: '', // 图片地址
+      st: ''
+    }
+  },
   methods: {
     cancel() {
       this.$emit('cancel')
     },
-    saveEdit() { }
+    saveEdit() { },
+    // 上传图片
+    uploadImg(){
+
+    },
+    // 图片上传成功
+    handleAvatarSuccess () {
+
+    }
   },
   computed: {
     editVisible: {
@@ -76,8 +89,27 @@ export default {
 .el-select{
   width: 100%;
 }
-.upload-demo{
-  /* height: 50px;
-  line-height: 50px; */
-}
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
 </style>

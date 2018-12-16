@@ -28,8 +28,8 @@
           <!-- 操作 -->
           <el-table-column align="center" label="operate">
             <template slot-scope="scope">
-              <el-button @click="handleInfo(scope.$index, scope.row)" type="text">details</el-button>
-              <el-button @click="handleEdit(scope.$index, scope.row)" type="text">edit</el-button>
+              <el-button @click="handleInfo(scope.$index, scope.row, true)" type="text">details</el-button>
+              <el-button @click="handleInfo(scope.$index, scope.row, false)" type="text">edit</el-button>
               <el-button @click="handleDelete(scope.$index, scope.row)" type="text">delete</el-button>
             </template>
           </el-table-column>
@@ -42,11 +42,9 @@
 
     </div>
     <!-- 新增 -->
-    <add :show='addVisible' @saveEdit="addUser" :items='items' @cancel='addCancel'></add>
+    <add :width="'150px'" :show='addVisible' @saveEdit="addUser" :items='items' @cancel='addCancel'></add>
     <!-- 查看详情 -->
-    <infoModal :show='infoVisible' :form='form'></infoModal>
-    <!-- 编辑用户 -->
-    <edit @cancel='editCancel' :show='editVisible' :items='items'></edit>
+    <infoModal @confrimInfo='confrimInfo' @saveEdit='saveEditInfo' :show='infoVisible' :form='form'></infoModal>
     <!-- 删除确认弹出框 -->
     <deleteModal :show='delVisible' @cancel='deleteCancel' @deleteRow='deleteRow'></deleteModal>
   </div>
@@ -67,17 +65,20 @@ export default {
       authorVisible: false, // 授权
       addVisible: false, // 增加
       items: [
-        { title: 'motorName', type: '', code: '' },
-        { title: 'Voltage', type: '', code: '' },
-        { title: 'Current', type: '', code: '' },
-        { title: 'Motor Efficiency', type: '', code: '' },
-        { title: 'MPPT Efficiency', type: '', code: '' },
-        { title: 'Connection standard', type: '', code: '' },
-        { title: 'Water temp', type: '', code: '' },
-        { title: 'Insulation class', type: '', code: '' },
-        { title: 'Enclosure class', type: '', code: '' },
-        { title: 'Submersion', type: '', code: '' },
-        { title: 'Required cooling flow', type: '', code: '' }
+        { title: 'MotorName:', type: '', code: '', vm: 'motorName'},
+        { title: 'Voltage:', type: '', code: '', vm: 'voltage' },
+        { title: '', type: '', code: '', vm: 'voltage2' },
+        { title: '', type: '', code: '', vm: 'voltage3' },
+        { title: 'Current:', type: '', code: '', vm: 'current' },
+        { title: '', type: '', code: '', vm: 'current2' },
+        { title: 'Motor Efficiency:', type: '', code: '', vm: 'motorEfficiency' },
+        { title: 'MPPT Efficiency:', type: '', code: '', vm: 'mPPTEfficiency' },
+        { title: 'Connection standard:', type: '', code: '', vm: 'conStandard' },
+        { title: 'Water temp:', type: '', code: '', vm: 'waterTemp' },
+        { title: 'Insulation class:', type: '', code: '', vm: 'insulationClass' },
+        { title: 'Enclosure class:', type: '', code: '', vm: 'enclosureClass' },
+        { title: 'Submersion:', type: '', code: '', vm: 'submersion' },
+        { title: 'Required cooling flow:', type: '', code: '', vm: 'requiredCoolingFlow' },
       ],
       form: {},
       infoVisible: false // 查看详情
@@ -152,7 +153,7 @@ export default {
     addUser() {
       let vm = {};
       for (let index of this.items) {
-        vm[index.title] = index.code;
+        vm[index.vm] = index.code; 
       }
       this.$axios
         .get("/pumpms/motor/add", {
@@ -171,9 +172,18 @@ export default {
           // console.log(error);
         });
     },
-    handleInfo(index, item) {
+    handleInfo(index, item, isEdit) {
       this.infoVisible = true
       this.form = item
+      this.form.isEdit = isEdit
+      // console.log(this.form.isEdit)
+    },
+    saveEditInfo () {
+      // this.infoVisible = false
+      console.log(this.form)
+    },
+    confrimInfo () {
+      this.infoVisible = false
     }
   },
   created() {

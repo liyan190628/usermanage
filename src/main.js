@@ -9,6 +9,9 @@ import '../static/css/icon.css'
 import 'babel-polyfill'
 import echarts from 'echarts'
 
+import htmlToPdf from '@/components/utils/htmlToPdf' // 导出Pdf
+Vue.use(htmlToPdf)
+
 axios.defaults.baseURL = 'http://192.168.1.104:8080';
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';

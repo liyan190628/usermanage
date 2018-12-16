@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- 新增/修改模态框 -->
-    <el-dialog title="add" :visible.sync="editVisible" center>
-      <el-form label-width="200px" size="small">
+    <el-dialog title="add" width="50%" :visible.sync="editVisible" center>
+      <el-form :label-width="width" :size="'samll'">
         <el-form-item v-for="(item, index) in items" :key="index" :label="item.title">
           <el-select v-if="item.type === 'select'" v-model="item.code">
             <el-option label="全部" value=""></el-option>
@@ -28,6 +28,10 @@ export default {
     items: {
       type: Array,
       default: []
+    },
+    width: {
+      type: String,
+      default: '120px'
     }
   },
   methods: {

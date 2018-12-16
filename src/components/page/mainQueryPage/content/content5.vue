@@ -52,7 +52,7 @@
 
     <!-- 页尾 -->
     <el-row type="flex" class="row-bg py-20 px-30">
-      <el-col :span="1">4/5</el-col>
+      <el-col :span="1">5/5</el-col>
       <el-col :span="1">
         <img src="@/assets/pdf-2.png" alt="">
       </el-col>

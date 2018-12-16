@@ -13,6 +13,8 @@
     "babel-polyfill": "^6.23.0",
     "echarts": "^4.2.0-rc.2",
     "element-ui": "^2.4.5",
+    "html2canvas": "^1.0.0-alpha.12",
+    "jspdf": "^1.4.1",
     "mavon-editor": "^2.5.4",
     "vue": "^2.5.16",
     "vue-cropperjs": "^2.2.0",

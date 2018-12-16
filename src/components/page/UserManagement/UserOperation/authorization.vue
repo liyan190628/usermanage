@@ -2,7 +2,7 @@
   <div>
     <!-- 编辑弹出框 -->
     <el-dialog center title="edit" :visible.sync="editVisible" width="30%">
-      <el-form label-width="150px">
+      <el-form label-width="90px">
         <el-form-item label="role：">
           <el-select :size="'medium'" v-model="roleId">
             <el-option v-for="(item, index) in userform" :key="index" :label="item.roleName" :value="item.roleId"></el-option>

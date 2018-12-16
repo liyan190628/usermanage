@@ -77,7 +77,7 @@ export default {
       // addVisible: false, // 新增模态框
       editVisible: false, // 修改模态框
       delVisible: false, // 删除
-      addVisible: false, // 增加
+      addVisible: true, // 增加
       editform: {}, // 编辑
       items: [{ title: 'pump_type', tyep: 'select' }]
     }

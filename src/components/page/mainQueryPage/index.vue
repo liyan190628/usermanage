@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div id="pdfDom">
+    <button type="button" class="btn btn-primary" v-on:click="getPdf()">导出PDF</button>
     <!-- 第一页 -->
     <content1></content1>
     <!-- 第二页 -->
@@ -28,7 +29,8 @@ export default {
         {title: 'PS2-4000 C-SJ8-15 -D', content: '1 pc. Submersible pump system including controller with DataModule, motor and pump end'},
         {title: 'PS2-4000 C-SJ8-15 -D', content: '1 pc. Submersible pump system including controller with DataModule, motor and pump end'},
         {title: 'PS2-4000 C-SJ8-15 -D', content: '1 pc. Submersible pump system including controller with DataModule, motor and pump end'}
-      ]
+      ],
+      htmlTitle: '页面导出PDF文件名'
     }
   }
 }

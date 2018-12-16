@@ -7,7 +7,7 @@
       <!-- 检索条件 -->
       <el-form :inline="true" :model="formInline" class="demo-form-inline mgb10">
         <el-form-item label="standarsName：">
-          <el-input v-model="standarsName"></el-input>
+          <el-input v-model="formInline.stName"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button @click="getListData" type="primary">查询</el-button>
@@ -23,11 +23,11 @@
 
       <el-card shadow="hover">
         <el-table :data="tableData" class="table" stripe style="width: 100%;">
-          <el-table-column prop="standarsName" align="center" label="standarsName">
+          <el-table-column prop="stName" align="center" label="standarsName">
           </el-table-column>
-          <el-table-column prop="standarsExplain" align="center" label="standarsExplain">
+          <el-table-column prop="stExplain" align="center" label="standarsExplain">
           </el-table-column>
-          <el-table-column prop="astandarsPicture" align="center" label="standarsPicture">
+          <el-table-column prop="stPicPath" align="center" label="standarsPicture">
           </el-table-column>
           <el-table-column prop="operate" align="center" label="operate">
             <template slot-scope="scope">
@@ -44,7 +44,8 @@
 
     </div>
     <!-- 新增模态框 -->
-    <add :show='addVisible' :items='items' @cancel='addCancel'></add>
+    <!-- <add :show='addVisible' :items='items' @cancel='addCancel'></add> -->
+    <addStandards @cancel='addCancel' :show='addVisible'></addStandards>
     <!-- 编辑用户 -->
     <edit @cancel='editCancel' :show='editVisible' :items='items'></edit>
     <!-- 删除模态框 -->
@@ -52,16 +53,16 @@
   </div>
 </template>
 <script>
-import add from '../../modal/addModal'
+// import add from '../../modal/addModal'
+import addStandards from './addStandards'
 import edit from '../../modal/editModal' // 编辑
 export default {
-  components: { edit, add },
+  components: { edit, addStandards},
   data() {
     return {
       cur_page: 1,
       formInline: {
-        user: '',
-        region: ''
+        stName: ''
       },
       tableData: [],
       editVisible: false, // 编辑
@@ -113,13 +114,14 @@ export default {
     },
     getListData () {
       this.$axios
-        .get("/pumpms/solarPanel/queryList", {
+        .get("/pumpms/standard/queryList", {
           params: {
-            standarsName: this.standarsName
+            stName: this.formInline.stName,
+            page: this.cur_page,
+            rows: 10
           }
         })
         .then(response => {
-          console.log(response)
           this.tableData = response.data.rows;
         })
         .catch(error => {

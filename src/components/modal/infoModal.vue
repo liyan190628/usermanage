@@ -4,37 +4,53 @@
     <el-dialog title="info" :visible.sync="infoVisible" center>
       <el-form ref="form" :model="form" label-width="200px">
         <el-form-item label="motorName:">
-          <el-input v-model="form.motorName"></el-input>
+          <el-input :disabled="form.isEdit" v-model="form.motorName"></el-input>
         </el-form-item>
         <el-form-item label="voltage:">
-          <el-input v-model="form.voltage"></el-input>
+          <el-input :disabled="form.isEdit" v-model="form.voltage"></el-input>
+        </el-form-item>
+         <el-form-item>
+          <el-input :disabled="form.isEdit" v-model="form.voltage2"></el-input>
         </el-form-item>
         <el-form-item label="current:">
-          <el-input v-model="form.current"></el-input>
+          <el-input :disabled="form.isEdit" v-model="form.current"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input :disabled="form.isEdit" v-model="form.current2"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input :disabled="form.isEdit" v-model="form.current3"></el-input>
         </el-form-item>
         <el-form-item label="motorEfficiency:">
-          <el-input v-model="form.motorEfficiency"></el-input>
+          <el-input :disabled="form.isEdit" v-model="form.motorEfficiency"></el-input>
         </el-form-item>
         <el-form-item label="mPPTEfficiency:">
-          <el-input v-model="form.mPPTEfficiency"></el-input>
+          <el-input :disabled="form.isEdit" v-model="form.mPPTEfficiency"></el-input>
+        </el-form-item>
+        <el-form-item label="conStandard:">
+          <el-input :disabled="form.isEdit" v-model="form.conStandard"></el-input>
         </el-form-item>
         <el-form-item label="waterTemp:">
-          <el-input v-model="form.waterTemp"></el-input>
+          <el-input :disabled="form.isEdit" v-model="form.waterTemp"></el-input>
         </el-form-item>
         <el-form-item label="insulationClass:">
-          <el-input v-model="form.insulationClass"></el-input>
+          <el-input :disabled="form.isEdit" v-model="form.insulationClass"></el-input>
         </el-form-item>
         <el-form-item label="enclosureClass:">
-          <el-input v-model="form.enclosureClass"></el-input>
+          <el-input :disabled="form.isEdit" v-model="form.enclosureClass"></el-input>
         </el-form-item>
          <el-form-item label="submersion:">
-          <el-input v-model="form.submersion"></el-input>
+          <el-input :disabled="form.isEdit" v-model="form.submersion"></el-input>
         </el-form-item>
         <el-form-item label="requiredCoolingFlow:">
-          <el-input v-model="form.requiredCoolingFlow"></el-input>
+          <el-input :disabled="form.isEdit" v-model="form.requiredCoolingFlow"></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span v-if="form.isEdit" slot="footer" class="dialog-footer">
+        <el-button @click="confrimInfo" type="primary">confirm</el-button>
+      </span>
+      <span v-else slot="footer" class="dialog-footer">
+         <el-button @click="confrimInfo" type="primary">cancel</el-button>
         <el-button @click="saveEdit" type="primary">confirm</el-button>
       </span>
     </el-dialog>
@@ -57,7 +73,10 @@ export default {
       this.$emit('cancel')
     },
     saveEdit() {
-      this.infoVisible = false
+      this.$emit('saveEdit')
+    },
+    confrimInfo () {
+      this.$emit('confrimInfo')
     }
   },
   computed: {
