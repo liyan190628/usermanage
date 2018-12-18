@@ -66,16 +66,16 @@ export default {
     show: {
       type: Boolean,
       default: false
+    },
+    userform: {
+      type: Object,
+      default: {}
     }
   },
   data () {
     return {
       imageUrl: '', // 图片地址
       st: '',
-      userform: {
-        acceName: '',
-        suitPump: ''
-      },
       pumpEnd: {
         domains: [{
           value: ''
@@ -135,11 +135,12 @@ export default {
         featuress: arr1,
         technicalDatas: arr2,
         dimenWeights: arr3,
-        picture: ''
+        picture: '',
+        acceId: this.userform.acceId
       })
       this.$axios({
          method: 'post',
-         url:'/pumpms/accessory/add',
+         url:'/pumpms/accessory/edit',
          data: params
       }).then((res)=>{
          if (res.data.flag) {
@@ -182,6 +183,35 @@ export default {
       set(n) {
         this.$emit('cancel', n)
       }
+    }
+  },
+  watch: {
+    userform (n) {
+      // console.log(n)
+      n.orderInfos.forEach(v => {
+        this.pumpEnd.domains.push({
+          value: v,
+          key: Date.now()
+        })
+      })
+      n.featuress.forEach(v => {
+        this.fpumpEnd.domains.push({
+          value: v,
+          key: Date.now()
+        })
+      })
+      n.technicalDatas.forEach(v => {
+        this.tpumpEnd.domains.push({
+          value: v,
+          key: Date.now()
+        })
+      })
+      n.dimenWeights.forEach(v => {
+        this.dpumpEnd.domains.push({
+          value: v,
+          key: Date.now()
+        })
+      })
     }
   }
 }

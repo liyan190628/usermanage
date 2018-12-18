@@ -1,4 +1,18 @@
 {
     "editor.fontSize": 18,
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+    "eslint.autoFixOnSave": true,
+    "eslint.validate": [
+      "javascript",
+      "javascriptreact",
+    {
+       "language": "html",
+       "autoFix": true
+    },
+    {
+       "language": "vue",
+       "autoFix": true
+    }
+    ],
+    "vetur.format.defaultFormatter.html": "prettier"
 }

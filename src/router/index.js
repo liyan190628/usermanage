@@ -12,7 +12,7 @@ export default new Router({
             path: '/',
             component: resolve => require(['../components/common/Home.vue'], resolve),
             meta: {
-                title: '自述文件'
+                title: '首页'
             },
             children: [{
                     path: '/userManagement',
@@ -23,7 +23,6 @@ export default new Router({
                 },
                 {
                     path: '/icon',
-                    component: resolve => require(['../components/page/Icon.vue'], resolve),
                     meta: {
                         title: '角色管理'
                     }
@@ -80,16 +79,7 @@ export default new Router({
                         title: '附件管理列表'
                     }
                 },
-                // {
-                //     // markdown组件
-                //     path: '/curveData',
-                //     component: resolve => require(['../components/page/CurveData/CurveData.vue'], resolve),
-                //     meta: {
-                //         title: '扬程曲线基础数据'
-                //     }
-                // },
                 {
-                    // 图片上传组件
                     path: '/upload',
                     component: resolve => require(['../components/page/Upload.vue'], resolve),
                     meta: {
@@ -97,7 +87,6 @@ export default new Router({
                     }
                 },
                 {
-                    // vue-schart组件
                     path: '/systemInstallDiagram',
                     component: resolve =>
                         require(['../components/page/SystemInstallDiagram/SystemInstallDiagram.vue'], resolve),
@@ -106,7 +95,6 @@ export default new Router({
                     }
                 },
                 {
-                    // 权限页面
                     path: '/mainQueryPage',
                     component: resolve => require(['../components/page/mainQueryPage/index.vue'], resolve),
                     meta: {
@@ -115,20 +103,10 @@ export default new Router({
                     }
                 },
                 {
-                    // 权限页面
                     path: '/test',
                     component: resolve => require(['../components/page/test/index.vue'], resolve),
                     meta: {
                         title: '测试',
-                        permission: true
-                    }
-                },
-                {
-                    // 权限页面
-                    path: '/permission',
-                    component: resolve => require(['../components/page/Permission.vue'], resolve),
-                    meta: {
-                        title: '权限测试',
                         permission: true
                     }
                 },

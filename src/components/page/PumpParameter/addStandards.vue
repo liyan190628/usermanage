@@ -34,6 +34,7 @@
   </div>
 </template>
 <script>
+import qs from 'qs'
 export default {
   props: {
     show: {
@@ -64,11 +65,11 @@ export default {
       this.pumpEnd.domains.forEach(v => {
         arr.push(v.value)
       })
-      let vm = {
+      let vm = qs.stringify({
         stName: this.userform.stName,
         stExplains: arr,
         stPicPath: this.imageUrl
-      }
+      })
       // console.log(vm)
       this.$axios
         .post("/pumpms/standard/add", vm)
