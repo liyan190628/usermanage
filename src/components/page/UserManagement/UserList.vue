@@ -50,7 +50,7 @@
             background
             @current-change="handleCurrentChange"
             layout="prev, pager, next"
-            :total="1000"
+            :total="total"
           ></el-pagination>
         </div>
       </el-card>
@@ -101,6 +101,7 @@ export default {
   methods: {
     handleCurrentChange(val) {
       this.cur_page = val;
+      this.getUserList()
     },
     handleDelete(index, row) {
       this.idx = index;
@@ -172,6 +173,7 @@ export default {
         })
         .then(response => {
           this.tableData = response.data.rows;
+          this.total = response.data.total
         })
         .catch(error => {
           // console.log(error);

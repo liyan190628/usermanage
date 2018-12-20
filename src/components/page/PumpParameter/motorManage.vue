@@ -36,7 +36,7 @@
         </el-table>
         <!-- 分页 -->
         <div class="pagination">
-          <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :total="1000"></el-pagination>
+          <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :total="total"></el-pagination>
         </div>
       </el-card>
 
@@ -81,7 +81,8 @@ export default {
         { title: 'Required cooling flow:', type: '', code: '', vm: 'requiredCoolingFlow' },
       ],
       form: {},
-      infoVisible: false // 查看详情
+      infoVisible: false, // 查看详情
+      total: 10
     }
   },
   methods: {

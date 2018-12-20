@@ -137,8 +137,6 @@
           <img v-if="imageUrl" :src="imageUrl" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
-
-      <img :src="imageUrl" alt="">
       </el-col>
       
     </el-row>
@@ -147,6 +145,7 @@
 <script>
 import qs from 'qs'
 export default {
+  name: 'pumpEdit',
   data() {
     return {
       systemItems: [
@@ -199,7 +198,7 @@ export default {
         }
       }
       this.$axios
-        .post("/pumpms/upload/picture", formData,config)
+        .post("/pumpms/pump/upload", formData,config)
         .then(response => {
           if (response.data.flag) {
             this.$message("上传成功")

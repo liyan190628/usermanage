@@ -44,6 +44,12 @@ export default new Router({
                     }
                 },
                 {
+                    path: '/pumpEdit',
+                    name: 'pumpEdit',
+                    component: resolve => require(['../components/page/PumpParameter/pumpEdit.vue'], resolve),
+                },
+                    {
+                
                     path: '/motorManage',
                     component: resolve => require(['../components/page/PumpParameter/motorManage.vue'], resolve),
                     meta: {

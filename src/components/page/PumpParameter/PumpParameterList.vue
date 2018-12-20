@@ -5,11 +5,7 @@
     <div class="container mgb10">
       <el-form :inline="true" class="demo-form-inline mgb10">
         <el-form-item v-for="(item, index) in formItems" :key="index" :label="item.title">
-          <el-select v-if="item.type === 'select'" v-model="item.value">
-            <el-option label="全部" value=""></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
-          <el-input v-model="item.value" v-else></el-input>
+          <el-input v-model="item.value"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary">查询</el-button>
@@ -37,63 +33,74 @@
         </el-table-column>
         <el-table-column prop="operation" align="center" label="operate" width="180">
           <template slot-scope="scope">
-            <el-button @click="handleInfo(scope.$index)" type="text">详情</el-button>
-            <el-button @click="editVisible = true" type="text">修改</el-button>
-            <el-button @click="handleDelete(scope.$index, scope.row)" type="text">删除</el-button>
+            <!-- <el-button @click="handleInfo(scope.$index, false)" type="text">详情</el-button> -->
+            <el-button @click="handleInfo(scope.row.pumpId)" type="text">Edit</el-button>
+            <el-button @click="handleDelete(scope.row.pumpId)" type="text">Delete</el-button>
           </template>
         </el-table-column>
       </el-table>
       <div class="pagination">
-        <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :total="1000">
+        <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :total="total">
         </el-pagination>
       </div>
     </div>
-     
-    <!-- 查看详情弹出框 -->
-    <infoModal :show='infoVisible' :form='infoForm'></infoModal>
-    <!-- 修改模态框 -->
-    <editModal :show='editVisible' :items='items' :userform='editform' @cancel='editCancel'></editModal>
-    <!-- 删除模态框 -->
-    <deleteModal :show='delVisible' @cancel='deleteCancel' @deleteRow='deleteRow'></deleteModal>
 
   </div>
 </template>
 <script>
+import pumpEdit from './pumpEdit'
 export default {
+  components: { pumpEdit },
   data() {
     return {
       formItems: [ // 查询条件
-        { title: 'pump_type:', type: 'select', value: '', code: 'pumpType' },
-        { title: 'pump_model:', type: 'input', value: '', code: 'pumpModel' },
-        { title: 'p_power:', type: 'input', value: '', code: 'powerMax' },
-        { title: 'h_head:', type: 'input',value: '', code: 'headMax' },
-        { title: 'q_flow_rate:', type: 'input', value: '', code: 'flowMax' }
+        { title: 'pump_type:', value: '', code: 'pumpType' },
+        { title: 'pump_model:', value: '', code: 'pumpModel' },
+        { title: 'p_power:', value: '', code: 'powerMax' },
+        { title: 'h_head:', value: '', code: 'headMax' },
+        { title: 'q_flow_rate:', value: '', code: 'flowMax' }
       ],
-      tableData: [ // 表格数据
-        {
-          pumpType: 'p_1',
-          powerMax: 20,
-          head: 0.8,
-          cable: '0.6/1KV,450/750V',
-          pipes: '0.25,0.3,0.35'
-        }
-      ],
+      tableData: [], // 表格数据
       infoVisible: false, // 详情弹出框
-      editVisible: false, // 修改模态框
-      delVisible: false, // 删除
       editform: {}, // 编辑
-      items: [{ title: 'pump_type', tyep: 'select' }],
       infoForm: {}, // 详情
       cur_page: 1, // 当前页
-      rows: 10
+      rows: 10,
+      total: 10
     }
   },
   methods: {
-    // 确定删除
-    deleteRow() {
-      this.tableData.splice(this.idx, 1)
-      this.$message.success('删除成功')
-      this.delVisible = false
+    handleCurrentChange (val) {
+      this.cur_page = val
+      this.getData()
+    },
+    handleDelete(id) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$axios
+            .get("/pumpms/pump/delete", {
+              params: {
+                pumpId: id
+              }
+            })
+            .then(res => {
+              if (res.data.flag) {
+                this.delVisible = false
+                this.$message.success("删除成功")
+                this.getData()
+              } else {
+                this.$message.error(res.data.msg)
+             }
+         })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
     },
     // 获取泵参数列表数据
     getData() {
@@ -107,16 +114,20 @@ export default {
         .get("/pumpms/pump/queryList", {
           params: vm
         })
-        .then(response => {
-          this.tableData = response.data.rows;
+        .then(res => {
+          this.tableData = res.data.rows;
+          this.total = res.data.total
         })
         .catch(error => {
           // console.log(error);
         });
     },
-    handleInfo (index) { // 查看详情
-      this.infoVisible = !this.infoVisible
-      this.infoForm = this.tableData[index]
+    handleInfo (id) { // 查看详情
+      console.log(1)
+      this.$router.push({name: 'pumpEdit', params: { id: id}})
+    },
+    saveEdit () { // 编辑
+
     }
   },
   created () {

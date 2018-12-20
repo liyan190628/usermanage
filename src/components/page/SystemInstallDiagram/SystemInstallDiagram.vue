@@ -145,7 +145,7 @@ export default {
       this.$axios
         .post("/pump/picture", formData,config)
         .then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.data.flag) {
             this.$message("上传成功")
             this.userform.imageUrl = res.data
