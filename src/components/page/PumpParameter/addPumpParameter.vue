@@ -139,6 +139,8 @@
       </el-upload>
 
       <img :src="imageUrl" alt="">
+      {{imageUrl}}
+      
       </el-col>
       
     </el-row>
