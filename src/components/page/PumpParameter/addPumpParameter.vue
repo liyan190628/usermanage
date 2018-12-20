@@ -92,9 +92,6 @@
           <el-row class="pd py">
             <el-checkbox-group v-model="checkList">
               <el-checkbox v-for="(item, index) in standards" :key="index" :label="item"></el-checkbox>
-              <!-- <el-checkbox label="ATU"></el-checkbox>
-              <el-checkbox label="3S"></el-checkbox>
-              <el-checkbox label="HE"></el-checkbox> -->
             </el-checkbox-group>
           </el-row>
           <!-- </el-row> -->
@@ -201,7 +198,6 @@ export default {
       this.$axios
         .post("/pumpms/pump/upload", formData,config)
         .then(response => {
-          console.log(response)
           if (response.data.flag) {
             this.$message("上传成功")
             this.imageUrl = response.data

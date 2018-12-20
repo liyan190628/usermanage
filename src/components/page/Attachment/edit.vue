@@ -1,6 +1,6 @@
 <template>
     <!-- 新增/修改模态框 -->
-    <el-dialog title="add" width="100%;" :visible.sync="editVisible" center>
+    <el-dialog title="edit" width="100%;" :visible.sync="editVisible" center>
       <el-form :model="userform" label-width="120px" size="small">
         <el-form-item label="productname:">
           <el-input v-model="userform.acceName"></el-input>
@@ -147,6 +147,7 @@ export default {
             this.$emit('cancel')
             this.$message.success('添加成功')
             this.$parent.getTableList()
+            this.init()
          }
       });
     },
@@ -174,6 +175,30 @@ export default {
         key: Date.now()
       })
     },
+    init () {
+      this.userform.acceName = '',
+      this.userform.suitPump = ''
+      this.pumpEnd =  {
+        domains: [{
+          value: ''
+        }]
+      },
+      this.fpumpEnd =  {
+        domains: [{
+          value: ''
+        }]
+      },
+      this.tpumpEnd =  {
+        domains: [{
+          value: ''
+        }]
+      },
+      this.dpumpEnd =  {
+        domains: [{
+          value: ''
+        }]
+      }
+    }
   },
   computed: {
     editVisible: {
@@ -187,7 +212,7 @@ export default {
   },
   watch: {
     userform (n) {
-      // console.log(n)
+      console.log(n)
       n.orderInfos.forEach(v => {
         this.pumpEnd.domains.push({
           value: v,

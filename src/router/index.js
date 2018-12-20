@@ -22,10 +22,11 @@ export default new Router({
                     }
                 },
                 {
-                    path: '/icon',
+                    path: '/roleManage',
                     meta: {
                         title: '角色管理'
-                    }
+                    },
+                    component: resolve => require(['../components/page/roleManage/index.vue'], resolve),
                 },
                 {
                     path: '/systemParameter',

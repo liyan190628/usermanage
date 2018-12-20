@@ -1,16 +1,25 @@
 <template>
-  <div id="pdfDom">
-    <button type="button" class="btn btn-primary" v-on:click="getPdf()">导出PDF</button>
+  <div @click="getPdf()" id="pdfDom">
     <!-- 第一页 -->
-    <content1></content1>
+    <div>
+      <content1></content1>
+    </div>
     <!-- 第二页 -->
-    <content2></content2>
+    <div>
+      <content2></content2>
+    </div>
     <!-- 第三页 -->
-    <content3></content3>
+    <div>
+      <content3></content3>
+    </div>
     <!-- 第四页 -->
-    <content4></content4>
+    <div>
+      <content4></content4>
+    </div>
     <!-- 第五页 -->
-    <content5></content5>
+    <div>
+      <content5></content5>
+    </div>
   </div>
 </template>
 <script>

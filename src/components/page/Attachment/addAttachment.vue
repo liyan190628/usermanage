@@ -144,7 +144,7 @@ export default {
       }).then((res)=>{
          if (res.data.flag) {
             this.$emit('cancel')
-            this.$message.success('添加成功')
+            this.$message.success('编辑成功')
             this.$parent.getTableList()
          }
       });

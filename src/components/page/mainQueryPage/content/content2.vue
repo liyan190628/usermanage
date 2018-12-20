@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 1140px;" class='bg-white mb-20'>
+  <div class='bg-white mb-20'>
     <!-- logo及公司相关信息 -->
     <el-row type="flex" class="row-bg py-20 px-30">
       <el-col :span="7">

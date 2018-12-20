@@ -46,7 +46,7 @@ export default {
                 },
                 {
                     icon: 'el-icon-lx-peoplefill',
-                    index: 'roleManagement',
+                    index: 'roleManage',
                     title: '角色管理'
                 },
                 {
