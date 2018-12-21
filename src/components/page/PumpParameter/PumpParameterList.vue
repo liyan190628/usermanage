@@ -33,7 +33,7 @@
         </el-table-column>
         <el-table-column prop="operation" align="center" label="operate" width="180">
           <template slot-scope="scope">
-            <!-- <el-button @click="handleInfo(scope.$index, false)" type="text">详情</el-button> -->
+            <!-- {{scope.row.pumpId}} -->
             <el-button @click="handleInfo(scope.row.pumpId)" type="text">Edit</el-button>
             <el-button @click="handleDelete(scope.row.pumpId)" type="text">Delete</el-button>
           </template>
@@ -122,9 +122,10 @@ export default {
           // console.log(error);
         });
     },
-    handleInfo (id) { // 查看详情
-      console.log(1)
-      this.$router.push({name: 'pumpEdit', params: { id: id}})
+    handleInfo (testId) { // 查看详情
+      // console.log(testId)
+      // this.$router.push({name: 'pumpEdit', params: { id: testId}})
+      this.$router.push({path: '/pumpEdit', query: {paicheNo: testId}})
     },
     saveEdit () { // 编辑
 

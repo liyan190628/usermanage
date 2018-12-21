@@ -185,10 +185,14 @@ export default {
       imageUrl: '',
       st: '',
       types: [], // motor类型
-      standards: [] // 多选框
+      standards: [], // 多选框
+      testId: ''
     };
   },
   methods: {
+    back() {
+      this.$router.go(-1)
+    },
     uploadImg(item) {
       let formData = new FormData()
       formData.append('picture', item.file)
@@ -241,7 +245,6 @@ export default {
       for (let index of this.systemItems) {
         vm[index.value] = index.code;
       }
-      // console.log(vm)
       let arr1 = []
       this.productAdvantage.domains.forEach(v => {
         arr1.push(v.value)
@@ -263,12 +266,13 @@ export default {
       vm.pumpEnds = arr3
       vm.explains = arr4
       vm.motorId = this.userform.name
+      vm.pumpId = this.testId
       vm = qs.stringify(vm)
       this.$axios
-        .post("/pumpms/pump/add", vm)
+        .post("/pumpms/pump/edit", vm)
         .then(res => {
           if (res.data.flag) {
-            this.$message.success("添加成功!")
+            this.$message.success("修改成功!")
             this.$router.go(-1)
           } else {
             this.$message.error(res.data.msg)
@@ -297,6 +301,58 @@ export default {
     }
   },
   created() {
+    let id = this.$route.query.paicheNo
+    console.log(id)
+    this.testId = id
+    this.$axios
+        .get("/pumpms/pump/queryDetail", {
+          params: {
+            pumpId: id
+          }
+        })
+        .then(res => {
+          let data = res.data
+          this.systemItems = [
+            { name: "pump type:", code: data.pumpType, value: "pumpType" },
+            { name: "pump model:", code: data.pumpModel, value: "pumpModel" },
+            { name: "Flow rate:", code: data.flowMax, value: "flowMax" },
+            { name: "Head max:", code: data.headMax, value: "headMax" },
+            { name: "Recommend Max input Power:", code: data.powerMax, value: "powerMax" },
+            { name: "Minimum well diameter:", code: data.minWellDiameter, value: "minWellDiameter" },
+            { name: "Pump discharge:", code: data.discharge, value: "discharge" },
+            { name: "efficiency:", code: data.efficiencyMax, value: "efficiencyMax" }
+          ]
+          if (data.proAdvantages != null) {
+            data.proAdvantages.forEach(v => {
+              this.productAdvantage.domains.push({
+                value: v
+              })
+            })
+          }
+          if (data.controRemarks != null) {
+            data.controRemarks.forEach(v => {
+               this.technicalData.domains.push({
+                 value: v
+              })
+            })
+          }
+          if (data.pumpEnds != null) {
+            data.pumpEnds.forEach(v => {
+              this.pumpEndAdd.domains.push({
+                value: v
+              })
+            })
+          }
+          if (data.explains != null) {
+            data.explains.forEach(v => {
+              this.explain.domains.push({
+                value: v
+             })
+            })
+          }
+          this.imageUrl = data.picPath
+          this.userform.motorId = data.motorId
+        })
     this.getType()
     this.getStards()
   },

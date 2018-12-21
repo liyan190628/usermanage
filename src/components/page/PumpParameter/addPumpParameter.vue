@@ -138,8 +138,8 @@
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
 
-      <img :src="imageUrl" alt="">
-      {{imageUrl}}
+      <!-- <img :src="imageUrl" alt="">
+      {{imageUrl}} -->
       
       </el-col>
       
