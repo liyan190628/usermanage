@@ -1,5 +1,5 @@
 <template>
-  <div class="mainQuery" id="pdfDom">
+  <div id="pdfDom" @click="getPdf()">
     <!-- 第一页 -->
     <content1></content1>
     <!-- 第二页 -->

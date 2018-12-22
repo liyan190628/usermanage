@@ -1,5 +1,6 @@
 <template>
-  <div class='bg-white mb-20'>
+  <div style="height:647px;" class='bg-white border mb-20'>
+    <!-- <el-button>导出pdf</el-button> -->
     <!-- logo及公司相关信息 -->
     <el-row type="flex" class="row-bg py-20 px-30">
       <el-col :span="7">

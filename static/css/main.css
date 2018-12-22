@@ -9,7 +9,8 @@ body,
 .wrapper {
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    /* overflow: hidden; */
+    background: #e4e4e4;
 }
 
 body {
@@ -19,7 +20,6 @@ body {
 a {
     text-decoration: none
 }
-
 
 .content-box {
     position: absolute;
@@ -89,6 +89,7 @@ a {
     opacity: 0;
 }
 
+
 /*BaseForm*/
 
 .form-box {
@@ -107,6 +108,7 @@ a {
 .el-time-spinner__wrapper .el-scrollbar__wrap:not(.el-scrollbar__wrap--hidden-default) {
     padding-bottom: 0;
 }
+
 
 /*Upload*/
 
@@ -153,6 +155,7 @@ a {
     font-style: normal;
 }
 
+
 /*VueEditor*/
 
 .ql-container {
@@ -166,6 +169,7 @@ a {
 .editor-btn {
     margin-top: 20px;
 }
+
 
 /*markdown*/
 
