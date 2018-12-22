@@ -3,7 +3,6 @@ export default {
     methods: {
         handleCurrentChange(val) {
             this.cur_page = val
-            // this.getData()
         },
         handleDelete(index, row) {
             this.idx = index
@@ -18,5 +17,11 @@ export default {
         deleteCancel() {
             this.delVisible = !this.delVisible
         },
+        back () {
+            this.$router.go(-1)
+        },
+        linkTo(name, routeId) {
+            this.$router.push({name: name, params: { id: routeId}})
+        }
     }
 }

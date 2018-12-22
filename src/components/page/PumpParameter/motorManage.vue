@@ -10,16 +10,10 @@
           <el-input v-model="motorName"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="getListData" type="primary">查询</el-button>
+          <el-button @click="getTableList" type="primary">query</el-button>
+          <el-button @click="addVisible = true" type="primary">add</el-button>
         </el-form-item>
       </el-form>
-
-      <!-- 添加 -->
-      <el-row class="pb-20" :gutter="24">
-        <el-col :span="2" :offset="22">
-          <el-button @click="addVisible = true" type="primary">+add</el-button>
-        </el-col>
-      </el-row>
       
       <!-- 表格 -->
       <el-card shadow="hover">
@@ -28,15 +22,23 @@
           <!-- 操作 -->
           <el-table-column align="center" label="operate">
             <template slot-scope="scope">
-              <el-button @click="handleInfo(scope.$index, scope.row, true)" type="text">details</el-button>
-              <el-button @click="handleInfo(scope.$index, scope.row, false)" type="text">edit</el-button>
+              <el-button @click="handleInfo(scope.$index, scope.row, false)" type="text">details</el-button>
+              <el-button @click="handleInfo(scope.$index, scope.row, true)" type="text">edit</el-button>
               <el-button @click="handleDelete(scope.$index, scope.row)" type="text">delete</el-button>
             </template>
           </el-table-column>
         </el-table>
         <!-- 分页 -->
         <div class="pagination">
-          <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :total="total"></el-pagination>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="cur_page"
+            :page-sizes="[10, 20, 30, 40]"
+            :page-size="rows"
+            layout="sizes, prev, pager, next"
+            :total="total">
+          </el-pagination>
         </div>
       </el-card>
 
@@ -86,7 +88,7 @@ export default {
     }
   },
   methods: {
-    getListData() {
+    getTableList() {
       this.$axios
         .get("/pumpms/motor/queryList", {
           params: {
@@ -102,9 +104,13 @@ export default {
           // console.log(error);
       });
     },
-    handleCurrentChange(val) {
+    handleSizeChange(val) {
+      this.rows = val
+      this.getTableList()
+    },
+    handleCurrentChange (val) {
       this.cur_page = val
-      this.getData()
+      this.getTableList()
     },
     handleDelete(index, row) {
       this.idx = index
@@ -142,13 +148,10 @@ export default {
           if (response.data.flag) {
             this.delVisible = false
             this.$message("删除成功")
-            this.getListData()
+            this.getTableList()
           } else {
             this.$message.success(response.data.msg)
           }
-        })
-        .catch(error => {
-          // console.log(error);
         })
     },
     addUser() {
@@ -164,31 +167,27 @@ export default {
            if (response.data.flag) {
             this.addVisible = false
             this.$message.success("添加成功!")
-            this.getListData()
+            this.getTableList()
           } else {
             this.$message.success(response.data.msg)
           }
         })
         .catch(response => {
-          // console.log(error);
         });
     },
     handleInfo(index, item, isEdit) {
       this.infoVisible = true
       this.form = item
       this.form.isEdit = isEdit
-      // console.log(this.form.isEdit)
     },
     saveEditInfo () {
-      // this.infoVisible = false
-      console.log(this.form)
     },
     confrimInfo () {
       this.infoVisible = false
     }
   },
   created() {
-    this.getListData()
+    this.getTableList()
   },
 }
 </script>

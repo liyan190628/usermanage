@@ -36,7 +36,6 @@
       </div>
     </div>
 
-    <!-- <SystemAdd @cancel='cancel' :show='editVisible'></SystemAdd> -->
     <el-dialog title="add" :visible.sync="editVisible" center>
       <el-form :model="userform" label-width="120px" size="small">
         <el-form-item label="install_type:">
@@ -47,8 +46,7 @@
           class="avatar-uploader"
           :action="st"
           :show-file-list="false"
-          :http-request="uploadImg"
-          :on-success="handleAvatarSuccess">
+          :http-request="uploadImg">
           <img v-if="userform.imageUrl" :src="userform.imageUrl" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
@@ -128,9 +126,6 @@ export default {
         .catch(error => {
           // console.log(error);
         });
-    },
-    handleAvatarSuccess(res, file) {
-      // this.imageUrl = URL.createObjectURL(file.raw);
     },
     uploadImg(item) {
       // console.log(item)

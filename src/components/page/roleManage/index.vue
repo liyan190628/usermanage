@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 面包屑导航 -->
-    <crumbs :title1="'系统安装图管理'" :title2="'系统安装图管理'"></crumbs>
+    <crumbs :title1="'角色管理'" :title2="'角色列表'"></crumbs>
     <div class="container mgb10">
       <!-- 查询 -->
       <el-form :inline="true" :model="formInline" class="demo-form-inline mgb10">
@@ -9,167 +9,153 @@
           <el-input v-model="formInline.roleName"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="getData()" type="primary">query</el-button>
+          <el-button @click="getTableList()" type="primary">query</el-button>
+          <el-button @click="addRole()" type="primary">add</el-button>
         </el-form-item>
       </el-form>
 
       <!-- 表格 -->
-      <el-row type="flex" class="row-bg" justify="space-between">
-        <el-col :span="6">角色管理</el-col>
-        <el-col :span="2">
-          <el-button @click="addVisible = true" type="primary">+add</el-button>
-        </el-col>
-      </el-row>
-      <el-table :data="tableData" class="table" stripe style="width: 100%;">
+      <el-table :data="tableData" :stripe='true' style="width: 100%;">
         <el-table-column prop="roleName" align="center" label="roleName">
         </el-table-column>
         <el-table-column prop="roleDescribe" align="center" label="roleDescribe">
         </el-table-column>
-         <el-table-column prop="operation" align="center" label="操作" width="200">
+         <el-table-column prop="operation" fixed='right' align="center" label="操作" width="320">
             <template slot-scope="scope">
               <el-button @click="handleEdit(scope.row)" type="text">编辑</el-button>
-              <!-- <el-button @click="handleDelete(scope.row.roleId)" type="text">删除</el-button> -->
             </template>
           </el-table-column>
       </el-table>
       <div class="pagination">
-        <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :total="1000">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="cur_page"
+          :page-sizes="[10, 20, 30, 40]"
+          :page-size="rows"
+          layout="sizes, prev, pager, next"
+          :total="total">
         </el-pagination>
       </div>
     </div>
 
-    <!-- <SystemAdd @cancel='cancel' :show='editVisible'></SystemAdd> -->
-    <el-dialog title="add" :visible.sync="addVisible" center>
-      <el-form :model="userform" label-width="120px" size="small">
-        <el-form-item label="roleName:">
+    <el-dialog title="operation" :visible.sync="addVisible" center>
+      <el-form :model="userform" :rules="rules" ref="userform" label-width="120px" size="small">
+        <el-form-item  prop='roleName' label="roleName:">
           <el-input v-model="userform.roleName"></el-input>
         </el-form-item>
         <el-form-item label="roleDescribe:">
           <el-input v-model="userform.roleDescribe"></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="addConfirm" type="primary">confirm</el-button>
-        <el-button @click="cancel">cancel</el-button>
-      </span>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click.native="addVisible = false">cancel</el-button>
+        <el-button @click.native="addConfirm" type="primary">confirm</el-button>
+      </div>
     </el-dialog>
-
-    <!-- 编辑 -->
-    <el-dialog title="add" :visible.sync="editVisible" center>
-      <el-form :model="editform" label-width="120px" size="small">
-        <el-form-item label="roleName:">
-          <el-input v-model="editform.roleName"></el-input>
-        </el-form-item>
-        <el-form-item label="roleDescribe:">
-          <el-input v-model="editform.roleDescribe"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="editConfirm" type="primary">confirm</el-button>
-        <el-button @click="editCancel">cancel</el-button>
-      </span>
-    </el-dialog>
-
   </div>
 </template>
 <script>
+import { roleService } from '@/api/roleService.js'
 export default {
   data() {
     return {
       formInline: {
         roleName: ''
       },
-      tableData: [
-        {roleName: '测试'}
-      ], // 表格数据
-      cur_page: 1, // 当前页
-      rows: 10,
+      tableData: [], // 表格数据
       addVisible: false,
-      editVisible: false,
       userform: {
         roleName: '',
         roleDescribe: ''
       },
-      editform: {
-        roleName: '',
-        roleDescribe: ''
+      rules: {
+        roleName: [{ required: true, message: '请填写用户名', trigger: 'blur' }]
       },
-      st: ''
+      cur_page: 1, // 当前页
+      rows: 10,
+      total: 10,
+      isEdit: false,
+      roleId: ''
     }
   },
   methods: {
-    cancel() { // 关闭弹出框
-      this.addVisible = !this.addVisible
+    handleSizeChange(val) {
+      this.rows = val
+      this.getTableList()
     },
-    editCancel() {
-      this.editVisible = !this.editVisible
+    handleCurrentChange (val) {
+      this.cur_page = val
+      this.getTableList()
     },
-    handleEdit (item) {
-      this.editVisible = true
-      this.editform = {
+    handleEdit (item, id) {
+      this.addVisible = true
+      this.roleId = item.roleId
+      this.isEdit = true
+      this.userform = {
         roleName: item.roleName,
         roleDescribe: item.roleDescribe,
-        roleId: item.roleId
       }
     },
-    getData() { // 获取列表数据
-      this.$axios
-        .get("/pumpms/role/queryList", {
-          params: {
-           roleName: this.formInline.roleName,
-           page: this.cur_page,
-           rows: this.rows
-          }
-        })
-        .then(response => {
-          this.tableData = response.data.rows;
-        })
-        .catch(error => {
-          // console.log(error);
-        });
+    addRole() {
+      this.addVisible = true
+      this.isEdit = false
+      this.userform = {
+        roleName: '',
+        roleDescribe: ''
+      }
+    },
+    async getTableList() { // 获取列表数据
+      let vm = {
+        roleName: this.formInline.roleName,
+        page: this.cur_page,
+        rows: this.rows
+      }
+      let res = await roleService.getRoleList(vm)
+      this.tableData = res.rows
+      this.total = res.total
     },
     addConfirm() { 
-      this.$axios
-        .get("/pumpms/role/add", {
-          params: {
-           roleName: this.userform.roleName,
-           roleDescribe: this.userform.roleDescribe
-          }
-        })
-        .then(res => {
-          if (res.data.flag) {
-            this.addVisible = false
-            this.$message("添加成功")
-            this.getData()
+      let vm = {
+        roleName: this.userform.roleName,
+        roleDescribe: this.userform.roleDescribe
+      }
+      this.$refs['userform'].validate((valid) => {
+        if (valid) {
+          if (this.isEdit) {
+            vm.roleId = this.roleId
+            this.editConfirm(vm)
           } else {
-            this.$message.success(res.data.msg)
+            this.addRoleConfirm(vm)
           }
-        })
-        .catch(error => {
-          // console.log(error);
-        });
+        } else {
+          return false;
+        }
+      })
     },
-    editConfirm() {
-      this.$axios
-        .get("/pumpms/role/edit", {
-          params: this.editform
-        })
-        .then(res => {
-          if (res.data.flag) {
-            this.editVisible = false
-            this.$message.success("编辑成功")
-            this.getData()
-          } else {
-            this.$message.error(res.data.msg)
-          }
-        })
-        .catch(error => {
-          // console.log(error);
-        });
+    async addRoleConfirm (vm) {
+      let res = await roleService.getAddRoler(vm)
+      if (res.flag) {
+        this.addVisible = false
+        this.$message.success("添加成功")
+        this.getTableList()
+      } else {
+        this.$message.error(res.msg)
+      }
+    },
+    async editConfirm(vm) {
+      let res = await roleService.getEditRole(vm)
+      if (res.flag) {
+        this.addVisible= false
+        this.$message.success("编辑成功")
+        this.getTableList()
+      } else {
+        this.$message.error(res.msg)
+      }
     }
   },
-  created () {
-    this.getData()
+  mounted() {
+    this.getTableList()
   }
 }
 </script>

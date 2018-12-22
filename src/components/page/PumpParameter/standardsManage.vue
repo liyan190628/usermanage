@@ -10,16 +10,10 @@
           <el-input v-model="formInline.stName"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="getListData" type="primary">查询</el-button>
+          <el-button @click="getTableList" type="primary">query</el-button>
+          <el-button @click="addVisible = true" type="primary">add</el-button>
         </el-form-item>
       </el-form>
-
-      <!-- 添加 -->
-      <el-row class="pb-20" :gutter="24">
-        <el-col :span="2" :offset="22">
-          <el-button @click="addVisible = true" type="primary">+add</el-button>
-        </el-col>
-      </el-row>
 
       <el-card shadow="hover">
         <el-table :data="tableData" class="table" stripe style="width: 100%;">
@@ -29,44 +23,44 @@
           </el-table-column>
           <el-table-column prop="stPicPath" align="center" label="standarsPicture">
           </el-table-column>
-          <el-table-column prop="operate" align="center" label="operate">
+          <el-table-column align="center" label="operate">
             <template slot-scope="scope">
-              <el-button @click="handleEdit(scope.$index, scope.row)" type="text">edit</el-button>
-              <el-button @click="handleDelete(scope.$index, scope.row)" type="text">delete</el-button>
+              <el-button @click="handleDelete(scope.row.stId)" type="text">delete</el-button>
             </template>
           </el-table-column>
         </el-table>
-        <div class="pagination">
-          <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :total="1000">
+         <div class="pagination">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="cur_page"
+            :page-sizes="[10, 20, 30, 40]"
+            :page-size="rows"
+            layout="sizes, prev, pager, next"
+            :total="total">
           </el-pagination>
         </div>
       </el-card>
 
     </div>
     <!-- 新增模态框 -->
-    <!-- <add :show='addVisible' :items='items' @cancel='addCancel'></add> -->
     <addStandards @cancel='addCancel' :show='addVisible'></addStandards>
     <!-- 编辑用户 -->
     <edit @cancel='editCancel' :show='editVisible' :items='items'></edit>
-    <!-- 删除模态框 -->
-    <deleteModal :show='delVisible' @cancel='deleteCancel' @deleteRow='deleteRow'></deleteModal>
   </div>
 </template>
 <script>
-// import add from '../../modal/addModal'
 import addStandards from './addStandards'
 import edit from '../../modal/editModal' // 编辑
 export default {
   components: { edit, addStandards},
   data() {
     return {
-      cur_page: 1,
       formInline: {
         stName: ''
       },
       tableData: [],
       editVisible: false, // 编辑
-      delVisible: false, // 删除
       authorVisible: false, // 授权
       addVisible: false, // 增加
       items: [
@@ -74,17 +68,46 @@ export default {
         { title: 'standarsExplain', type: '', code: '' },
         { title: 'standarsPicture', type: '', code: '' }
       ],
-      standarsName: ''
+      standarsName: '',
+      cur_page: 1,
+      rows: 10,
+      total: 10
     }
   },
   methods: {
-    handleCurrentChange(val) {
-      this.cur_page = val
-      // this.getData()
+    handleSizeChange(val) {
+      this.rows = val
+      this.getTableList()
     },
-    handleDelete(index, row) {
-      this.idx = index
-      this.delVisible = true
+    handleCurrentChange (val) {
+      this.cur_page = val
+      this.getTableList()
+    },
+    handleDelete(id) { // 删除用户
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$axios
+          .get("/pumpms/standard/delete", {
+            params: {stId: id}
+          })
+          .then(response => {
+            if (response.data.flag) {
+              this.delVisible = false
+              this.$message.success("删除成功")
+              this.getTableList()
+            } else {
+              this.$message.success(response.data.msg)
+            }
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+        });          
+      });
     },
     // 编辑
     editCancel() {
@@ -103,16 +126,7 @@ export default {
       }
       this.editVisible = true
     },
-    deleteCancel() {
-      this.delVisible = !this.delVisible
-    },
-    // 确定删除
-    deleteRow() {
-      this.tableData.splice(this.idx, 1)
-      this.$message.success('删除成功')
-      this.delVisible = false
-    },
-    getListData () {
+    getTableList () {
       this.$axios
         .get("/pumpms/standard/queryList", {
           params: {
@@ -124,13 +138,10 @@ export default {
         .then(response => {
           this.tableData = response.data.rows;
         })
-        .catch(error => {
-          // console.log(error);
-        });
     }
   },
-  created() {
-    this.getListData()
-  },
+  mounted() {
+    this.getTableList()
+  }
 }
 </script>

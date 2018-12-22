@@ -10,9 +10,30 @@
         <!-- System Overview -->
         <el-row class="border bg-white mb-20 pr-20">
           <el-col class="text-center pb-20 pt-10" :span="24">System Overview</el-col>
-          <el-form label-width="220px">
-            <el-form-item v-for="(item, index) in systemItems" :key="index" :label="item.name">
-              <el-input v-model="item.code"></el-input>
+          <el-form :model="systemItems" :rules="rules" ref="systemItems" label-width="220px" class="demo-ruleForm">
+            <el-form-item label="pump model:" prop="pumpModel">
+              <el-input v-model="systemItems.pumpModel"></el-input>
+            </el-form-item>
+            <el-form-item label="pump type:" prop="pumpType">
+              <el-input v-model="systemItems.pumpType"></el-input>
+            </el-form-item>
+            <el-form-item label="Flow rate:" prop="flowMax">
+              <el-input v-model="systemItems.flowMax"></el-input>
+            </el-form-item>
+            <el-form-item label="Head max:" prop="headMax">
+              <el-input v-model="systemItems.headMax"></el-input>
+            </el-form-item>
+            <el-form-item label="Recommend Max input Power:" prop="powerMax">
+              <el-input v-model="systemItems.powerMax"></el-input>
+            </el-form-item>
+            <el-form-item label="Minimum well diameter:" prop="minWellDiameter">
+              <el-input v-model="systemItems.minWellDiameter"></el-input>
+            </el-form-item>
+            <el-form-item label="Pump discharge:" prop="discharge">
+              <el-input v-model="systemItems.discharge"></el-input>
+            </el-form-item>
+            <el-form-item label="efficiency:" prop="efficiencyMax">
+              <el-input v-model="systemItems.efficiencyMax"></el-input>
             </el-form-item>
           </el-form>
         </el-row>
@@ -46,7 +67,6 @@
               <el-form-item label="Motor">
                 <el-select v-model="userform.motorId">
                   <el-option v-for="(item, index) in types" :key="index" :label="item.motorName" :value='item.motorId'></el-option>
-                  <!-- <el-option label="区域二" value="beijing"></el-option> -->
                 </el-select>
               </el-form-item>
               <el-row class="py pb-10">
@@ -137,12 +157,7 @@
           <img v-if="imageUrl" :src="imageUrl" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
-
-      <!-- <img :src="imageUrl" alt="">
-      {{imageUrl}} -->
-      
       </el-col>
-      
     </el-row>
   </div>
 </template>
@@ -151,16 +166,22 @@ import qs from 'qs'
 export default {
   data() {
     return {
-      systemItems: [
-        { name: "pump type:", code: "", value: "pumpType" },
-        { name: "pump model:", code: "", value: "pumpModel" },
-        { name: "Flow rate:", code: "", value: "flowMax" },
-        { name: "Head max:", code: "", value: "headMax" },
-        { name: "Recommend Max input Power:", code: "", value: "powerMax" },
-        { name: "Minimum well diameter:", code: "", value: "minWellDiameter" },
-        { name: "Pump discharge:", code: "", value: "discharge" },
-        { name: "efficiency:", code: "", value: "efficiencyMax" }
-      ],
+      systemItems: {
+        pumpType: '',
+        pumpModel: '',
+        flowMax: '',
+        headMax: '',
+        powerMax: '',
+        minWellDiameter: '',
+        discharge: '',
+        efficiencyMax: ''
+      },
+      rules: {
+        pumpModel: [{ required: true, message: '请填写pumpModel', trigger: 'blur' }],
+        flowMax: [{ required: true, message: '请填写flowMax', trigger: 'blur' }],
+        headMax: [{ required: true, message: '请填写headMax', trigger: 'blur' }],
+        powerMax: [{ required: true, message: '请填写powerMax', trigger: 'blur' }],
+      },
       userform: {
         name: ""
       },
@@ -240,11 +261,7 @@ export default {
       })
     },
     confirm () {
-      let vm = {};
-      for (let index of this.systemItems) {
-        vm[index.value] = index.code;
-      }
-      // console.log(vm)
+      let vm = this.systemItems
       let arr1 = []
       this.productAdvantage.domains.forEach(v => {
         arr1.push(v.value)
@@ -267,16 +284,22 @@ export default {
       vm.explains = arr4
       vm.motorId = this.userform.name
       vm = qs.stringify(vm)
-      this.$axios
-        .post("/pumpms/pump/add", vm)
-        .then(res => {
-          if (res.data.flag) {
-            this.$message.success("添加成功!")
-            this.$router.go(-1)
-          } else {
-            this.$message.error(res.data.msg)
-          }
-        })
+      this.$refs['systemItems'].validate((valid) => {
+        if (valid) {
+          this.$axios
+            .post("/pumpms/pump/add", vm)
+            .then(res => {
+            if (res.data.flag) {
+              this.$message.success("添加成功!")
+              this.back()
+            } else {
+              this.$message.error(res.data.msg)
+            }
+          })
+        } else {
+          return false;
+        }
+      })
     },
     // 获取motor
     getType () {

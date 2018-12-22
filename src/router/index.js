@@ -48,8 +48,8 @@ export default new Router({
                     name: 'pumpEdit',
                     component: resolve => require(['../components/page/PumpParameter/pumpEdit.vue'], resolve),
                 },
-                    {
-                
+                {
+
                     path: '/motorManage',
                     component: resolve => require(['../components/page/PumpParameter/motorManage.vue'], resolve),
                     meta: {
@@ -65,6 +65,7 @@ export default new Router({
                 },
                 {
                     path: '/addPumpParameter',
+                    name: 'addPumpParameter',
                     component: resolve => require(['../components/page/PumpParameter/addPumpParameter.vue'], resolve),
                     meta: {
                         title: '新增泵参数'
@@ -102,14 +103,6 @@ export default new Router({
                     }
                 },
                 {
-                    path: '/mainQueryPage',
-                    component: resolve => require(['../components/page/mainQueryPage/index.vue'], resolve),
-                    meta: {
-                        title: '主查询页面',
-                        permission: true
-                    }
-                },
-                {
                     path: '/test',
                     component: resolve => require(['../components/page/test/index.vue'], resolve),
                     meta: {
@@ -132,6 +125,14 @@ export default new Router({
                     }
                 }
             ]
+        },
+        {
+            path: '/mainQueryPage',
+            component: resolve => require(['../components/page/mainQueryPage/index.vue'], resolve),
+            meta: {
+                title: '主查询页面',
+                permission: true
+            }
         },
         {
             path: '/login',

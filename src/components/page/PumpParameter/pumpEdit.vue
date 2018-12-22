@@ -8,11 +8,32 @@
         </el-row>
 
         <!-- System Overview -->
-        <el-row class="border bg-white mb-20 pr-20">
+       <el-row class="border bg-white mb-20 pr-20">
           <el-col class="text-center pb-20 pt-10" :span="24">System Overview</el-col>
-          <el-form label-width="220px">
-            <el-form-item v-for="(item, index) in systemItems" :key="index" :label="item.name">
-              <el-input v-model="item.code"></el-input>
+          <el-form :model="systemItems" :rules="rules" ref="systemItems" label-width="220px" class="demo-ruleForm">
+            <el-form-item label="pump model:" prop="pumpModel">
+              <el-input v-model="systemItems.pumpModel"></el-input>
+            </el-form-item>
+            <el-form-item label="pump type:" prop="pumpType">
+              <el-input v-model="systemItems.pumpType"></el-input>
+            </el-form-item>
+            <el-form-item label="Flow rate:" prop="flowMax">
+              <el-input v-model="systemItems.flowMax"></el-input>
+            </el-form-item>
+            <el-form-item label="Head max:" prop="headMax">
+              <el-input v-model="systemItems.headMax"></el-input>
+            </el-form-item>
+            <el-form-item label="Recommend Max input Power:" prop="powerMax">
+              <el-input v-model="systemItems.powerMax"></el-input>
+            </el-form-item>
+            <el-form-item label="Minimum well diameter:" prop="minWellDiameter">
+              <el-input v-model="systemItems.minWellDiameter"></el-input>
+            </el-form-item>
+            <el-form-item label="Pump discharge:" prop="discharge">
+              <el-input v-model="systemItems.discharge"></el-input>
+            </el-form-item>
+            <el-form-item label="efficiency:" prop="efficiencyMax">
+              <el-input v-model="systemItems.efficiencyMax"></el-input>
             </el-form-item>
           </el-form>
         </el-row>
@@ -46,7 +67,6 @@
               <el-form-item label="Motor">
                 <el-select v-model="userform.motorId">
                   <el-option v-for="(item, index) in types" :key="index" :label="item.motorName" :value='item.motorId'></el-option>
-                  <!-- <el-option label="区域二" value="beijing"></el-option> -->
                 </el-select>
               </el-form-item>
               <el-row class="py pb-10">
@@ -132,8 +152,7 @@
           class="avatar-uploader"
           :action="st"
           :show-file-list="false"
-          :http-request="uploadImg"
-          :on-success="handleAvatarSuccess">
+          :http-request="uploadImg">
           <img v-if="imageUrl" :src="imageUrl" class="avatar">
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
@@ -144,20 +163,27 @@
 </template>
 <script>
 import qs from 'qs'
+import { pumpService } from '@/api/pumpService.js'
 export default {
   name: 'pumpEdit',
   data() {
     return {
-      systemItems: [
-        { name: "pump type:", code: "", value: "pumpType" },
-        { name: "pump model:", code: "", value: "pumpModel" },
-        { name: "Flow rate:", code: "", value: "flowMax" },
-        { name: "Head max:", code: "", value: "headMax" },
-        { name: "Recommend Max input Power:", code: "", value: "powerMax" },
-        { name: "Minimum well diameter:", code: "", value: "minWellDiameter" },
-        { name: "Pump discharge:", code: "", value: "discharge" },
-        { name: "efficiency:", code: "", value: "efficiencyMax" }
-      ],
+       systemItems: {
+        pumpType: '',
+        pumpModel: '',
+        flowMax: '',
+        headMax: '',
+        powerMax: '',
+        minWellDiameter: '',
+        discharge: '',
+        efficiencyMax: ''
+      },
+      rules: {
+        pumpModel: [{ required: true, message: '请填写pumpModel', trigger: 'blur' }],
+        flowMax: [{ required: true, message: '请填写flowMax', trigger: 'blur' }],
+        headMax: [{ required: true, message: '请填写headMax', trigger: 'blur' }],
+        powerMax: [{ required: true, message: '请填写powerMax', trigger: 'blur' }],
+      },
       userform: {
         name: ""
       },
@@ -190,9 +216,6 @@ export default {
     };
   },
   methods: {
-    back() {
-      this.$router.go(-1)
-    },
     uploadImg(item) {
       let formData = new FormData()
       formData.append('picture', item.file)
@@ -211,12 +234,6 @@ export default {
             this.$message.success(response.data.msg)
           }
         })
-        .catch(error => {
-          // console.log(error);
-        })
-    },
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
     },
     handleIconClick(index) {
       this.systemItems.splice(index, 1);
@@ -240,11 +257,8 @@ export default {
         key: Date.now()
       })
     },
-    confirm () {
-      let vm = {};
-      for (let index of this.systemItems) {
-        vm[index.value] = index.code;
-      }
+    async confirm () {
+      let vm = this.systemItems
       let arr1 = []
       this.productAdvantage.domains.forEach(v => {
         arr1.push(v.value)
@@ -268,19 +282,24 @@ export default {
       vm.motorId = this.userform.name
       vm.pumpId = this.testId
       vm = qs.stringify(vm)
-      this.$axios
-        .post("/pumpms/pump/edit", vm)
-        .then(res => {
-          if (res.data.flag) {
-            this.$message.success("修改成功!")
-            this.$router.go(-1)
-          } else {
-            this.$message.error(res.data.msg)
-          }
-        })
+      this.$refs['systemItems'].validate((valid) => {
+        if (valid) {
+          this.$axios
+            .post("/pumpms/pump/edit", vm)
+            .then(res => {
+            if (res.data.flag) {
+              this.$message.success("添加成功!")
+              this.back()
+            } else {
+              this.$message.error(res.data.msg)
+            }
+          })
+        } else {
+          return false;
+        }
+      })
     },
-    // 获取motor
-    getType () {
+    getType () {  // 获取motor下拉列表
       this.$axios
         .get("/pumpms/motor/query")
         .then(res => {
@@ -298,64 +317,62 @@ export default {
         .then(res => {
           //  console.log(res)
         })
+    },
+    async getDetails (id) {
+      let vm = {
+        pumpId: id
+      }
+      let res = await pumpService.getDetail(vm)
+      let data = res
+      this.systemItems = {
+        pumpType: data.pumpType,
+        pumpModel: data.pumpModel,
+        flowMax: data.flowMax,
+        headMax: data.headMax,
+        powerMax: data.powerMax,
+        minWellDiameter: data.minWellDiameter,
+        discharge: data.discharge,
+        efficiencyMax: data.efficiencyMax
+      }
+      if (data.proAdvantages != null) {
+        data.proAdvantages.forEach(v => {
+          this.productAdvantage.domains.push({
+            value: v
+          })
+        })
+      }
+      if (data.controRemarks != null) {
+        data.controRemarks.forEach(v => {
+          this.technicalData.domains.push({
+            value: v
+          })
+        })
+      }
+      if (data.pumpEnds != null) {
+        data.pumpEnds.forEach(v => {
+          this.pumpEndAdd.domains.push({
+          value: v
+          })
+        })
+      }
+      if (data.explains != null) {
+        data.explains.forEach(v => {
+          this.explain.domains.push({
+            value: v
+          })
+        })
+      }
+      this.imageUrl = data.picPath
+      this.userform.motorId = data.motorId
     }
   },
-  created() {
-    let id = this.$route.query.paicheNo
-    console.log(id)
+  activated() {
+    let id = localStorage.getItem('testId')
+    if (id) this.getDetails(id)
     this.testId = id
-    this.$axios
-        .get("/pumpms/pump/queryDetail", {
-          params: {
-            pumpId: id
-          }
-        })
-        .then(res => {
-          let data = res.data
-          this.systemItems = [
-            { name: "pump type:", code: data.pumpType, value: "pumpType" },
-            { name: "pump model:", code: data.pumpModel, value: "pumpModel" },
-            { name: "Flow rate:", code: data.flowMax, value: "flowMax" },
-            { name: "Head max:", code: data.headMax, value: "headMax" },
-            { name: "Recommend Max input Power:", code: data.powerMax, value: "powerMax" },
-            { name: "Minimum well diameter:", code: data.minWellDiameter, value: "minWellDiameter" },
-            { name: "Pump discharge:", code: data.discharge, value: "discharge" },
-            { name: "efficiency:", code: data.efficiencyMax, value: "efficiencyMax" }
-          ]
-          if (data.proAdvantages != null) {
-            data.proAdvantages.forEach(v => {
-              this.productAdvantage.domains.push({
-                value: v
-              })
-            })
-          }
-          if (data.controRemarks != null) {
-            data.controRemarks.forEach(v => {
-               this.technicalData.domains.push({
-                 value: v
-              })
-            })
-          }
-          if (data.pumpEnds != null) {
-            data.pumpEnds.forEach(v => {
-              this.pumpEndAdd.domains.push({
-                value: v
-              })
-            })
-          }
-          if (data.explains != null) {
-            data.explains.forEach(v => {
-              this.explain.domains.push({
-                value: v
-             })
-            })
-          }
-          this.imageUrl = data.picPath
-          this.userform.motorId = data.motorId
-        })
     this.getType()
     this.getStards()
-  },
+  }
 };
 </script>
 <style>

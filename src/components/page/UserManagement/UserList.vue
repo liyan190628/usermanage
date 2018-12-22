@@ -2,14 +2,34 @@
   <div>
     <!-- 面包屑导航 -->
     <crumbs :title1="'用户管理'" :title2="'用户列表'"></crumbs>
+    <el-dialog title="Add" :visible.sync="addVisible" width="50%" center>
+      <el-form :model="addItems" :rules="rules" ref="addItems" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="userName:" prop="userName">
+          <el-input v-model="addItems.userName"></el-input>
+        </el-form-item>
+        <el-form-item label="password:" prop="password">
+          <el-input v-model="addItems.password"></el-input>
+        </el-form-item>
+        <el-form-item label="email:" prop="email">
+          <el-input v-model="addItems.email"></el-input>
+        </el-form-item>
+        <el-form-item label="address:" prop="address">
+          <el-input v-model="addItems.address"></el-input>
+        </el-form-item>
+        <el-form-item label="phone:" prop="phone">
+          <el-input v-model="addItems.phone"></el-input>
+        </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click.native="addVisible = false">Cancel</el-button>
+          <el-button type="primary" @click.native="confirm">Confirm</el-button>
+        </div>
+    </el-dialog>
     <!-- 搜索 -->
     <div class="container">
       <el-form :inline="true" :model="formInline" class="demo-form-inline mgb10">
         <el-form-item label="用户名：">
           <el-input v-model="formInline.userName"></el-input>
-        </el-form-item>
-        <el-form-item label="角色：">
-          <el-input v-model="formInline.userType"></el-input>
         </el-form-item>
         <el-form-item label="状态：">
           <el-select v-model="formInline.isLock">
@@ -19,57 +39,70 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="getUserList">查询</el-button>
+          <el-button type="primary" @click="getTableList">query</el-button>
+          <el-button type="primary" @click="addUser"> add </el-button>
         </el-form-item>
       </el-form>
-      <el-row type="flex" class="row-bg pb-20" justify="end">
-        <el-col :span="2">
-          <el-button type="primary" @click="addVisible = true">添加用户</el-button>
-        </el-col>
-      </el-row>
       <!-- 表格 -->
       <el-card shadow="hover">
         <el-table :data="tableData" class="table" stripe style="width: 100%;">
           <el-table-column prop="userName" align="center" label="用户名"></el-table-column>
           <el-table-column prop="password" align="center" label="密码"></el-table-column>
-          <el-table-column prop="phone" align="center" label="联系方式"></el-table-column>
-          <el-table-column prop="email" align="center" label="邮箱"></el-table-column>
+          <el-table-column prop="phone" align="center" label="联系方式" width="140"></el-table-column>
+          <el-table-column prop="email" align="center" label="邮箱" width="140"></el-table-column>
+          <el-table-column prop="address" align="center" label="地址" width="140"></el-table-column>
           <el-table-column prop="userType" align="center" label="权限"></el-table-column>
-          <el-table-column prop="isLock" align="center" label="当前状态"></el-table-column>
-          <el-table-column prop="operation" align="center" label="操作" width="200">
+          <el-table-column align="center" label="当前状态">
             <template slot-scope="scope">
-              <el-button @click="handleEdit(scope.$index, scope.row)" type="text">编辑</el-button>
-              <el-button @click="handleDelete(scope.$index)" type="text">删除</el-button>
-              <el-button type="text">解锁</el-button>
-              <el-button @click="handleAuthor(scope.$index)" type="text">授权</el-button>
+              <span :class="scope.row.isLock === 'N' ? 'text-success' : 'text-danger'">
+                {{scope.row.isLock === 'N' ? '未锁定' : '锁定'}}
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column fixed="right" prop="operation" align="center" label="操作" width="200">
+            <template slot-scope="scope">
+              <el-button @click="editUser(scope.row.userId)" type="text">编辑</el-button>
+              <el-button @click="handleDelete(scope.row.userId)" type="text">删除</el-button>
+              <el-button @click="lockOperation(scope.row.userId, scope.row.isLock)" type="text">
+                {{scope.row.isLock === 'N' ? '锁定' : '解锁'}}
+              </el-button>
+              <el-button @click="handleAuthor(scope.row.userId)" type="text">授权</el-button>
             </template>
           </el-table-column>
         </el-table>
         <div class="pagination">
           <el-pagination
-            background
+            @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            layout="prev, pager, next"
-            :total="total"
-          ></el-pagination>
-        </div>
+            :current-page.sync="cur_page"
+            :page-sizes="[10, 20, 30, 40]"
+            :page-size="rows"
+            layout="sizes, prev, pager, next"
+            :total="total">
+          </el-pagination>
+      </div>
       </el-card>
     </div>
-    <!-- 添加用户 -->
-    <addModal @cancel='addCancel' @saveEdit="addUser" :show="addVisible" :items="addItems"></addModal>
-    <!-- 编辑用户 -->
-    <edit @cancel="editCancel" @saveEdit='saveEdit' :show="editVisible" :userform="userform"></edit>
-    <!-- 删除用户 -->
-    <deleteModal :show="delVisible" @cancel="deleteCancel" @deleteRow="deleteRow"></deleteModal>
-    <!-- 授权 -->
-    <authorization :userId='userId' :show="authorVisible" @cancel="authorCancel"></authorization>
+    <el-dialog title="Add" :visible.sync="authorVisible" width="30%" center>
+      <el-form label-width="80px" class="demo-ruleForm">
+        <el-form-item label="role:">
+          <el-select v-model="queryRoles.roleId">
+            <el-option v-for="(item, index) in userRoles" :key="index" :label="item.roleName" :value="item.roleId"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="authorVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="AuthorSave">Confirm</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 <script>
-import edit from "./UserOperation/edit"; // 编辑
-import authorization from "./UserOperation/authorization"; // 授权
+import { userService } from '@/api/userService.js'
+import { roleService } from '@/api/roleService'
 export default {
-  components: { edit, authorization },
   data() {
     return {
       formInline: {
@@ -77,151 +110,202 @@ export default {
         userType: "",
         isLock: ""
       },
-      tableData: [
-        {userName: '测试'}
-      ],
+      tableData: [],
       addVisible: false, // 添加
-      editVisible: false, // 编辑
-      delVisible: false, // 删除
       authorVisible: false, // 授权
       userform: {},
-      addItems: [
-        { title: "userName:", type: "input", code: "", vm: "userName" },
-        { title: "password:", type: "input", code: "", vm: "password" },
-        { title: "email:", type: "input", code: "", vm: "email" },
-        { title: "address:", type: "input", code: "", vm: "address" },
-        { title: "phone:", type: "input", code: "", vm: "phone" }
-      ],
-      idx: -1,
       cur_page: 1, // 当前页
       rows: 10,
-      userId: ''
-    };
+      total: 10,
+      userId: '',
+      rules: {
+        userName: [{ required: true, message: '请填写用户名', trigger: 'blur' }],
+        password: [{ required: true, message: '请填写密码', trigger: 'blur' }]
+      },
+      addItems: {
+        userName: '',
+        password: '',
+        email: '',
+        address: '',
+        phone: ''
+      },
+      isEdit: false,
+      userRoles: [], // 用户权限
+      queryRoles: {
+        roleId: ''
+      }
+    }
   },
   methods: {
-    handleCurrentChange(val) {
-      this.cur_page = val;
-      this.getUserList()
+     handleSizeChange(val) {
+      this.rows = val
+      this.getTableList()
     },
-    handleDelete(index, row) {
-      this.idx = index;
-      this.delVisible = true;
+    handleCurrentChange (val) {
+      this.cur_page = val
+      this.getTableList()
     },
-    addCancel () {
-      this.addVisible = !this.addVisible
+    handleDelete(id) { // 删除用户
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$axios
+            .get("/pumpms/customer/delete", {
+            params: {userId: id}
+          })
+          .then(response => {
+            if (response.data.flag) {
+              this.delVisible = false
+              this.$message.success("删除成功")
+              this.getTableList()
+            } else {
+              this.$message.success(response.data.msg)
+            }
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+        });          
+      });
     },
-    handleAuthor (index) {
-      this.authorVisible = !this.authorVisible
-      this.userId = this.tableData[index].userId
-    },
-    // 编辑
-    editCancel() {
-      this.editVisible = !this.editVisible;
+    async handleAuthor (id) { // 获取授权
+      this.authorVisible = true
+      this.userId = id
+      let res = await roleService.getQueryRoles({})
+      this.userRoles = res
     },
     authorCancel() {
       this.authorVisible = !this.authorVisible;
     },
-    handleEdit(index, row) {
-      this.idx = index;
-      const item = this.tableData[index];
-      this.userform = {
-        userName: item.userName,
-        password: item.password,
-        phone: item.phone,
-        email: item.email,
-        userType: item.userType,
-        isLock: item.isLock,
-        userId: item.userId
-      };
-      this.editVisible = true
+    lockOperation (id, status) {
+      if (status === 'N') {
+        this.lock(id)
+      } else {
+        this.unlock(id)
+      }
     },
-    deleteCancel() {
-      this.delVisible = !this.delVisible;
+    // 解锁
+    async unlock(id) {
+      let vm = {
+        userId: id
+      }
+      let res = await userService.getUnlock(vm)
+      if (res.flag) {
+        this.getTableList()
+        this.$message.success('已解锁！')
+      }
     },
-    // 确定删除
-    deleteRow() {
-      this.$axios
-        .get("/pumpms/customer/delete", {
-          params: {
-            userId: this.tableData[this.idx].userId
-          }
-        })
-        .then(response => {
-          if (response.data.flag) {
-            this.delVisible = false
-            this.$message("删除成功")
-            this.getUserList()
-          } else {
-            this.$message.success(response.data.msg)
-          }
-        })
-        .catch(error => {
-          // console.log(error);
-        })
+    // 锁定
+    async lock(id) {
+      let vm = {
+        userId: id
+      }
+      let res = await userService.getlock(vm)
+      if (res.flag) {
+        this.getTableList()
+        this.$message.success('已锁定！')
+      }
     },
     // 获取用户列表
-    getUserList() {
-      this.$axios
-        .get("/pumpms/customer/queryList", {
-          params: {
-            userName: this.formInline.userName,
-            userType: this.formInline.userType,
-            isLock: this.formInline.isLock,
-            page: 1,
-            rows: 10
-          }
-        })
-        .then(response => {
-          this.tableData = response.data.rows;
-          this.total = response.data.total
-        })
-        .catch(error => {
-          // console.log(error);
-        });
+    async getTableList() {
+      let vm = {
+        userName: this.formInline.userName,
+        userType: this.formInline.userType,
+        isLock: this.formInline.isLock,
+        page: this.cur_page,
+        rows: this.rows
+      }
+      let res = await userService.getList(vm)
+      this.tableData = res.rows;
+      this.total = res.total
     },
     // 添加用户
     addUser() {
-      let vm = {};
-      for (let index of this.addItems) {
-        vm[index.vm] = index.code;
+      this.isEdit = false
+      this.addVisible = true
+      this.addItems = {
+        userName: '',
+        password: '',
+        email: '',
+        address: '',
+        phone: ''
       }
-      this.$axios
-        .get("/pumpms/customer/add", {
-          params: vm
-        })
-        .then(response => {
-           if (response.data.flag) {
-            this.addVisible = false
-            this.$message.success("添加成功!")
-            this.getUserList()
-          } else {
-            this.$message.success(response.data.msg)
-          }
-        })
-        .catch(response => {
-          // console.log(error);
-        });
     },
-    saveEdit() { 
-      this.$axios
-        .get("/pumpms/customer/edit", {
-          params: this.userform
-        })
-        .then(response => {
-          if (response.data.flag) {
-            this.editVisible = false
-            this.getUserList()
-          }else {
-            this.$message.success(response.data.msg)
+    async editUser(id) {
+      let vm = {
+        userId: id
+      }
+      this.isEdit = true
+      this.addVisible = true
+      let res = await userService.getDetail(vm)
+      this.addItems = {
+        userName: res.userName,
+        password: res.password,
+        email: res.email,
+        address: res.address,
+        phone: res.phone
+      }
+      this.userId = res.userId
+    },
+    confirm () {
+      this.$refs['addItems'].validate((valid) => {
+        if (valid) {
+          if (this.isEdit) {
+            this.addItems.userId = this.userId
+            this.edit()
+          } else {
+            this.add()
           }
-        })
-        .catch(function(error) {
-          // this.$message('这是一条消息提示');
-        });
+        } else {
+          return false;
+        }
+      })
+    },
+    async add () {
+      let res = await userService.getAdd(this.addItems)
+      if (res.flag) {
+        this.addVisible = false
+        this.$message.success("添加成功!")
+        this.getTableList()
+      } else {
+        this.$message.success(res.msg)
+      }
+    },
+    async edit () {
+      let res = await userService.getEdit(this.addItems)
+      if (res.flag) {
+        this.addVisible = false
+        this.$message.success("修改成功!")
+        this.getTableList()
+      } else {
+        this.$message.success(res.msg)
+      }
+    },
+    async AuthorSave () {
+      let vm = {
+        userId: this.userId,
+        roleId: this.queryRoles.roleId
+      }
+      let res = await userService.getAccredit(vm)
+      if (res.flag) {
+        this.$message.success('授权成功!')
+        this.authorVisible = false
+      }
     }
   },
-  created() {
-    this.getUserList()
+  mounted() {
+    this.getTableList()
   }
 };
 </script>
+<style scoped>
+.text-danger{
+  color: #F56C6C;
+}
+.text-success{
+  color: #67C23A;
+}
+</style>

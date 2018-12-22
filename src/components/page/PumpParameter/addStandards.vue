@@ -70,15 +70,17 @@ export default {
         stExplains: arr,
         stPicPath: this.imageUrl
       })
-      // console.log(vm)
       this.$axios
         .post("/pumpms/standard/add", vm)
-        .then(response => {
-          console.log(response)
+        .then(res => {
+          if (res.data.flag) {
+            this.$message.success('add success!')
+            this.$emit('cancel')
+            this.$parent.getTableList()
+          } else {
+            this.$message.error(res.data.msg)
+          }
         })
-        .catch(error => {
-          // console.log(error);
-        });
     },
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
@@ -100,16 +102,12 @@ export default {
       this.$axios
         .post("/pumpms/pump/upload", formData,config)
         .then(response => {
-          console.log(response)
           if (response.data.flag) {
             this.$message("上传成功")
             this.imageUrl = response.data
           } else {
             this.$message.success(response.data.msg)
           }
-        })
-        .catch(error => {
-          // console.log(error);
         })
     }
   },
@@ -119,7 +117,6 @@ export default {
         return this.show
       },
       set(n) {
-        // this.$emit('cancel', n)
       }
     }
   }

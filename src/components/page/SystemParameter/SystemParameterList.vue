@@ -13,16 +13,14 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">查询</el-button>
+          <el-button type="primary">query</el-button>
+          <el-button @click="addVisible = true" type="primary">add</el-button>
         </el-form-item>
       </el-form>
       <!-- 表格 -->
-      <el-row type="flex" class="row-bg" justify="space-between">
+      <!-- <el-row type="flex" class="row-bg" justify="space-between">
         <el-col :span="6">systemParameter</el-col>
-        <el-col :span='2'>
-          <el-button @click="addVisible = true" type="primary">+add</el-button>
-        </el-col>
-      </el-row>
+      </el-row> -->
 
       <div class="row-bg" id="myChart"></div>
     </div>
@@ -89,7 +87,7 @@ export default {
     // 确定删除
     deleteRow() {
       this.tableData.splice(this.idx, 1)
-      this.$message.success('删除成功')
+      // this.$message.success('删除成功')
       this.delVisible = false
     },
     getData() {
@@ -138,7 +136,7 @@ export default {
 
 <style scoped>
 .row-bg{
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   padding: 8px 4px;
 }
 .table{

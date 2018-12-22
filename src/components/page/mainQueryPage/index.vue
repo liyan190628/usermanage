@@ -1,25 +1,15 @@
 <template>
-  <div @click="getPdf()" id="pdfDom">
+  <div class="mainQuery" id="pdfDom">
     <!-- 第一页 -->
-    <div>
-      <content1></content1>
-    </div>
+    <content1></content1>
     <!-- 第二页 -->
-    <div>
-      <content2></content2>
-    </div>
+    <content2></content2>
     <!-- 第三页 -->
-    <div>
-      <content3></content3>
-    </div>
+    <content3></content3>
     <!-- 第四页 -->
-    <div>
-      <content4></content4>
-    </div>
+    <content4></content4>
     <!-- 第五页 -->
-    <div>
-      <content5></content5>
-    </div>
+    <content5></content5>
   </div>
 </template>
 <script>
@@ -44,3 +34,9 @@ export default {
   }
 }
 </script>
+<style>
+.mainQuery{
+  /* height: 10000px; */
+  overflow: auto;
+}
+</style>

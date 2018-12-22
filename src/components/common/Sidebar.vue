@@ -90,11 +90,6 @@ export default {
                 },
                 {
                     icon: 'el-icon-lx-warn',
-                    index: 'mainQueryPage',
-                    title: '主查询页面',
-                },
-                {
-                    icon: 'el-icon-lx-warn',
                     index: 'test',
                     title: '测试',
                 }

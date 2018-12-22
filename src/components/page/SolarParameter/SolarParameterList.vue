@@ -9,39 +9,40 @@
           <el-input v-model="items.value"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="getListData" type="primary">查询</el-button>
+          <el-button @click="getTableList" type="primary">query</el-button>
+          <el-button @click="addCancel" type="primary">add</el-button>
         </el-form-item>
       </el-form>
-
-      <!-- 表格 -->
-      <el-row type="flex" class="row-bg" justify="end">
-        <el-col :span="2">
-          <!-- <span @click="addCancel"><i class="el-icon-lx-add"></i>增加</span> -->
-          <el-button @click="addCancel" type="primary">+add</el-button>
-        </el-col>
-      </el-row>
-
-      <el-table :data="tableData" class="table" stripe style="width: 100%;">
-        <el-table-column width="200" prop="solarPanelType" label="solar_panel_type">
+      
+      <!-- biaoge -->
+      <el-table :data="tableData" stripe style="width: 100%;">
+        <el-table-column align="center" width="200" prop="solarPanelType" label="solar_panel_type">
         </el-table-column>
-        <el-table-column width="190" prop="peakPower" label="peak_power">
+        <el-table-column align="center" width="190" prop="peakPower" label="peak_power">
         </el-table-column>
-        <el-table-column width="260" prop="tolerancePmax" label="production_tolerance_of_pmax">
+        <el-table-column align="center" width="260" prop="tolerancePmax" label="production_tolerance_of_pmax">
         </el-table-column>
-        <el-table-column width="180" prop="voltagePmax" label="voltage_pmax">
+        <el-table-column align="center" width="180" prop="voltagePmax" label="voltage_pmax">
         </el-table-column>
-        <el-table-column width="180" prop="currentPmax" label="current_pmax">
+        <el-table-column align="center" width="180" prop="currentPmax" label="current_pmax">
         </el-table-column>
-        <el-table-column width="180" prop="openCircuitVoltage" label="open_circuit_voltag">
+        <el-table-column align="center" width="180" prop="openCircuitVoltage" label="open_circuit_voltag">
         </el-table-column>
-        <el-table-column width="260" prop="shortCircuitCurrent" label="short_circuit_current">
+        <el-table-column align="center" width="260" prop="shortCircuitCurrent" label="short_circuit_current">
         </el-table-column>
-        <el-table-column width="260" prop="maxSeriesFuse" label="maximum_series_fuse">
+        <el-table-column align="center" width="260" prop="maxSeriesFuse" label="maximum_series_fuse">
         </el-table-column>
       </el-table>
 
       <div class="pagination">
-        <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :total="1000">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="cur_page"
+          :page-sizes="[10, 20, 30, 40]"
+          :page-size="rows"
+          layout="sizes, prev, pager, next"
+          :total="total">
         </el-pagination>
       </div>
 
@@ -61,7 +62,7 @@ export default {
       },
       formItems: [
         { title: 'peakPower:', type: 'input', value: '', code: 'peakPower' },
-        { title: 'openCircuitVoltage:', type: 'input', value: '', code: 'openCircuitVoltage'  },
+        { title: 'openCircuitVoltage:', type: 'input', value: '', code: 'openCircuitVoltage'},
       ],
       tableData: [],
       addVisible: false, // 添加
@@ -75,12 +76,21 @@ export default {
         { title: "shortCircuitCurrent:", type: "input", code: "", vm: "shortCircuitCurrent" },
         { title: "maxSeriesFuse:", type: "input", code: "", vm: "maxSeriesFuse" }
       ],
-      rows: 10, // 显示条数
       cur_page: 1, // 当前页
+      rows: 10, // 显示条数
+      total: 10
     }
   },
   methods: {
-    getListData () { // 列表数据
+    handleSizeChange(val) {
+      this.rows = val
+      this.getTableList()
+    },
+    handleCurrentChange (val) {
+      this.cur_page = val
+      this.getTableList()
+    },
+    getTableList () { // 列表数据
       let vm = {}
       for (let index of this.formItems) {
         vm[index.code] = index.value;
@@ -92,12 +102,8 @@ export default {
           params: vm
         })
         .then(response => {
-          console.log(response)
           this.tableData = response.data.rows;
         })
-        .catch(error => {
-          // console.log(error);
-        });
     },
     addCancel () {
       this.addVisible = !this.addVisible
@@ -115,18 +121,15 @@ export default {
            if (response.data.flag) {
             this.addVisible = false
             this.$message.success("添加成功!")
-            this.getListData()
+            this.getTableList()
           } else {
             this.$message.error(response.data.msg)
           }
         })
-        .catch(response => {
-          // console.log(error);
-        });
     },
   },
-  created() {
-    this.getListData()
+  mounted() {
+    this.getTableList()
   },
 }
 </script>

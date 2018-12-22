@@ -3,8 +3,8 @@
         <div class="ms-login">
             <div class="ms-title">后台管理系统</div>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
-                <el-form-item prop="username">
-                    <el-input v-model="ruleForm.username" placeholder="username">
+                <el-form-item prop="userName">
+                    <el-input v-model="ruleForm.userName" placeholder="userName">
                         <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                     </el-input>
                 </el-form-item>
@@ -22,15 +22,16 @@
 </template>
 
 <script>
+import qs from 'qs'
 export default {
     data: function () {
         return {
             ruleForm: {
-                username: 'admin',
-                password: '123123'
+                userName: '',
+                password: ''
             },
             rules: {
-                username: [
+                userName: [
                     { required: true, message: '请输入用户名', trigger: 'blur' }
                 ],
                 password: [
@@ -43,8 +44,20 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    localStorage.setItem('ms_username', this.ruleForm.username);
-                    this.$router.push('/');
+                    this.$axios
+                      .post("/pumpms/user/login", qs.stringify(this.ruleForm))
+                      .then(res => {
+                        if (res.data.falg) {
+                            this.$message.success('登陆成功！')
+                            if (res.data.date.userType === '1') {
+                                this.$router.push('/')
+                            } else {
+                                this.$router.push('/mainQueryPage')
+                            }
+                        } else {
+                            this.$message.error(res.data.msg)
+                        }
+                   })
                 } else {
                     console.log('error submit!!');
                     return false;

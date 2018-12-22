@@ -8,19 +8,12 @@
           <el-input v-model="item.value"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">查询</el-button>
+          <el-button @click="getTableList()" type="primary">query</el-button>
+          <el-button @click="linkTo('addPumpParameter')" type="primary">add</el-button>
         </el-form-item>
       </el-form>
       <!-- 表格 -->
-      <el-row type="flex" class="row-bg" justify="space-between">
-        <el-col :span="6">泵参数管理</el-col>
-        <el-col :span="2">
-          <router-link :to="{path: '/addPumpParameter'}">
-            <el-button type="primary">+add</el-button>
-          </router-link>
-        </el-col>
-      </el-row>
-      <el-table :data="tableData" class="table" stripe style="width: 100%;">
+      <el-table :data="tableData" stripe style="width: 100%;margin-top:30px;">
         <el-table-column prop="pumpType" align="center" label="pump_type">
         </el-table-column>
         <el-table-column prop="pumpModel" align="center" label="pump_model">
@@ -33,22 +26,28 @@
         </el-table-column>
         <el-table-column prop="operation" align="center" label="operate" width="180">
           <template slot-scope="scope">
-            <!-- {{scope.row.pumpId}} -->
-            <el-button @click="handleInfo(scope.row.pumpId)" type="text">Edit</el-button>
+            <el-button @click="link(scope.row.pumpId)" type="text">Edit</el-button>
             <el-button @click="handleDelete(scope.row.pumpId)" type="text">Delete</el-button>
           </template>
         </el-table-column>
       </el-table>
       <div class="pagination">
-        <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :total="total">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="cur_page"
+          :page-sizes="[10, 20, 30, 40]"
+          :page-size="rows"
+          layout="sizes, prev, pager, next"
+          :total="total">
         </el-pagination>
       </div>
     </div>
-
   </div>
 </template>
 <script>
 import pumpEdit from './pumpEdit'
+import { pumpService } from '@/api/pumpService.js'
 export default {
   components: { pumpEdit },
   data() {
@@ -70,9 +69,17 @@ export default {
     }
   },
   methods: {
+    link(id) {
+      localStorage.setItem('testId', id)
+      this.$router.push('pumpEdit')
+    },
+    handleSizeChange(val) {
+      this.rows = val
+      this.getTableList()
+    },
     handleCurrentChange (val) {
       this.cur_page = val
-      this.getData()
+      this.getTableList()
     },
     handleDelete(id) {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -90,7 +97,7 @@ export default {
               if (res.data.flag) {
                 this.delVisible = false
                 this.$message.success("删除成功")
-                this.getData()
+                this.getTableList()
               } else {
                 this.$message.error(res.data.msg)
              }
@@ -102,38 +109,21 @@ export default {
           });          
         });
     },
-    // 获取泵参数列表数据
-    getData() {
+    async getTableList() { // 获取泵参数列表数据
       let vm = {}
       for (let index of this.formItems) {
         vm[index.code] = index.value;
       }
       vm.page = this.cur_page,
       vm.rows = this.rows 
-      this.$axios
-        .get("/pumpms/pump/queryList", {
-          params: vm
-        })
-        .then(res => {
-          this.tableData = res.data.rows;
-          this.total = res.data.total
-        })
-        .catch(error => {
-          // console.log(error);
-        });
-    },
-    handleInfo (testId) { // 查看详情
-      // console.log(testId)
-      // this.$router.push({name: 'pumpEdit', params: { id: testId}})
-      this.$router.push({path: '/pumpEdit', query: {paicheNo: testId}})
-    },
-    saveEdit () { // 编辑
-
+      let res = await pumpService.getList(vm)
+      this.tableData = res.rows;
+      this.total = res.total
     }
   },
-  created () {
-    this.getData()
-  }
+  mounted() {
+    this.getTableList()
+  },
 }
 </script>
 <style scoped>
