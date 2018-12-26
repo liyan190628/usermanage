@@ -7,7 +7,9 @@
                 class="mb-20 pd"
                 style="background: #f0f0f0;padding: 12px;"
                 justify="center">
-          <el-col :span="6">pump model</el-col>
+          <el-col :span="6">
+            <h3>pump model</h3>
+          </el-col>
         </el-row>
 
         <!-- System Overview -->
@@ -196,9 +198,9 @@
                 class="row-bg"
                 justify="center">
           <el-col :span="6">
-            <el-button @click="back()">取消</el-button>
+            <el-button @click="back()">cancel</el-button>
             <el-button @click="confirm"
-                       type="primary">确定</el-button>
+                       type="primary">confirm</el-button>
           </el-col>
         </el-row>
 

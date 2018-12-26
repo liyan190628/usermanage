@@ -3,36 +3,54 @@
     <el-row :gutter="20">
       <el-col :span="16">
         <!-- pump model -->
-        <el-row type="flex" class="border row-bg mb-20 pd" justify="center">
-          <el-col :span="6">pump model</el-col>
+        <el-row type="flex"
+                class="mb-20"
+                style="background: #f0f0f0;padding: 12px;"
+                justify="center">
+          <el-col :span="6">
+            <h3>pump model</h3>
+          </el-col>
         </el-row>
 
         <!-- System Overview -->
-       <el-row class="border bg-white mb-20 pr-20">
-          <el-col class="text-center pb-20 pt-10" :span="24">System Overview</el-col>
-          <el-form :model="systemItems" :rules="rules" ref="systemItems" label-width="220px" class="demo-ruleForm">
-            <el-form-item label="pump model:" prop="pumpModel">
+        <el-row class="border bg-white mb-20 pr-20">
+          <el-col class="text-center pb-20 pt-10"
+                  :span="21">System Overview</el-col>
+          <el-form :model="systemItems"
+                   :rules="rules"
+                   ref="systemItems"
+                   label-width="220px"
+                   class="demo-ruleForm">
+            <el-form-item label="pump model:"
+                          prop="pumpModel">
               <el-input v-model="systemItems.pumpModel"></el-input>
             </el-form-item>
-            <el-form-item label="pump type:" prop="pumpType">
+            <el-form-item label="pump type:"
+                          prop="pumpType">
               <el-input v-model="systemItems.pumpType"></el-input>
             </el-form-item>
-            <el-form-item label="Flow rate:" prop="flowMax">
+            <el-form-item label="Flow rate:"
+                          prop="flowMax">
               <el-input v-model="systemItems.flowMax"></el-input>
             </el-form-item>
-            <el-form-item label="Head max:" prop="headMax">
+            <el-form-item label="Head max:"
+                          prop="headMax">
               <el-input v-model="systemItems.headMax"></el-input>
             </el-form-item>
-            <el-form-item label="Recommend Max input Power:" prop="powerMax">
+            <el-form-item label="Recommend Max input Power:"
+                          prop="powerMax">
               <el-input v-model="systemItems.powerMax"></el-input>
             </el-form-item>
-            <el-form-item label="Minimum well diameter:" prop="minWellDiameter">
+            <el-form-item label="Minimum well diameter:"
+                          prop="minWellDiameter">
               <el-input v-model="systemItems.minWellDiameter"></el-input>
             </el-form-item>
-            <el-form-item label="Pump discharge:" prop="discharge">
+            <el-form-item label="Pump discharge:"
+                          prop="discharge">
               <el-input v-model="systemItems.discharge"></el-input>
             </el-form-item>
-            <el-form-item label="efficiency:" prop="efficiencyMax">
+            <el-form-item label="efficiency:"
+                          prop="efficiencyMax">
               <el-input v-model="systemItems.efficiencyMax"></el-input>
             </el-form-item>
           </el-form>
@@ -40,18 +58,27 @@
 
         <!-- Product advantage -->
         <el-row class="border bg-white mb-20 pt-10">
-          <el-row type="flex" class="mb-10 pd" justify="center">
+          <el-row type="flex"
+                  class="mb-10 pd"
+                  justify="center">
             <el-col :span="6">Product advantage</el-col>
           </el-row>
           <el-row class="py pb-10 mt-10">
-            <el-form :model="productAdvantage" ref="productAdvantage">
-              <el-form-item v-for="(domain, index) in productAdvantage.domains" :key="domain.key" :prop="'domains.' + index + '.value'">
-                <el-input v-model="domain.value"></el-input>
-              </el-form-item>
-              <el-form-item>
-               <el-row type="flex" justify="center">
-                <el-col :span="6"><el-button @click="productAdvantageAdd">+add</el-button></el-col>
-              </el-row>
+            <el-form :model="productAdvantage"
+                     ref="productAdvantage">
+              <el-form-item v-for="(domain, index) in productAdvantage.domains"
+                            :key="domain.key"
+                            :prop="'domains.' + index + '.value'">
+                <!-- <el-input v-model="domain.value"></el-input> -->
+                <el-input v-model="domain.value">
+                  <i v-if="index"
+                     class="el-icon-minus el-input__icon"
+                     slot="suffix"
+                     @click="productAdvantageReduce(index)"></i>
+                  <i class="el-icon-plus el-input__icon"
+                     slot="suffix"
+                     @click="productAdvantageAdd"></i>
+                </el-input>
               </el-form-item>
             </el-form>
           </el-row>
@@ -59,26 +86,38 @@
 
         <!-- Technical Data -->
         <el-row class="border bg-white mb-20 pt-10">
-          <el-row type="flex" class="mb-10 pd" justify="center">
+          <el-row type="flex"
+                  class="mb-10 pd"
+                  justify="center">
             <el-col :span="6">Technical Data</el-col>
           </el-row>
           <el-row>
-            <el-form :model="userform" label-width="150px">
+            <el-form :model="userform"
+                     label-width="150px">
               <el-form-item label="Motor">
                 <el-select v-model="userform.motorId">
-                  <el-option v-for="(item, index) in types" :key="index" :label="item.motorName" :value='item.motorId'></el-option>
+                  <el-option v-for="(item, index) in types"
+                             :key="index"
+                             :label="item.motorName"
+                             :value='item.motorId'></el-option>
                 </el-select>
               </el-form-item>
               <el-row class="py pb-10">
-                <el-form :model="technicalData" ref="technicalData">
-                  <el-form-item v-for="(domain, index) in technicalData.domains" :key="domain.key" :prop="'domains.' + index + '.value'">
-                    <el-input v-model="domain.value"></el-input>
+                <el-form :model="technicalData"
+                         ref="technicalData">
+                  <el-form-item v-for="(domain, index) in technicalData.domains"
+                                :key="domain.key"
+                                :prop="'domains.' + index + '.value'">
+                    <el-input v-model="domain.value">
+                      <i v-if="index"
+                         class="el-icon-minus el-input__icon"
+                         slot="suffix"
+                         @click="technicalDataReduce(index)"></i>
+                      <i class="el-icon-plus el-input__icon"
+                         slot="suffix"
+                         @click="technicalDataAdd"></i>
+                    </el-input>
                   </el-form-item>
-                  <el-form-item>
-                  <el-row type="flex" justify="center">
-                    <el-col :span="6"><el-button @click="technicalDataAdd">+add</el-button></el-col>
-                  </el-row>
-                 </el-form-item>
                 </el-form>
               </el-row>
             </el-form>
@@ -87,31 +126,43 @@
 
         <!-- Pump End -->
         <el-row class="border bg-white mb-20 pt-10">
-          <el-row type="flex" class="mb-10 pd" justify="center">
+          <el-row type="flex"
+                  class="mb-10 pd"
+                  justify="center">
             <el-col :span="6">Pump End</el-col>
           </el-row>
           <el-row class="py pb-10">
-            <el-form :model="pumpEnd" ref="pumpEnd">
-              <el-form-item v-for="(domain, index) in pumpEnd.domains" :key="domain.key" :prop="'domains.' + index + '.value'">
-                <el-input v-model="domain.value"></el-input>
-                  </el-form-item>
-                  <el-form-item>
-                  <el-row type="flex" justify="center">
-                    <el-col :span="6"><el-button @click="pumpEndAdd">+add</el-button></el-col>
-                  </el-row>
-                 </el-form-item>
-              </el-form>
+            <el-form :model="pumpEnd"
+                     ref="pumpEnd">
+              <el-form-item v-for="(domain, index) in pumpEnd.domains"
+                            :key="domain.key"
+                            :prop="'domains.' + index + '.value'">
+                <el-input v-model="domain.value">
+                  <i v-if="index"
+                     class="el-icon-minus el-input__icon"
+                     slot="suffix"
+                     @click="pumpEndReduce(index)"></i>
+                  <i class="el-icon-plus el-input__icon"
+                     slot="suffix"
+                     @click="pumpEndAdd"></i>
+                </el-input>
+              </el-form-item>
+            </el-form>
           </el-row>
         </el-row>
 
         <!-- Standards -->
         <el-row class="authentication border bg-white mb-20 pt-10">
-          <el-row type="flex" class="mb-10 pd" justify="center">
+          <el-row type="flex"
+                  class="mb-10 pd"
+                  justify="center">
             <el-col :span="6">Standards</el-col>
           </el-row>
           <el-row class="pd py">
             <el-checkbox-group v-model="checkList">
-              <el-checkbox v-for="(item, index) in standards" :key="index" :label="item"></el-checkbox>
+              <el-checkbox v-for="(item, index) in standards"
+                           :key="index"
+                           :label="item"></el-checkbox>
             </el-checkbox-group>
           </el-row>
           <!-- </el-row> -->
@@ -119,45 +170,57 @@
 
         <!-- Explain -->
         <el-row class="border bg-white mb-20 pt-10">
-          <el-row type="flex" class="mb-10 pd" justify="center">
+          <el-row type="flex"
+                  class="mb-10 pd"
+                  justify="center">
             <el-col :span="6">Explain</el-col>
           </el-row>
           <el-row class="py pb-10">
-            <el-form :model="explain" ref="explain">
-                <el-form-item v-for="(domain, index) in explain.domains" :key="domain.key" :prop="'domains.' + index + '.value'">
-                    <el-input v-model="domain.value"></el-input>
-                  </el-form-item>
-                  <el-form-item>
-                  <el-row type="flex" justify="center">
-                    <el-col :span="6"><el-button @click="explainAdd">+add</el-button></el-col>
-                  </el-row>
-                 </el-form-item>
-                </el-form>
+            <el-form :model="explain"
+                     ref="explain">
+              <el-form-item v-for="(domain, index) in explain.domains"
+                            :key="domain.key"
+                            :prop="'domains.' + index + '.value'">
+                <el-input v-model="domain.value">
+                  <i v-if="index"
+                     class="el-icon-minus el-input__icon"
+                     slot="suffix"
+                     @click="explainReduce(index)"></i>
+                  <i class="el-icon-plus el-input__icon"
+                     slot="suffix"
+                     @click="explainAdd"></i>
+                </el-input>
+              </el-form-item>
+            </el-form>
           </el-row>
         </el-row>
-   
-        <el-row type="flex" class="row-bg" justify="center">
+
+        <el-row type="flex"
+                class="row-bg"
+                justify="center">
           <el-col :span="6">
-            <el-button @click="back()">取消</el-button>
-            <el-button @click="confirm" type="primary">确定</el-button>
+            <el-button @click="back()">cancel</el-button>
+            <el-button @click="confirm"
+                       type="primary">confirm</el-button>
           </el-col>
         </el-row>
 
-
       </el-col>
-    
+
       <!-- 上传图片 -->
       <el-col :span="8">
-        <el-upload
-          class="avatar-uploader"
-          :action="st"
-          :show-file-list="false"
-          :http-request="uploadImg">
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-      </el-upload>
+        <el-upload class="avatar-uploader"
+                   :action="st"
+                   :show-file-list="false"
+                   :http-request="uploadImg">
+          <img v-if="imageUrl"
+               :src="imageUrl"
+               class="avatar">
+          <i v-else
+             class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
       </el-col>
-      
+
     </el-row>
   </div>
 </template>
@@ -166,9 +229,9 @@ import qs from 'qs'
 import { pumpService } from '@/api/pumpService.js'
 export default {
   name: 'pumpEdit',
-  data() {
+  data () {
     return {
-       systemItems: {
+      systemItems: {
         pumpType: '',
         pumpModel: '',
         flowMax: '',
@@ -216,7 +279,7 @@ export default {
     };
   },
   methods: {
-    uploadImg(item) {
+    uploadImg (item) {
       let formData = new FormData()
       formData.append('picture', item.file)
       let config = {
@@ -225,7 +288,7 @@ export default {
         }
       }
       this.$axios
-        .post("/pumpms/pump/upload", formData,config)
+        .post("/pumpms/pump/upload", formData, config)
         .then(response => {
           if (response.data.flag) {
             this.$message("上传成功")
@@ -235,14 +298,14 @@ export default {
           }
         })
     },
-    handleIconClick(index) {
+    handleIconClick (index) {
       this.systemItems.splice(index, 1);
     },
     // 动态添加参数
-    productAdvantageAdd (){
+    productAdvantageAdd () {
       this.addDomain(this.productAdvantage)
     },
-    technicalDataAdd() {
+    technicalDataAdd () {
       this.addDomain(this.technicalData)
     },
     pumpEndAdd () {
@@ -250,6 +313,18 @@ export default {
     },
     explainAdd () {
       this.addDomain(this.explain)
+    },
+    productAdvantageReduce (index) {
+      this.productAdvantage.domains.splice(index, 1)
+    },
+    technicalDataReduce (index) {
+      this.technicalData.domains.splice(index, 1)
+    },
+    pumpEndReduce (index) {
+      this.pumpEnd.domains.splice(index, 1)
+    },
+    explainReduce (index) {
+      this.explain.domains.splice(index, 1)
     },
     addDomain (item) {
       item.domains.push({
@@ -287,13 +362,13 @@ export default {
           this.$axios
             .post("/pumpms/pump/edit", vm)
             .then(res => {
-            if (res.data.flag) {
-              this.$message.success("添加成功!")
-              this.back()
-            } else {
-              this.$message.error(res.data.msg)
-            }
-          })
+              if (res.data.flag) {
+                this.$message.success("添加成功!")
+                this.back()
+              } else {
+                this.$message.error(res.data.msg)
+              }
+            })
         } else {
           return false;
         }
@@ -303,15 +378,15 @@ export default {
       this.$axios
         .get("/pumpms/motor/query")
         .then(res => {
-           res.data.forEach(v => {
-             this.types.push({
-               motorName: v.motorName,
-               motorId: v.motorId
-             })
-           })
+          res.data.forEach(v => {
+            this.types.push({
+              motorName: v.motorName,
+              motorId: v.motorId
+            })
+          })
         })
     },
-    getStards() { // 获取checkbox
+    getStards () { // 获取checkbox
       this.$axios
         .get("/pumpms/standard/query")
         .then(res => {
@@ -351,7 +426,7 @@ export default {
       if (data.pumpEnds != null) {
         data.pumpEnds.forEach(v => {
           this.pumpEndAdd.domains.push({
-          value: v
+            value: v
           })
         })
       }
@@ -366,7 +441,7 @@ export default {
       this.userform.motorId = data.motorId
     }
   },
-  activated() {
+  activated () {
     let id = localStorage.getItem('testId')
     if (id) this.getDetails(id)
     this.testId = id
@@ -377,26 +452,26 @@ export default {
 </script>
 <style>
 .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
 </style>
