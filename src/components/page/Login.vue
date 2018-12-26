@@ -50,7 +50,7 @@ export default {
                         if (res.data.falg) {
                             this.$message.success('登陆成功！')
                             if (res.data.date.userType === '1') {
-                                this.$router.push('/')
+                                this.$router.push('/userManagement')
                             } else {
                                 this.$router.push('/mainQueryPage')
                             }

@@ -13,7 +13,7 @@
         </el-form-item>
       </el-form>
       <!-- 表格 -->
-      <el-table :data="tableData" stripe style="width: 100%;margin-top:30px;">
+      <el-table border :data="tableData" stripe style="width: 100%;">
         <el-table-column prop="pumpType" align="center" label="pump_type">
         </el-table-column>
         <el-table-column prop="pumpModel" align="center" label="pump_model">
@@ -38,7 +38,7 @@
           :current-page.sync="cur_page"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="rows"
-          layout="sizes, prev, pager, next"
+          layout="total, sizes, prev, pager, next, jumper"
           :total="total">
         </el-pagination>
       </div>

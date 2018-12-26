@@ -15,8 +15,8 @@
         </el-form-item>
       </el-form>
 
-      <el-card shadow="hover">
-        <el-table :data="tableData" class="table" stripe style="width: 100%;">
+      <!-- <el-card shadow="hover"> -->
+        <el-table border :data="tableData" class="table" stripe style="width: 100%;">
           <el-table-column prop="stName" align="center" label="standarsName">
           </el-table-column>
           <el-table-column prop="stExplain" align="center" label="standarsExplain">
@@ -36,11 +36,11 @@
             :current-page.sync="cur_page"
             :page-sizes="[10, 20, 30, 40]"
             :page-size="rows"
-            layout="sizes, prev, pager, next"
+            layout="total, sizes, prev, pager, next, jumper"
             :total="total">
           </el-pagination>
         </div>
-      </el-card>
+      <!-- </el-card> -->
 
     </div>
     <!-- 新增模态框 -->
@@ -51,7 +51,7 @@
 </template>
 <script>
 import addStandards from './addStandards'
-import edit from '../../modal/editModal' // 编辑
+import edit from '../../../modal/editModal' // 编辑
 export default {
   components: { edit, addStandards},
   data() {

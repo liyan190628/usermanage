@@ -3,38 +3,38 @@ import {
 } from './methods'
 
 let apiBaseUrl = require('./ApiConst').apiBaseUrl
-apiBaseUrl += 'pumpms/pump'
+apiBaseUrl += 'pumpms/motor'
 
-const pumpService = {
+const motorServices = {
     // 获取列表
-    async getList(vm, header) {
+    async getMotorList(vm, header) {
         let apiUrl = `${apiBaseUrl}/queryList`
         let res = await directives.getAsync(apiUrl, vm, header)
         return res
     },
     // 编辑
-    async postEdit(vm, header) {
+    async getMotorEdit(vm, header) {
         let apiUrl = `${apiBaseUrl}/edit`
-        let res = await directives.postAsync(apiUrl, vm, header)
+        let res = await directives.getAsync(apiUrl, vm, header)
         return res
     },
     // 添加
-    async postAdd(vm, header) {
+    async getMotorAdd(vm, header) {
         let apiUrl = `${apiBaseUrl}/add`
-        let res = await directives.postAsync(apiUrl, vm, header)
+        let res = await directives.getAsync(apiUrl, vm, header)
         return res
     },
     // 删除
-    async getDelete(vm, header) {
+    async getMotorDelete(vm, header) {
         let apiUrl = `${apiBaseUrl}/delete`
         let res = await directives.getAsync(apiUrl, vm, header)
         return res
     },
-    async getDetail(vm, header) {
+    async getMotorDetail(vm, header) {
         let apiUrl = `${apiBaseUrl}/queryDetail`
         let res = await directives.getAsync(apiUrl, vm, header)
         return res
     }
 }
 
-export { pumpService }
+export { motorServices }

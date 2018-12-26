@@ -1,13 +1,9 @@
 <template>
   <div>
-    <!-- 新增/修改模态框 -->
-    <el-dialog title="新增" :visible.sync="editVisible" center>
-      <el-form :model="userform" label-width="120px" size="small">
+    <el-dialog title="Add" :visible.sync="editVisible">
+      <el-form :model="addForm" :rules="rules" :ref="addForm" label-width="120px" size="small">
         <el-form-item label="pump_type">
-          <el-select v-model="userform.region">
-            <el-option label="全部" value=""></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
+          <el-input></el-input>
         </el-form-item>
         <el-form-item label="max_voc(v)">
           <el-input></el-input>
@@ -26,8 +22,8 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="cancel">取 消</el-button>
-        <el-button @click="saveEdit" type="primary">确 认</el-button>
+        <el-button @click="cancel">cancel</el-button>
+        <el-button @click="addConfirm" type="primary">confirm</el-button>
       </span>
     </el-dialog>
   </div>
@@ -38,17 +34,19 @@ export default {
     show: {
       type: Boolean,
       default: false
-    },
-    userform: {
-      type: Object,
-      default: {}
+    }
+  },
+  data () {
+    return {
+      addForm: {},
+      rules: {}
     }
   },
   methods: {
     cancel() {
       this.$emit('cancel')
     },
-    saveEdit() { }
+    addConfirm() { }
   },
   computed: {
     editVisible: {
@@ -56,7 +54,7 @@ export default {
         return this.show
       },
       set(n) {
-        this.$emit('cancel', n)
+        // this.$emit('cancel', n)
       }
     }
   }

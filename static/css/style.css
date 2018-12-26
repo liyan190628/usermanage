@@ -73,6 +73,10 @@
     margin-bottom: 10px;
 }
 
+.mb-18 {
+    margin-bottom: 18px;
+}
+
 .mb-20 {
     margin-bottom: 20px;
 }
@@ -83,6 +87,19 @@
 
 .el-table thead {
     color: #333;
+}
+
+.el-dialog__header {
+    background-color: #f0f0f0 !important;
+    /* color: #fff; */
+}
+
+.el-dialog__title {
+    /* color: #fff; */
+}
+
+.el-upload--text {
+    width: 180px;
 }
 
 .text-center {
@@ -134,4 +151,8 @@
 
 .ml-left {
     margin-left: -8px;
+}
+
+.addform .addform-1 {
+    margin-bottom: 0;
 }

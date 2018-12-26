@@ -1,28 +1,28 @@
 <template>
   <div>
     <!-- 新增/修改模态框 -->
-    <el-dialog title="add" :visible.sync="editVisible" center>
+    <el-dialog title="Details" :visible.sync="editVisible" center>
       <el-form :model="userform" label-width="120px" size="small">
         <el-form-item label="productname:">
-          <el-input v-model="userform.productname"></el-input>
+          <el-input v-model="userform.acceName"></el-input>
         </el-form-item>
         <el-form-item label="suitPump:">
           <el-input v-model="userform.suitPump"></el-input>
         </el-form-item>
         <el-form-item label="orderInformation:">
-          <el-input v-model="userform.orderInformation"></el-input>
+          <el-input v-for="(items, index) in userform.orderInfos" :key="index" class="mb-18"></el-input>
         </el-form-item>
         <el-form-item label="features:">
-          <el-input v-model="userform.features"></el-input>
+          <el-input v-for="(items, index) in userform.featuress" :key="index" class="mb-18"></el-input>
         </el-form-item>
         <el-form-item label="technicalData:">
-          <el-input v-model="userform.technicalData"></el-input>
+          <el-input v-for="(items, index) in userform.technicalDatass" :key="index" class="mb-18"></el-input>
         </el-form-item>
         <el-form-item label="dimenWeight:">
-          <el-input v-model="userform.productname"></el-input>
+          <el-input v-for="(items, index) in userform.dimenWeights" :key="index" class="mb-18"></el-input>
         </el-form-item>
         <el-form-item>
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
+          <img v-if="userform.imageUrl" :src="userform.imageUrl" class="avatar">
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -37,16 +37,19 @@ export default {
     show: {
       type: Boolean,
       default: false
-    },
-    userform: {
-      type: Object,
-      default: {}
     }
   },
   data () {
     return {
-      imageUrl: '', // 图片地址
-      st: ''
+      userform: {
+        acceName: '',
+        suitPump: '',
+        orderInfos: [],
+        featuress: [],
+        technicalDatas: [],
+        dimenWeights: [],
+        imageUrl: ''
+      }
     }
   },
   methods: {

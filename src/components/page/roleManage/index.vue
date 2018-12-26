@@ -15,14 +15,14 @@
       </el-form>
 
       <!-- 表格 -->
-      <el-table :data="tableData" :stripe='true' style="width: 100%;">
+      <el-table border :data="tableData" :stripe='true' style="width: 100%;">
         <el-table-column prop="roleName" align="center" label="roleName">
         </el-table-column>
         <el-table-column prop="roleDescribe" align="center" label="roleDescribe">
         </el-table-column>
-         <el-table-column prop="operation" fixed='right' align="center" label="操作" width="320">
+         <el-table-column prop="operation" fixed='right' align="center" label="操作" width="200">
             <template slot-scope="scope">
-              <el-button @click="handleEdit(scope.row)" type="text">编辑</el-button>
+              <el-button @click="handleEdit(scope.row)" type="text">edit</el-button>
             </template>
           </el-table-column>
       </el-table>
@@ -33,7 +33,7 @@
           :current-page.sync="cur_page"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="rows"
-          layout="sizes, prev, pager, next"
+          layout="total, sizes, prev, pager, next, jumper"
           :total="total">
         </el-pagination>
       </div>

@@ -1,57 +1,56 @@
 <template>
     <!-- 新增/修改模态框 -->
     <el-dialog title="edit" width="100%;" :visible.sync="editVisible" center>
-      <el-form :model="userform" label-width="120px" size="small">
+      <el-form class="addform" :model="userform" label-width="120px" size="small">
         <el-form-item label="productname:">
           <el-input v-model="userform.acceName"></el-input>
         </el-form-item>
         <el-form-item label="suitPump:">
           <el-input v-model="userform.suitPump"></el-input>
         </el-form-item>
-        <el-form-item label="orderInformation:">
-           <el-form-item v-for="(domain, index) in pumpEnd.domains" :key="domain.key">
-             <el-input v-model="domain.value"></el-input>
-          </el-form-item>
-          <el-form-item>
-             <el-button @click="pumpEndAdd">+add</el-button>
-          </el-form-item>
-        </el-form-item>
-        <el-form-item label="features:">
-           <el-form-item v-for="(domain, index) in fpumpEnd.domains" :key="domain.key">
-             <el-input v-model="domain.value"></el-input>
-          </el-form-item>
-          <el-form-item>
-             <el-button @click="fpumpEndAdd">+add</el-button>
+        <el-form-item class="addform-1" label="orderInformation:">
+            <el-form-item v-for="(domain, index) in pumpEnd.domains" :key="domain.key">
+              <el-input v-model="domain.value">
+                <i v-if="index" class="el-icon-minus el-input__icon" slot="suffix" @click="pumpEndReduce(index)"></i>
+                <i class="el-icon-plus el-input__icon" slot="suffix" @click="pumpEndAdd"></i>
+              </el-input>
           </el-form-item>
         </el-form-item>
-        <el-form-item label="technicalData:">
-           <el-form-item v-for="(domain, index) in tpumpEnd.domains" :key="domain.key">
-             <el-input v-model="domain.value"></el-input>
-          </el-form-item>
-          <el-form-item>
-             <el-button @click="tpumpEndAdd">+add</el-button>
+        <el-form-item class="addform-1" label="features:">
+            <el-form-item v-for="(domain, index) in fpumpEnd.domains" :key="domain.key">
+              <el-input v-model="domain.value">
+                <i v-if="index" class="el-icon-minus el-input__icon" slot="suffix" @click="fpumpEndReduce(index)"></i>
+                <i class="el-icon-plus el-input__icon" slot="suffix" @click="fpumpEndAdd"></i>
+              </el-input>
           </el-form-item>
         </el-form-item>
-        <el-form-item label="dimenWeight:">
-           <el-form-item v-for="(domain, index) in dpumpEnd.domains" :key="domain.key">
-             <el-input v-model="domain.value"></el-input>
+        <el-form-item class="addform-1" label="technicalData:">
+            <el-form-item v-for="(domain, index) in tpumpEnd.domains" :key="domain.key">
+              <el-input v-model="domain.value">
+                <i v-if="index" class="el-icon-minus el-input__icon" slot="suffix" @click="tpumpEndReduce(index)"></i>
+                <i class="el-icon-plus el-input__icon" slot="suffix" @click="tpumpEndAdd"></i>
+              </el-input>
           </el-form-item>
-          <el-form-item>
-             <el-button @click="dpumpEndAdd">+add</el-button>
+        </el-form-item>
+        <el-form-item class="addform-1" label="dimenWeight:">
+          <el-form-item v-for="(domain, index) in dpumpEnd.domains" :key="domain.key">
+              <el-input v-model="domain.value">
+                <i v-if="index" class="el-icon-minus el-input__icon" slot="suffix" @click="dpumpEndReduce(index)"></i>
+                <i class="el-icon-plus el-input__icon" slot="suffix" @click="dpumpEndAdd"></i>
+              </el-input>
           </el-form-item>
         </el-form-item>
         <el-form-item>
-           <el-upload
-             class="avatar-uploader"
-             :action="st"
-             :show-file-list="false"
-             :http-request="uploadImg"
-             :on-success="handleAvatarSuccess">
-             <img v-if="imageUrl" :src="imageUrl" class="avatar">
-             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            <el-upload
+              class="avatar-uploader"
+              :action="st"
+              :show-file-list="false"
+              :http-request="uploadImg"
+              :on-success="handleAvatarSuccess">
+              <img v-if="imageUrl" :src="imageUrl" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
-        </el-form-item>
-         
+        </el-form-item> 
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="cancel">cancel</el-button>
@@ -61,6 +60,7 @@
 </template>
 <script>
 import qs from 'qs'
+import { accessoryServices } from '@/api/accessoryServices'
 export default {
   props: {
     show: {
@@ -111,7 +111,7 @@ export default {
     handleAvatarSuccess () {
 
     },
-    confirm () {
+    async confirm () {
       let arr = []
       this.pumpEnd.domains.forEach(v => {
         arr.push(v.value)
@@ -138,18 +138,15 @@ export default {
         picture: '',
         acceId: this.userform.acceId
       })
-      this.$axios({
-         method: 'post',
-         url:'/pumpms/accessory/edit',
-         data: params
-      }).then((res)=>{
-         if (res.data.flag) {
-            this.$emit('cancel')
-            this.$message.success('添加成功')
-            this.$parent.getTableList()
-            this.init()
-         }
-      });
+      let res = await accessoryServices.postAccessoryEdit(params)
+      if (res.flag) {
+        this.$emit('cancel')
+        this.$message.success('修改成功')
+        this.$parent.getTableList()
+        this.init()
+      } else {
+        thiss.$message.error(res.msg)
+      }
     },
     pumpEndAdd () {
       this.pumpEnd.domains.push({
@@ -174,6 +171,18 @@ export default {
         value: '',
         key: Date.now()
       })
+    },
+    pumpEndReduce(index) {
+      this.pumpEnd.domains.splice(index, 1)
+    },
+    fpumpEndReduce(index) {
+      this.fpumpEnd.domains.splice(index, 1)
+    },
+    tpumpEndReduce(index) {
+      this.tpumpEnd.domains.splice(index, 1)
+    },
+    dpumpEndReduce(index) {
+      this.dpumpEnd.domains.splice(index, 1)
     },
     init () {
       this.userform.acceName = '',
@@ -268,4 +277,7 @@ export default {
     height: 178px;
     display: block;
   }
+.addform .addform-1{
+  margin-bottom: 0;
+}
 </style>

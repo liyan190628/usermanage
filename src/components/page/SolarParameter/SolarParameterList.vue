@@ -15,7 +15,7 @@
       </el-form>
       
       <!-- biaoge -->
-      <el-table :data="tableData" stripe style="width: 100%;">
+      <el-table border :data="tableData" stripe style="width: 100%;">
         <el-table-column align="center" width="200" prop="solarPanelType" label="solar_panel_type">
         </el-table-column>
         <el-table-column align="center" width="190" prop="peakPower" label="peak_power">
@@ -41,7 +41,7 @@
           :current-page.sync="cur_page"
           :page-sizes="[10, 20, 30, 40]"
           :page-size="rows"
-          layout="sizes, prev, pager, next"
+          layout="total, sizes, prev, pager, next, jumper"
           :total="total">
         </el-pagination>
       </div>

@@ -1,2 +1,2 @@
-let apiBaseUrl = `http://192.168.1.104:8080/`
+let apiBaseUrl = `http://172.105.200.91:8080/`
 export { apiBaseUrl }

@@ -1,13 +1,9 @@
 <template>
   <div>
-    <!-- 新增/修改模态框 -->
-    <el-dialog title="修改" :visible.sync="editVisible" center>
-      <el-form :model="userform" label-width="120px" size="small">
+    <el-dialog title="Edit" :visible.sync="editVisible">
+      <el-form :model="editForm" :rules="rules" :ref="editForm" label-width="120px" size="small">
         <el-form-item label="pump_type">
-          <el-select v-model="userform.region">
-            <el-option label="全部" value=""></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
+          <el-input></el-input>
         </el-form-item>
         <el-form-item label="max_voc(v)">
           <el-input></el-input>
@@ -19,15 +15,15 @@
           <el-input></el-input>
         </el-form-item>
         <el-form-item label="cable_type">
-          <el-input placeholder="多个参数以,分开"></el-input>
+          <el-input></el-input>
         </el-form-item>
         <el-form-item label="pipes_caliber(m)">
-          <el-input placeholder="多个参数以,分开"></el-input>
+          <el-input></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="cancel">取 消</el-button>
-        <el-button @click="saveEdit" type="primary">确 认</el-button>
+        <el-button @click="cancel">cancel</el-button>
+        <el-button @click="editConfirm" type="primary">confirm</el-button>
       </span>
     </el-dialog>
   </div>
@@ -38,17 +34,19 @@ export default {
     show: {
       type: Boolean,
       default: false
-    },
-    userform: {
-      type: Object,
-      default: {}
+    }
+  },
+  data () {
+    return {
+      editForm: {},
+      rules: {}
     }
   },
   methods: {
     cancel() {
       this.$emit('cancel')
     },
-    saveEdit() { }
+    editConfirm() { }
   },
   computed: {
     editVisible: {
@@ -56,7 +54,7 @@ export default {
         return this.show
       },
       set(n) {
-        this.$emit('cancel', n)
+        // this.$emit('cancel', n)
       }
     }
   }

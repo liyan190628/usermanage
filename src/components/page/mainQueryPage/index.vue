@@ -1,15 +1,20 @@
 <template>
   <div id="pdfDom" @click="getPdf()">
-    <!-- 第一页 -->
-    <content1></content1>
-    <!-- 第二页 -->
-    <content2></content2>
-    <!-- 第三页 -->
-    <content3></content3>
-    <!-- 第四页 -->
-    <content4></content4>
-    <!-- 第五页 -->
-    <content5></content5>
+    <div class="mainContent">
+      <content1></content1>
+    </div>
+    <div class="mainContent">
+      <content2></content2>
+    </div>
+    <div class="mainContent">
+      <content3></content3>
+    </div>
+    <div class="mainContent">
+      <content4></content4>
+    </div>
+    <div class="mainContent">
+      <content5></content5>
+    </div>
   </div>
 </template>
 <script>
@@ -22,13 +27,6 @@ export default {
   components: {content1, content2, content3, content4, content5},
   data () {
     return {
-      tableData: [],
-      customerInfo: [
-        {title: 'PS2-4000 C-SJ8-15 -D', content: '1 pc. Submersible pump system including controller with DataModule, motor and pump end'},
-        {title: 'PS2-4000 C-SJ8-15 -D', content: '1 pc. Submersible pump system including controller with DataModule, motor and pump end'},
-        {title: 'PS2-4000 C-SJ8-15 -D', content: '1 pc. Submersible pump system including controller with DataModule, motor and pump end'},
-        {title: 'PS2-4000 C-SJ8-15 -D', content: '1 pc. Submersible pump system including controller with DataModule, motor and pump end'}
-      ],
       htmlTitle: '页面导出PDF文件名'
     }
   }
@@ -38,5 +36,11 @@ export default {
 .mainQuery{
   /* height: 10000px; */
   overflow: auto;
+}
+.mainContent{
+  height: 1505px;
+  background: #fff;
+  /* font-size: 18px; */
+  /* padding-bottom: 10px; */
 }
 </style>

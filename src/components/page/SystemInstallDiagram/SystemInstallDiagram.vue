@@ -1,98 +1,117 @@
 <template>
   <div>
     <!-- 面包屑导航 -->
-    <crumbs :title1="'系统安装图管理'" :title2="'系统安装图管理'"></crumbs>
+    <crumbs :title1="'系统安装图管理'"
+            :title2="'系统安装图管理'"></crumbs>
     <div class="container mgb10">
       <!-- 查询 -->
-      <el-form :inline="true" :model="formInline" class="demo-form-inline mgb10">
+      <el-form :inline="true"
+               :model="formInline"
+               class="demo-form-inline mgb10">
         <el-form-item label="install_type:">
           <el-input v-model="formInline.installType"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="getData()" type="primary">查询</el-button>
+          <el-button @click="getTableList()"
+                     type="primary">query</el-button>
+          <el-button @click="editVisible = true"
+                     type="primary">add</el-button>
         </el-form-item>
       </el-form>
 
       <!-- 表格 -->
-      <el-row type="flex" class="row-bg" justify="space-between">
-        <el-col :span="6">
-          系统参数管理
-        </el-col>
-        <el-col :span="2">
-          <el-button @click="editVisible = true" type="primary">+add</el-button>
-        </el-col>
-      </el-row>
-      <el-table :data="tableData" class="table" stripe style="width: 100%;">
-        <el-table-column prop="installType" align="center" label="install_type">
+      <el-table border
+                :data="tableData"
+                stripe
+                style="width:100%;">
+        <el-table-column prop="installType"
+                         align="center"
+                         label="install_type">
         </el-table-column>
-        <el-table-column prop="explainRemark" align="center" label="explain">
+        <el-table-column prop="explainRemark"
+                         align="center"
+                         label="explain">
         </el-table-column>
-        <el-table-column prop="picPath" align="center" label="install_picture">
+        <el-table-column prop="picPath"
+                         align="center"
+                         label="install_picture">
         </el-table-column>
       </el-table>
       <div class="pagination">
-        <el-pagination background @current-change="handleCurrentChange" layout="prev, pager, next" :total="1000">
+        <el-pagination @size-change="handleSizeChange"
+                       @current-change="handleCurrentChange"
+                       :current-page.sync="cur_page"
+                       :page-sizes="[10, 20, 30, 40]"
+                       :page-size="rows"
+                       layout="total, sizes, prev, pager, next, jumper"
+                       :total="total">
         </el-pagination>
       </div>
     </div>
 
-    <el-dialog title="add" :visible.sync="editVisible" center>
-      <el-form :model="userform" label-width="120px" size="small">
+    <el-dialog title="add"
+               :visible.sync="editVisible">
+      <el-form :model="userform"
+               label-width="120px"
+               size="small">
         <el-form-item label="install_type:">
           <el-input v-model="userform.installType"></el-input>
         </el-form-item>
         <el-form-item label="install_picture:">
-        <el-upload
-          class="avatar-uploader"
-          :action="st"
-          :show-file-list="false"
-          :http-request="uploadImg">
-          <img v-if="userform.imageUrl" :src="userform.imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
+          <el-upload class="avatar-uploader"
+                     :action="st"
+                     :show-file-list="false"
+                     :http-request="uploadImg">
+            <img v-if="userform.imageUrl"
+                 :src="userform.imageUrl"
+                 class="avatar">
+            <i v-else
+               class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
         </el-form-item>
         <el-form-item label="explain:">
           <el-input v-model="userform.explainRemark"></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="saveEdit" type="primary">confirm</el-button>
-        <el-button @click="cancel">cancel</el-button>
-      </span>
+      <div slot="footer"
+           class="dialog-footer">
+        <el-button @click.native="editVisible = false">cancel</el-button>
+        <el-button @click.native="addConfirm"
+                   type="primary">confirm</el-button>
+      </div>
     </el-dialog>
 
   </div>
 </template>
 <script>
+// import echarts from 'echarts'
 export default {
-  data() {
+  data () {
     return {
       formInline: {
         installType: '' // 安装类型
       },
       tableData: [], // 表格数据
-      cur_page: 1, // 当前页
-      rows: 10,
       editVisible: false,
       userform: {
         installType: '',
         imageUrl: '',
         explainRemark: ''
       },
-      st: ''
+      st: '',
+      cur_page: 1, // 当前页
+      rows: 10,
+      total: 10
     }
   },
   methods: {
-    cancel() { // 关闭弹出框
-      this.editVisible = !this.editVisible
-    },
-    getData() { // 获取列表数据
+    getTableList () { // 获取列表数据
       this.$axios
         .get("/pumpms/syspic/queryList", {
           params: {
-           installType: this.formInline.installType,
-           page: this.cur_page,
-           rows: this.rows
+            installType: this.formInline.installType,
+            page: this.cur_page,
+            rows: this.rows
           }
         })
         .then(response => {
@@ -102,23 +121,20 @@ export default {
           // console.log(error);
         });
     },
-    cancel() {
-      this.$emit('cancel')
-    },
-    saveEdit() { 
+    addConfirm () {
       this.$axios
         .get("/pumpms/syspic/add", {
           params: {
-           installType: this.userform.installType,
-           imageUrl: this.userform.imageUrl,
-           explainRemark: this.userform.explainRemark
+            installType: this.userform.installType,
+            imageUrl: this.userform.imageUrl,
+            explainRemark: this.userform.explainRemark
           }
         })
         .then(res => {
           if (res.data.flag) {
             this.editVisible = false
-            this.$message("删除成功")
-            this.getData()
+            this.$message("添加成功!")
+            this.getTableList()
           } else {
             this.$message.success(res.data.msg)
           }
@@ -127,25 +143,22 @@ export default {
           // console.log(error);
         });
     },
-    uploadImg(item) {
-      // console.log(item)
+    uploadImg (item) {
       let formData = new FormData()
       formData.append('picture', item.file)
       let config = {
         headers: {
           'Content-Type': 'multipart/form-data'  //之前说的以表单传数据的格式来传递fromdata
         }
-        // withCredentials:true
       }
       this.$axios
-        .post("/pump/picture", formData,config)
-        .then(res => {
-          // console.log(res)
-          if (res.data.flag) {
+        .post("/pumpms/upload/picture", formData, config)
+        .then(response => {
+          if (response.data.flag) {
             this.$message("上传成功")
-            this.userform.imageUrl = res.data
+            this.imageUrl = response.data
           } else {
-            this.$message.success(res.data.msg)
+            this.$message.success(response.data.msg)
           }
         })
         .catch(error => {
@@ -154,40 +167,40 @@ export default {
     },
   },
   created () {
-    this.getData()
+    this.getTableList()
   }
 }
 </script>
 <style scoped>
-.row-bg{
+.row-bg {
   border: 1px solid #ccc;
   padding: 8px 4px;
 }
-.table{
+.table {
   border: 1px solid #ccc;
   border-top: none;
 }
 .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
 </style>

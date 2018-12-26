@@ -42,7 +42,7 @@ const userService = {
         return res
     },
     // 删除用户
-    async getDeleteUser(vm, header) {
+    async getDelete(vm, header) {
         let apiUrl = `${apiBaseUrl}/delete`
         let res = await directives.getAsync(apiUrl, vm, header)
         return res

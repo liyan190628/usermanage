@@ -1,54 +1,53 @@
 <template>
     <!-- 新增/修改模态框 -->
-    <el-dialog title="add" width="100%;" :visible.sync="editVisible" center>
-      <el-form :model="userform" label-width="120px" size="small">
-        <el-form-item label="productname:">
-          <el-input v-model="userform.acceName"></el-input>
+    <el-dialog title="Add" width="60%" :visible.sync="addVisible">
+      <el-form  class="addform" :model="addForm" :rules="rules" :ref="addForm" label-width="120px" size="small">
+        <el-form-item label="productname:" prop="acceName">
+          <el-input v-model="addForm.acceName"></el-input>
         </el-form-item>
         <el-form-item label="suitPump:">
-          <el-input v-model="userform.suitPump"></el-input>
+          <el-input v-model="addForm.suitPump"></el-input>
         </el-form-item>
-        <el-form-item label="orderInformation:">
-           <el-form-item v-for="(domain, index) in pumpEnd.domains" :key="domain.key">
-             <el-input v-model="domain.value"></el-input>
-          </el-form-item>
-          <el-form-item>
-             <el-button @click="pumpEndAdd">+add</el-button>
-          </el-form-item>
-        </el-form-item>
-        <el-form-item label="features:">
-           <el-form-item v-for="(domain, index) in fpumpEnd.domains" :key="domain.key">
-             <el-input v-model="domain.value"></el-input>
-          </el-form-item>
-          <el-form-item>
-             <el-button @click="fpumpEndAdd">+add</el-button>
+        <el-form-item class="addform-1" label="orderInformation:">
+            <el-form-item v-for="(domain, index) in pumpEnd.domains" :key="domain.key">
+              <el-input v-model="domain.value">
+                <i v-if="index" class="el-icon-minus el-input__icon" slot="suffix" @click="pumpEndReduce(index)"></i>
+                <i class="el-icon-plus el-input__icon" slot="suffix" @click="pumpEndAdd"></i>
+              </el-input>
           </el-form-item>
         </el-form-item>
-        <el-form-item label="technicalData:">
-           <el-form-item v-for="(domain, index) in tpumpEnd.domains" :key="domain.key">
-             <el-input v-model="domain.value"></el-input>
-          </el-form-item>
-          <el-form-item>
-             <el-button @click="tpumpEndAdd">+add</el-button>
+        <el-form-item class="addform-1" label="features:">
+            <el-form-item v-for="(domain, index) in fpumpEnd.domains" :key="domain.key">
+              <el-input v-model="domain.value">
+                <i v-if="index" class="el-icon-minus el-input__icon" slot="suffix" @click="fpumpEndReduce(index)"></i>
+                <i class="el-icon-plus el-input__icon" slot="suffix" @click="fpumpEndAdd"></i>
+              </el-input>
           </el-form-item>
         </el-form-item>
-        <el-form-item label="dimenWeight:">
+        <el-form-item class="addform-1" label="technicalData:">
+            <el-form-item v-for="(domain, index) in tpumpEnd.domains" :key="domain.key">
+              <el-input v-model="domain.value">
+                <i v-if="index" class="el-icon-minus el-input__icon" slot="suffix" @click="tpumpEndReduce(index)"></i>
+                <i class="el-icon-plus el-input__icon" slot="suffix" @click="tpumpEndAdd"></i>
+              </el-input>
+          </el-form-item>
+        </el-form-item>
+        <el-form-item class="addform-1" label="dimenWeight:">
            <el-form-item v-for="(domain, index) in dpumpEnd.domains" :key="domain.key">
-             <el-input v-model="domain.value"></el-input>
-          </el-form-item>
-          <el-form-item>
-             <el-button @click="dpumpEndAdd">+add</el-button>
+              <el-input v-model="domain.value">
+                <i v-if="index" class="el-icon-minus el-input__icon" slot="suffix" @click="dpumpEndReduce(index)"></i>
+                <i class="el-icon-plus el-input__icon" slot="suffix" @click="dpumpEndAdd"></i>
+              </el-input>
           </el-form-item>
         </el-form-item>
         <el-form-item>
-           <el-upload
-             class="avatar-uploader"
-             :action="st"
-             :show-file-list="false"
-             :http-request="uploadImg"
-             :on-success="handleAvatarSuccess">
-             <img v-if="imageUrl" :src="imageUrl" class="avatar">
-             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          <el-upload
+            class="avatar-uploader"
+            :action="st"
+            :show-file-list="false"
+            :http-request="uploadImg">
+            <img v-if="addForm.imageUrl" :src="addForm.imageUrl" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
          
@@ -70,11 +69,17 @@ export default {
   },
   data () {
     return {
-      imageUrl: '', // 图片地址
+      rules: {
+        acceName: [
+          { required: true, message: '请输入acceName', trigger: 'blur' },
+          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        ],
+      },
       st: '',
-      userform: {
+      addForm: {
         acceName: '',
-        suitPump: ''
+        suitPump: '',
+        imageUrl: ''
       },
       pumpEnd: {
         domains: [{
@@ -102,14 +107,28 @@ export default {
     cancel() {
       this.$emit('cancel')
     },
-    saveEdit() { },
     // 上传图片
-    uploadImg(){
-
-    },
-    // 图片上传成功
-    handleAvatarSuccess () {
-
+    uploadImg(item) {
+      let formData = new FormData()
+      formData.append('picture', item.file)
+      let config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'  //之前说的以表单传数据的格式来传递fromdata
+        }
+      }
+      this.$axios
+        .post("/pump/picture", formData,config)
+        .then(res => {
+          if (res.data.flag) {
+            this.$message("上传成功")
+            this.addFrom.imageUrl = res.data
+          } else {
+            this.$message.success(res.data.msg)
+          }
+        })
+        .catch(error => {
+          // console.log(error);
+        })
     },
     confirm () {
       let arr = []
@@ -129,8 +148,8 @@ export default {
         arr3.push(v.value)
       })
       let params = qs.stringify({
-        acceName: this.userform.acceName,
-        suitPump: this.userform.suitPump,
+        acceName: this.addForm.acceName,
+        suitPump: this.addForm.suitPump,
         orderInfos: arr,
         featuress: arr1,
         technicalDatas: arr2,
@@ -144,7 +163,7 @@ export default {
       }).then((res)=>{
          if (res.data.flag) {
             this.$emit('cancel')
-            this.$message.success('编辑成功')
+            this.$message.success('添加成功')
             this.$parent.getTableList()
          }
       });
@@ -173,9 +192,21 @@ export default {
         key: Date.now()
       })
     },
+    pumpEndReduce(index) {
+      this.pumpEnd.domains.splice(index, 1)
+    },
+    fpumpEndReduce(index) {
+      this.fpumpEnd.domains.splice(index, 1)
+    },
+    tpumpEndReduce(index) {
+      this.tpumpEnd.domains.splice(index, 1)
+    },
+    dpumpEndReduce(index) {
+      this.dpumpEnd.domains.splice(index, 1)
+    }
   },
   computed: {
-    editVisible: {
+    addVisible: {
       get() {
         return this.show
       },
@@ -213,4 +244,10 @@ export default {
     height: 178px;
     display: block;
   }
+.addform .addform-1{
+  margin-bottom: 0;
+}
+.addform .el-form-item{
+  /* margin-bottom: 18px; */
+} 
 </style>
