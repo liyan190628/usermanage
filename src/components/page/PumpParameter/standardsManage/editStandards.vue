@@ -30,12 +30,16 @@
 </template>
 <script>
 import { pumpService } from '@/api/pumpService.js'
+import { standardService } from '@/api/standards.js'
 import qs from 'qs'
 export default {
   props: {
     show: {
       type: Boolean,
       default: false
+    },
+    stId: {
+      default: null
     }
   },
   data () {
@@ -52,9 +56,24 @@ export default {
       action: ''
     }
   },
+  mounted() {
+    if (this.stId)  this.getStandards(this.stId)
+  },
+  watch: {
+    stId(n) {
+      this.getStandards(this.stId)
+    }
+  },
   methods: {
     cancel () {
       this.$emit('cancel')
+    },
+    async getStandards (id) {
+      let vm = {
+        stId: id
+      }
+      let res = await standardService.getDetail(vm)
+      console.log(res)
     },
     async saveEdit () {
       let arr = []
@@ -77,15 +96,6 @@ export default {
             this.$message.error(res.data.msg)
           }
         })
-      // let res = await pumpService.postAdd(vm)
-      // console.log(res)
-      // if (res.flag) {
-      //   this.$message.success('add success!')
-      //   this.$emit('cancel')
-      //   this.$parent.getTableList()
-      // } else {
-      //   this.$message.error(res.msg)
-      // }
     },
     handleAvatarSuccess (res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);

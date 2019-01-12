@@ -1,7 +1,7 @@
 <template>
   <div class="el-common-header">
     <el-dialog title="Add" :visible.sync="addVisible" width="60%">
-      <el-form :model="editItems" :rules="rules" ref="editItems" label-width="150px" class="demo-ruleForm">
+      <el-form :model="editItems" ref="editItems" label-width="150px" class="demo-ruleForm">
         <el-form-item label="MotorName:" prop="motorName">
           <el-input v-model="editItems.motorName"></el-input>
         </el-form-item>
@@ -43,14 +43,13 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <!-- <el-button @click.native="cancel">Cancel</el-button> -->
         <el-button type="primary" @click.native="cancel">Confirm</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 <script>
-import { motorServices } from '@/api/motorServices.js'
+import { motorServices } from '@/api/motorServices'
 export default {
   props: {
     motorId: {
@@ -77,23 +76,26 @@ export default {
         enclosureClass: '',
         submersion: '',
         requiredCoolingFlow: ''
-      },
-      rules: {
-        motorName: [{ required: true, message: '请填写用户名', trigger: 'blur' }]
       }
     }
   },
   methods: {
-    cancel() {
-      this.$emit('cancel')
+    cancel() { this.$emit('cancel')},
+    async getMotorDetail () {
+      let vm = {
+        motorId: this.motorId
+      }
+      let res = await motorServices.getMotorDetail(vm)
+      console.log(res)
+      this.editItems = res
     }
+  },
+  mounted() {
+    if(this.motorId) this.getMotorDetail()
   },
   watch: {
     motorId (n) {
-      if (n) {
-        this.editItems = this.motorId
-        console.log(this.editItems)
-      }
+      this.getMotorDetail()
     }
   },
   computed: {

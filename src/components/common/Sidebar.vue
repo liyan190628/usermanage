@@ -42,7 +42,7 @@ export default {
                 {
                     icon: 'el-icon-lx-people',
                     index: 'userManagement',
-                    title: '用户管理'
+                    title: '账户管理'
                 },
                 {
                     icon: 'el-icon-lx-peoplefill',
@@ -76,12 +76,12 @@ export default {
                 {
                     icon: 'el-icon-lx-emoji',
                     index: 'solarParameter',
-                    title: '太阳能参数管理'
+                    title: '太阳板'
                 },
                 {
                     icon: 'el-icon-lx-favor',
                     index: 'attachment',
-                    title: '附件管理'
+                    title: '配件'
                 },
                 {
                     icon: 'el-icon-lx-warn',

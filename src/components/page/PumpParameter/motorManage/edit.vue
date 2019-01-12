@@ -94,9 +94,8 @@ export default {
         }
       })
     },
-    async addMotor() { 
+    async addMotor() {
       let vm = this.editItems
-      // vm.motorId = this.motorId
       let res = await motorServices.getMotorEdit(vm)
       if (res.flag) {
         this.$emit('cancel')

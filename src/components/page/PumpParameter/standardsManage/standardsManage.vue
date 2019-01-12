@@ -2,7 +2,6 @@
   <div>
     <!-- 面包屑导航 -->
     <crumbs :title1="'泵参数管理'" :title2="'standardsManage'"></crumbs>
-
     <div class="container system-content">
       <!-- 检索条件 -->
       <el-form :inline="true" :model="formInline" class="demo-form-inline mgb10">
@@ -14,22 +13,29 @@
           <el-button @click="addVisible = true" type="primary">add</el-button>
         </el-form-item>
       </el-form>
-
       <!-- <el-card shadow="hover"> -->
-        <el-table border :data="tableData" class="table" stripe style="width: 100%;">
+      <el-table border :data="tableData" class="table" stripe style="width: 100%;">
+          <el-table-column fixed="left" label="序号" type="index" align="center" width="50"/>
           <el-table-column prop="stName" align="center" label="standarsName">
           </el-table-column>
           <el-table-column prop="stExplain" align="center" label="standarsExplain">
+            <!-- <template slot-scope="scope">
+              <div v-for="(item, index) in scope.row.stExplain" :key="index">
+                {{item}}
+              </div>
+            </template> -->
           </el-table-column>
           <el-table-column prop="stPicPath" align="center" label="standarsPicture">
           </el-table-column>
           <el-table-column align="center" label="operate">
             <template slot-scope="scope">
-              <el-button @click="handleDelete(scope.row.stId)" type="text">delete</el-button>
+              <el-button @click="handleDelete(scope.row.stId)" type="text">Delete</el-button>
+              <el-button @click="handleEdit(scope.row.stId)" type="text">Edit</el-button>
+              <el-button @click="handleEdit(scope.row.stId)" type="text">导出pdf</el-button>
             </template>
           </el-table-column>
         </el-table>
-         <div class="pagination">
+        <div class="pagination">
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -41,19 +47,18 @@
           </el-pagination>
         </div>
       <!-- </el-card> -->
-
     </div>
     <!-- 新增模态框 -->
     <addStandards @cancel='addCancel' :show='addVisible'></addStandards>
-    <!-- 编辑用户 -->
-    <edit @cancel='editCancel' :show='editVisible' :items='items'></edit>
+    <editStandards :stId='stId' @cancel='editCancel' :show='editVisible'></editStandards>
   </div>
 </template>
 <script>
 import addStandards from './addStandards'
-import edit from '../../../modal/editModal' // 编辑
+import editStandards from './editStandards'
+import { standardService } from '@/api/standards.js'
 export default {
-  components: { edit, addStandards},
+  components: { addStandards, editStandards},
   data() {
     return {
       formInline: {
@@ -61,7 +66,6 @@ export default {
       },
       tableData: [],
       editVisible: false, // 编辑
-      authorVisible: false, // 授权
       addVisible: false, // 增加
       items: [
         { title: 'standarsName', type: '', code: '' },
@@ -71,7 +75,10 @@ export default {
       standarsName: '',
       cur_page: 1,
       rows: 10,
-      total: 10
+      total: 10,
+      editForm: {},
+      stName: '',
+      stId: ''
     }
   },
   methods: {
@@ -106,38 +113,25 @@ export default {
           this.$message({
             type: 'info',
             message: '已取消删除'
-        });          
+        });
       });
     },
-    // 编辑
-    editCancel() {
-      this.editVisible = !this.editVisible
-    },
-    authorCancel() {
-      this.authorVisible = !this.authorVisible
-    },
-    handleEdit(index, row) {
-      this.idx = index
-      const item = this.tableData[index]
-      this.userform = {
-        name: item.name,
-        date: item.date,
-        address: item.address
+    async getTableList () {
+      let vm = {
+        stName: this.formInline.stName,
+        page: this.cur_page,
+        rows: this.rows
       }
-      this.editVisible = true
+      let res = await standardService.getList(vm)
+      this.tableData = res.rows
+      this.tableData.forEach(v=> {
+        v.stExplain.split(',')
+      })
+      this.total = res.total
     },
-    getTableList () {
-      this.$axios
-        .get("/pumpms/standard/queryList", {
-          params: {
-            stName: this.formInline.stName,
-            page: this.cur_page,
-            rows: 10
-          }
-        })
-        .then(response => {
-          this.tableData = response.data.rows;
-        })
+    handleEdit(id) {
+      this.editVisible = true
+      this.stId = id
     }
   },
   mounted() {

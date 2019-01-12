@@ -24,6 +24,7 @@
                 :data="tableData"
                 stripe
                 style="width:100%;">
+                <el-table-column fixed="left" label="序号" type="index" align="center" width="50"/>
         <el-table-column prop="installType"
                          align="center"
                          label="install_type">
@@ -35,6 +36,17 @@
         <el-table-column prop="picPath"
                          align="center"
                          label="install_picture">
+        </el-table-column>
+        <el-table-column
+          fixed="right"
+          prop="operation"
+          align="center"
+          label="操作"
+          width="200">
+          <template slot-scope="scope">
+            <el-button type="text">Edit</el-button>
+            <el-button type="text">Delete</el-button>
+          </template>
         </el-table-column>
       </el-table>
       <div class="pagination">

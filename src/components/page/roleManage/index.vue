@@ -16,15 +16,16 @@
 
       <!-- 表格 -->
       <el-table border :data="tableData" :stripe='true' style="width: 100%;">
+        <el-table-column fixed="left" label="序号" type="index" align="center" width="50"/>
         <el-table-column prop="roleName" align="center" label="roleName">
         </el-table-column>
         <el-table-column prop="roleDescribe" align="center" label="roleDescribe">
         </el-table-column>
-         <el-table-column prop="operation" fixed='right' align="center" label="操作" width="200">
-            <template slot-scope="scope">
-              <el-button @click="handleEdit(scope.row)" type="text">edit</el-button>
-            </template>
-          </el-table-column>
+        <el-table-column prop="operation" fixed='right' align="center" label="操作" width="200">
+          <template slot-scope="scope">
+            <el-button @click="handleEdit(scope.row)" type="text">edit</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <div class="pagination">
         <el-pagination
@@ -115,7 +116,7 @@ export default {
       this.tableData = res.rows
       this.total = res.total
     },
-    addConfirm() { 
+    addConfirm() {
       let vm = {
         roleName: this.userform.roleName,
         roleDescribe: this.userform.roleDescribe

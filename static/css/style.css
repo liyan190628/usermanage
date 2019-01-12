@@ -90,12 +90,16 @@
 }
 
 .el-dialog__header {
-    background-color: #f0f0f0 !important;
-    /* color: #fff; */
+    background-color: #409EFF !important;
+    color: #fff;
 }
 
 .el-dialog__title {
-    /* color: #fff; */
+    color: #fff;
+}
+
+.el-dialog__headerbtn .el-dialog__close {
+    color: #fff;
 }
 
 .el-upload--text {

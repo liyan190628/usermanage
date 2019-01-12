@@ -13,9 +13,10 @@
           <el-button @click="addCancel" type="primary">add</el-button>
         </el-form-item>
       </el-form>
-      
+
       <!-- biaoge -->
       <el-table border :data="tableData" stripe style="width: 100%;">
+        <el-table-column fixed="left" label="序号" type="index" align="center" width="50"/>
         <el-table-column align="center" width="200" prop="solarPanelType" label="solar_panel_type">
         </el-table-column>
         <el-table-column align="center" width="190" prop="peakPower" label="peak_power">
@@ -32,8 +33,18 @@
         </el-table-column>
         <el-table-column align="center" width="260" prop="maxSeriesFuse" label="maximum_series_fuse">
         </el-table-column>
+        <el-table-column
+          fixed="right"
+          prop="operation"
+          align="center"
+          label="操作"
+          width="200">
+          <template slot-scope="scope">
+            <el-button type="text">Edit</el-button>
+            <el-button type="text">Delete</el-button>
+          </template>
+        </el-table-column>
       </el-table>
-
       <div class="pagination">
         <el-pagination
           @size-change="handleSizeChange"

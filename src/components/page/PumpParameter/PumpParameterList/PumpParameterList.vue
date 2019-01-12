@@ -4,7 +4,7 @@
     <crumbs :title1="'泵参数管理'" :title2="'泵参数列表'"></crumbs>
     <div class="container mgb10">
       <el-form :inline="true" class="demo-form-inline mgb10">
-        <el-form-item v-for="(item, index) in formItems" :key="index" :label="item.title">
+        <el-form-item :label-width="'90px'" v-for="(item, index) in formItems" :key="index" :label="item.title">
           <el-input v-model="item.value"></el-input>
         </el-form-item>
         <el-form-item>
@@ -14,6 +14,7 @@
       </el-form>
       <!-- 表格 -->
       <el-table border :data="tableData" stripe style="width: 100%;">
+        <el-table-column fixed="left" label="序号" type="index" align="center" width="50"/>
         <el-table-column prop="pumpType" align="center" label="pump_type">
         </el-table-column>
         <el-table-column prop="pumpModel" align="center" label="pump_model">
@@ -24,10 +25,12 @@
         </el-table-column>
         <el-table-column prop="flowMax" align="center" label="Q_flow_rate(m/h)">
         </el-table-column>
-        <el-table-column prop="operation" align="center" label="operate" width="180">
+        <el-table-column prop="operation" align="center" label="operate" width="280">
           <template slot-scope="scope">
             <el-button @click="link(scope.row.pumpId)" type="text">Edit</el-button>
             <el-button @click="handleDelete(scope.row.pumpId)" type="text">Delete</el-button>
+            <el-button @click="handleDelete(scope.row.pumpId)" type="text">PDF</el-button>
+            <el-button @click="handleDelete(scope.row.pumpId)" type="text">Download</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -106,7 +109,7 @@ export default {
           this.$message({
             type: 'info',
             message: '已取消删除'
-          });          
+          });
         });
     },
     async getTableList() { // 获取泵参数列表数据
@@ -115,7 +118,7 @@ export default {
         vm[index.code] = index.value;
       }
       vm.page = this.cur_page,
-      vm.rows = this.rows 
+      vm.rows = this.rows
       let res = await pumpService.getList(vm)
       this.tableData = res.rows;
       this.total = res.total

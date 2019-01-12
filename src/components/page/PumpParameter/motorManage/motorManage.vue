@@ -2,7 +2,6 @@
   <div>
     <!-- 面包屑导航 -->
     <crumbs :title1="'泵参数管理'" :title2="'motorManage'"></crumbs>
-
     <div class="container system-content">
       <!-- 检索条件 -->
       <el-form :inline="true" class="demo-form-inline mgb10">
@@ -14,17 +13,18 @@
           <el-button @click="addVisible = true" type="primary">add</el-button>
         </el-form-item>
       </el-form>
-      
       <!-- 表格 -->
       <!-- <el-card shadow="hover"> -->
         <el-table border :data="tableData" class="table" stripe style="width: 100%;">
+          <el-table-column fixed="left" label="序号" type="index" align="center" width="50"/>
           <el-table-column prop="motorName" align="center" label="motorName"></el-table-column>
           <!-- 操作 -->
           <el-table-column width="260" align="center" label="operate">
             <template slot-scope="scope">
-              <el-button @click="infoVisible = true" type="text">details</el-button>
+              <el-button @click="handleDetails(scope.row.motorId)" type="text">details</el-button>
               <el-button @click="handleEdit(scope.row.motorId, scope.row)" type="text">edit</el-button>
               <el-button @click="handleDelete(scope.row.motorId)" type="text">delete</el-button>
+              <el-button @click="handleEdit(scope.row.stId)" type="text">导出pdf</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -41,11 +41,9 @@
           </el-pagination>
         </div>
       <!-- </el-card> -->
-
     </div>
     <!-- 新增 -->
     <add :show='addVisible' @cancel='addCancel'></add>
-    <!-- 编辑 -->
     <edit @cancel='editCancel' :show='editVisible' :motorId='motorId'></edit>
     <info @cancel='infoCancel' :show='infoVisible' :motorId='motorId'></info>
   </div>
@@ -76,6 +74,10 @@ export default {
     infoCancel() {
       this.infoVisible = !this.infoVisible
     },
+    handleDetails(id) {
+      this.infoVisible = true
+      this.motorId = id
+    },
     async getTableList() {
       let vm = {
         motorName: this.motorName,
@@ -97,7 +99,7 @@ export default {
           this.$message({
             type: 'info',
             message: '已取消删除'
-        });          
+        });
       });
     },
     async deleteMotor (id) {

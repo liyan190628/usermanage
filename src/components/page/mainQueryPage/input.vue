@@ -1,38 +1,39 @@
 <template>
   <div>
     <el-row>
-      <el-col :span="6">
+      <el-col :span="5">
         <div class="inputs">
-          <el-form
-            :model="ruleForm"
-            :rules="rules"
-            ref="ruleForm"
-          >
-            <el-form-item
-              label="location"
-              prop="name"
-            >
-              <el-input
-                placeholder="请选择地址"
-                v-model="ruleForm.name"
-              ></el-input>
-            </el-form-item>
-            <el-form-item
-              label="Water require ( m³/day)"
-              required
-            >
+          <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+            <el-row>location</el-row>
+            <el-row class="mt-10">
+                <el-col :span="12">
+                  <el-form-item  label="country" required>
+                    <el-input v-model="ruleForm.name"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col class="pl-10" :span="12">
+                  <el-form-item label="city" required>
+                    <el-input v-model="ruleForm.name"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item  label="longitude" required>
+                    <el-input v-model="ruleForm.name"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col class="pl-10" :span="12">
+                  <el-form-item label="latitude" required>
+                    <el-input v-model="ruleForm.name"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            <el-form-item label="Water require ( m³/day)" required>
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
-            <el-form-item
-              label="Head H (m)"
-              required
-            >
+            <el-form-item label="Head H (m)" required>
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
-            <el-form-item
-              label="Pipe length L (m)"
-              required
-            >
+            <el-form-item label="Pipe length L (m)" required>
               <el-input v-model="ruleForm.name"></el-input>
             </el-form-item>
             <el-form-item label="Pipe diameter D (mm)">
@@ -76,9 +77,64 @@
           </el-form>
         </div>
       </el-col>
-      <el-col :span='18'>
-        <div class="imgWrap">
-          <img src="../../../assets/pdf-8.jpg">
+      <el-col :span='19'>
+        <div class="right-content">
+          <!-- 表格 -->
+          <el-table
+            border
+            :data="tableData"
+            class="table"
+            stripe
+            style="width: 100%;"
+          >
+            <el-table-column
+              prop="userName"
+              align="center"
+              label="Pump Model"
+            ></el-table-column>
+            <el-table-column
+              prop="password"
+              align="center"
+              label="Solar Panel/Pwoer"
+              width="155"
+            ></el-table-column>
+            <el-table-column
+              prop="phone"
+              align="center"
+              label="Accessories"
+            ></el-table-column>
+            <el-table-column
+              prop="email"
+              align="center"
+              label="Cable"
+            ></el-table-column>
+            <el-table-column
+              prop="address"
+              align="center"
+              label="H(m)"
+            ></el-table-column>
+            <el-table-column
+              prop="userType"
+              align="center"
+              label="Q(m³/h)"
+            ></el-table-column>
+            <el-table-column
+              align="center"
+              label="Output(m³/day)"
+              width="122px;"
+            />
+            <el-table-column
+              align="center"
+              label="Hmax(m)"
+            />
+            <el-table-column
+              align="center"
+              label="Qmax(m³/h)"
+            />
+          </el-table>
+          <div class="imgWrap">
+            <img src="../../../assets/pdf-8.jpg">
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -96,7 +152,8 @@ export default {
         temp: '25',
         loss: '3'
       },
-      rules: {}
+      rules: {},
+      tableData: []
     }
   },
   methods: {
@@ -107,11 +164,14 @@ export default {
   }
 }
 </script>
-<style>
+<style lang='scss'>
 .inputs {
   border: 1px solid #e0e0e0;
   padding: 20px;
-  background: #ffefd5;
+  // background: #666666;
+  // .el-form-item__label{
+  //   color:#fff;
+  // }
 }
 .inputs .el-input__suffix {
   top: 15px !important;
@@ -119,10 +179,7 @@ export default {
 .inputs .el-select {
   display: block !important;
 }
-.imgWrap {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  top: 50%;
-  left: 50%;
+.right-content {
+  padding-left: 20px;
 }
 </style>

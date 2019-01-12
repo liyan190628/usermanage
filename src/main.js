@@ -34,32 +34,13 @@ Vue.component('crumbs', crumbs)
 import mixins from './mixin/mixin'
 Vue.mixin(mixins)
 
-// 用户登录信息
-// import usersModule from './store/modules/usersModules'
-// const store = new Vuex.Store({
-//     modules: {
-//         users: usersModule
-//     }
-// })
-
 Vue.use(ElementUI, {
     size: 'small'
 })
 Vue.prototype.$axios = axios
-
-// 使用钩子函数对路由进行权限跳转
-// router.beforeEach((to, from, next) => {
-//     const role = localStorage.getItem('ms_username')
-//     if (!role && to.path !== '/login') {
-//         next('/login')
-//     } else if (to.meta.permission) {
-//         // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
-//         role === 'admin' ? next() : next('/403')
-//     }
-// })
-
+import store from './store'
 new Vue({
     router,
-    // store,
+    store,
     render: h => h(App)
 }).$mount('#app')
